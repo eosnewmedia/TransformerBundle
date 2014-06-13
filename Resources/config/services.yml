@@ -1,0 +1,6 @@
+services:
+  enm.array.transformer.service:
+    class: ENM\TransformerBundle\Manager\ArrayTransformerManager
+
+  enm.json.transformer.service:
+    class: ENM\TransformerBundle\Manager\JsonTransformerManager
