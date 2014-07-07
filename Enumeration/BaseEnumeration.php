@@ -22,7 +22,7 @@ abstract class BaseEnumeration implements EnumInterface
   {
     $self   = new \ReflectionClass(get_called_class());
     $return = array();
-    foreach ($self->getStaticProperties() as $value)
+    foreach ($self->getConstants() as $value)
     {
       array_push($return, $value);
     }
