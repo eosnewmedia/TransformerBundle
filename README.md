@@ -233,9 +233,9 @@ Values can be of the types 'string', 'integer', 'float' and 'bool'
 
     OwnEnumeration extends ENM\Enumeration\BaseEnumeration
     {
-      public static function $test = 'test';
-      public static function $testuser = 'testuser';
-      public static function $user = 'user';
+      const TEST = 'test';
+      const TESTUSER = 'testuser';
+      const USER = 'user';
     }
 
 

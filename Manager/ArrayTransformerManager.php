@@ -213,7 +213,17 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         $value = boolval($value);
       }
 
-      $violationList = $validator->validateValue($value, $constrains);
+      if ($settings['type'] === 'integer' && is_numeric($value))
+      {
+        $value = intval($value);
+      }
+
+      if ($settings['type'] === 'float' && is_numeric($value))
+      {
+        $value = floatval($value);
+      }
+
+      $violationList = $validator->validate($value, $constrains);
     }
     catch (\Exception $e)
     {
