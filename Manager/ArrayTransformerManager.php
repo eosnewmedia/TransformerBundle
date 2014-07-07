@@ -223,7 +223,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         $value = floatval($value);
       }
 
-      $violationList = $validator->validate($value, $constrains);
+      $violationList = $validator->validateValue($value, $constrains);
     }
     catch (\Exception $e)
     {
