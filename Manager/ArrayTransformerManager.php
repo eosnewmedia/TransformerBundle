@@ -151,10 +151,12 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       throw new InvalidArgumentException('"' . $key . '" have to be an array. ' . gettype($params[$key]) . ' given!');
     }
 
-    // Ruft weitere Transformer-Methoden in dieser Klasse auf
+    // komplexer Typ
+    // Ruft die übergebene Methode aus der übergebenen Klasse auf
     if (method_exists(new $settings['methodClass'](), $settings['method']))
     {
-      return $this->{$settings['method']}($params);
+      $class = new $settings['methodClass']();
+      return $class->{$settings['method']}($params);
     }
 
     throw new MissingRequiredConfigArgumentException('It must be defined at least one of the following parameters: complex(false), children(count > 0), method(!= null)');
