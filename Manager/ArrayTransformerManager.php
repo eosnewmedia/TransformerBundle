@@ -345,4 +345,8 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
 
     return $constraints;
   }
+
+  protected function prepareCollection(){
+
+  }
 }
