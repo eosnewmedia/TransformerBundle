@@ -121,16 +121,16 @@ The following array structure is needed for each parameter:
 
       '{KEY}' => array( // Description under "Key"
         'complex' => (true|false),
-        'children' => array(), // Only if complex is true, Description under "Child Objects"
+        'children' => array(), // Only if complex is true, Description under "Child Objects" or "Collections"
         'methodClass' => '{METHOD_HOLDER_CLASS}' // Only if complex is true, Description under "Own Validation Methods"
         'method' => '{METHOD}' // Only if complex is true, Description under "Own Validation Methods"
-        'type' => '(bool|integer|string|float|array)', // Only if complex is false
+        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false
         'options' => array(
           'required' => (true|false),
           'min' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'expected' => array(), // Only if complex is false, Description under "Enumerations"
-          'returnClass' => '{NAMESPACE\CLASS_NAME}' // Only if complex is true, Description under "Child Objects"
+          'returnClass' => '{NAMESPACE\CLASS_NAME}' // Only if complex is true, Description under "Child Objects" or "Collections"
         )
       )
 
@@ -156,6 +156,39 @@ The return class is the class of the object, which is build from the children el
         'children' => array(
           'address' => $address_configuration,
         ),
+        'options' => array(
+          'returnClass' => 'Own\Address' // Needed class including namespace
+          // your needed options for the main configuration of 'user_extra_data'
+        )
+      )
+    );
+
+
+    $user = $this->container->get('enm.array.transformer.service')->transform(new User(), $main_configuration, $params);
+
+### Collections
+If you want to get a Collection, you can set the 'complex'-key to TRUE and write a configuration array for your
+expected object, that should be in your collection.
+This array you can set as the value of your 'children'-key. It needs the array-key 'dynamic', because the number of identical classes isn't limited.
+
+You also have to set the 'type'-key of your configuration to 'collection'
+
+If you are using a complex structure with children, you must define a return class.
+The return class is the class of the object, which is build from the children element.
+
+    $address_configuration = array(
+      // normal configuration array
+    );
+
+
+    $main_configuration = array(
+      'user_addresses' => array(
+        'complex' => true,
+        'children' => array(
+        // multiple addresses for one user
+          'dynamic' => $address_configuration,
+        ),
+        'type' => 'collection',
         'options' => array(
           'returnClass' => 'Own\Address' // Needed class including namespace
           // your needed options for the main configuration of 'user_extra_data'

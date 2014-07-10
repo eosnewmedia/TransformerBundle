@@ -1,0 +1,65 @@
+<?php
+/**
+ * CollectionTest.php
+ * Date: 10.07.14
+ *
+ * @author Philipp Marien <marien@eosnewmedia.de>
+ */
+
+namespace Ssc\ApiBundle\Tests;
+
+use ENM\TransformerBundle\Manager\ArrayTransformerManager;
+use ENM\TransformerBundle\Tests\BaseTest;
+
+class CollectionTest extends BaseTest
+{
+
+  public function testCollection()
+  {
+    //$manager = $this->container->get('enm.array.transformer.service');
+
+    $manager = new ArrayTransformerManager();
+
+    $config = array(
+      'list' => array(
+        'complex'  => true,
+        'children' => array(
+          'dynamic' => array(
+            'test' => array(
+              'complex' => false,
+              'type'    => 'string',
+              'options' => array(
+                'required' => true,
+              )
+            )
+          ),
+        ),
+        'type'     => 'collection',
+        'options'  => array(
+          'required'    => true,
+          'returnClass' => 'stdClass',
+        )
+      )
+    );
+
+    $params = array(
+      'list' => array(
+        0 => array(
+          'test' => 'hallo',
+        ),
+        1 => array(
+          'test' => '123',
+        ),
+        2 => array(
+          'test' => 'abc',
+        ),
+      )
+    );
+
+    $result = $manager->transform(new \stdClass(), $config, $params);
+
+    $this->assertArrayHasKey(0, $result->list);
+    $this->assertArrayHasKey(1, $result->list);
+    $this->assertArrayHasKey(2, $result->list);
+  }
+} 

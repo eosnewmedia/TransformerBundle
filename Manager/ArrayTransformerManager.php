@@ -141,6 +141,16 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       return $this->prepareNonComplex($params[$key], $settings);
     }
 
+    if ($settings['type'] === 'collection')
+    {
+      if (is_array($settings['children']) && is_array($settings['children']['dynamic']))
+      {
+        return $this->prepareCollection($settings['options'], $settings['children']['dynamic'], $params[$key]);
+      }
+
+      throw new InvalidArgumentException();
+    }
+
     // Wenn das ein verschachteltes Objekt ist.
     if (count($settings['children']))
     {
@@ -156,6 +166,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     if (method_exists(new $settings['methodClass'](), $settings['method']))
     {
       $class = new $settings['methodClass']();
+
       return $class->{$settings['method']}($params);
     }
 
@@ -346,7 +357,27 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     return $constraints;
   }
 
-  protected function prepareCollection(){
 
+
+  protected function prepareCollection(array $options = array(), array $config = array(), array $parameter = array())
+  {
+    if (class_exists($options['returnClass']))
+    {
+      $returnClass = $options['returnClass'];
+
+      $collection_array = array();
+
+      foreach ($parameter as $params)
+      {
+        if (!is_array($params))
+        {
+          throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($params) . ' given!');
+        }
+        array_push($collection_array, $this->transform(new $returnClass(), $config, $params));
+      }
+
+      return $collection_array;
+    }
+    throw new InvalidArgumentException('The Class ' . $options['returnClass'] . ' does not exists');
   }
 }

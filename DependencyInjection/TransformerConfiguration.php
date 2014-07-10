@@ -29,7 +29,7 @@ class TransformerConfiguration implements ConfigurationInterface
         ->prototype('array')
           ->children()
             ->booleanNode('complex')->defaultValue(false)->end()
-            ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array'))->defaultValue(null)->end()
+            ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array', 'collection'))->defaultValue(null)->end()
             ->scalarNode('methodClass')->defaultValue(null)->end()
             ->scalarNode('method')->defaultValue(null)->end()
             ->arrayNode('children')->prototype('variable')->end()->end()
