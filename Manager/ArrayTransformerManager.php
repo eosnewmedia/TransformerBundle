@@ -141,7 +141,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       return $this->prepareNonComplex($params[$key], $settings);
     }
 
-    if ($settings['type'] === 'collection')
+    if (isset($settings['type']) && $settings['type'] === 'collection')
     {
       if (is_array($settings['children']) && is_array($settings['children']['dynamic']))
       {
