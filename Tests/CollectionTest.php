@@ -16,9 +16,7 @@ class CollectionTest extends BaseTest
 
   public function testCollection()
   {
-    //$manager = $this->container->get('enm.array.transformer.service');
-
-    $manager = new ArrayTransformerManager();
+    $manager = $this->container->get('enm.array.transformer.service');
 
     $config = array(
       'list' => array(
