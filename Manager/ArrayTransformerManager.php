@@ -364,18 +364,12 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   {
     $constraints = array();
 
-    if (array_key_exists('length', $settings['options']) && is_array($settings['options']['length']))
+    if (array_key_exists('length', $settings['options']))
     {
-      if (array_key_exists('min', $settings['options']['length'])
-          && array_key_exists('max', $settings['options']['length'])
-      )
-      {
-        $constraints[] = new Constraints\Length(array(
-          'min' => $settings['options']['length']['min'],
-          'max' => $settings['options']['length']['max'],
-        ));
-      }
-      throw new MissingRequiredConfigArgumentException('If you want to check a length, you have to define min and max!');
+      $constraints[] = new Constraints\Length(array(
+        'min' => $settings['options']['length']['min'],
+        'max' => $settings['options']['length']['max'],
+      ));
     }
 
     return $constraints;
@@ -387,7 +381,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   {
     $constraints = array();
 
-    if (array_key_exists('datetime', $settings['options']))
+    if (array_key_exists('date', $settings['options']))
     {
       switch ($settings['options']['datetime'])
       {
@@ -400,10 +394,6 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         case 'time':
           $constraints[] = new Constraints\Time();
           break;
-        case false:
-          break;
-        default:
-          throw new InvalidConfigurationException();
       }
     }
 
