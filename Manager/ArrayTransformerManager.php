@@ -136,32 +136,30 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       return null;
     }
     // primitive Typen verarbeiten
-    if (!$settings['complex'])
+    if (!array_key_exists('complex', $settings) || !$settings['complex'])
     {
       return $this->prepareNonComplex($params[$key], $settings);
     }
 
-    if (isset($settings['type']) && $settings['type'] === 'collection')
-    {
-      if (is_array($settings['children']) && is_array($settings['children']['dynamic']))
-      {
-        return $this->prepareCollection($settings['options'], $settings['children']['dynamic'], $params[$key]);
-      }
-
-      throw new InvalidArgumentException();
-    }
-
     // Wenn das ein verschachteltes Objekt ist.
-    if (count($settings['children']))
+    if (array_key_exists('children', $settings) && is_array($settings['children']))
     {
       if (is_array($params[$key]))
       {
+        if (array_key_exists('type', $settings) && $settings['type'] === 'collection')
+        {
+          if (array_key_exists('dynamic', $settings['children']) && is_array($settings['children']['dynamic']))
+          {
+            return $this->prepareCollection($settings['options'], $settings['children']['dynamic'], $params[$key]);
+          }
+          throw new MissingRequiredConfigArgumentException('Dynamic is undefined!');
+        }
+
         return $this->prepareNested($settings['options'], $settings['children'], $params[$key]);
       }
       throw new InvalidArgumentException('"' . $key . '" have to be an array. ' . gettype($params[$key]) . ' given!');
     }
 
-    // komplexer Typ
     // Ruft die übergebene Methode aus der übergebenen Klasse auf
     if (method_exists(new $settings['methodClass'](), $settings['method']))
     {
