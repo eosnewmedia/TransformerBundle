@@ -14,6 +14,7 @@ use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
 use ENM\TransformerBundle\Exceptions\InvalidParameterException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredArgumentException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredConfigArgumentException;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -282,6 +283,8 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         $constraints = array_merge($constraints, $this->getConstraintsByOptionMax($settings));
       }
       $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionDate($settings));
     }
 
     return $constraints;
@@ -350,6 +353,58 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       }
 
       $constraints[] = new Constraints\Choice($config);
+    }
+
+    return $constraints;
+  }
+
+
+
+  protected function getConstraintsByOptionLength(array $settings = array())
+  {
+    $constraints = array();
+
+    if (array_key_exists('length', $settings['options']) && is_array($settings['options']['length']))
+    {
+      if (array_key_exists('min', $settings['options']['length'])
+          && array_key_exists('max', $settings['options']['length'])
+      )
+      {
+        $constraints[] = new Constraints\Length(array(
+          'min' => $settings['options']['length']['min'],
+          'max' => $settings['options']['length']['max'],
+        ));
+      }
+      throw new MissingRequiredConfigArgumentException('If you want to check a length, you have to define min and max!');
+    }
+
+    return $constraints;
+  }
+
+
+
+  protected function getConstraintsByOptionDate(array $settings = array())
+  {
+    $constraints = array();
+
+    if (array_key_exists('datetime', $settings['options']))
+    {
+      switch ($settings['options']['datetime'])
+      {
+        case 'date':
+          $constraints[] = new Constraints\Date();
+          break;
+        case 'datetime':
+          $constraints[] = new Constraints\DateTime();
+          break;
+        case 'time':
+          $constraints[] = new Constraints\Time();
+          break;
+        case false:
+          break;
+        default:
+          throw new InvalidConfigurationException();
+      }
     }
 
     return $constraints;
