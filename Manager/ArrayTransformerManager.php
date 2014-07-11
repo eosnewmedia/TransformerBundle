@@ -383,7 +383,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
 
     if (array_key_exists('date', $settings['options']))
     {
-      switch ($settings['options']['datetime'])
+      switch ($settings['options']['date'])
       {
         case 'date':
           $constraints[] = new Constraints\Date();
