@@ -4,3 +4,4 @@ services:
 
     enm.json.transformer.service:
         class: ENM\TransformerBundle\Manager\JsonTransformerManager
+        arguments: [ @service_container ]
