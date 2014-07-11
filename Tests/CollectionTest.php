@@ -8,7 +8,6 @@
 
 namespace Ssc\ApiBundle\Tests;
 
-use ENM\TransformerBundle\Manager\ArrayTransformerManager;
 use ENM\TransformerBundle\Tests\BaseTest;
 
 class CollectionTest extends BaseTest
