@@ -42,7 +42,7 @@ class JsonTransformerManager implements JsonTransformerManagerInterface
 
 
 
-  protected function objectToArray($object)
+  public function objectToArray($object)
   {
     $array = array();
     foreach ($object as $key => $value)

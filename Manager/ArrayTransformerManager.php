@@ -14,8 +14,8 @@ use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
 use ENM\TransformerBundle\Exceptions\InvalidParameterException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredArgumentException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredConfigArgumentException;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -23,6 +23,20 @@ use Symfony\Component\Validator\Validation;
 
 class ArrayTransformerManager implements ArrayTransformerManagerInterface
 {
+
+  /**
+   * @var \Symfony\Component\DependencyInjection\Container
+   */
+  protected $container;
+
+
+
+  function __construct(Container $container)
+  {
+    $this->container = $container;
+  }
+
+
 
   /**
    * @param object $returnClass
@@ -412,6 +426,10 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
 
       foreach ($parameter as $params)
       {
+        if (is_object($params))
+        {
+          $params = $this->container->get('enm.json.transformer.service')->objectToArray($params);
+        }
         if (!is_array($params))
         {
           throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($params) . ' given!');
