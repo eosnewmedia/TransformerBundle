@@ -73,7 +73,14 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       }
 
       // prüfen, ob der Wert vorhanden ist, wenn er benötigt wird
-      $this->validateRequired($key, $returnClass->$key, $settings);
+      if (method_exists($returnClass, 'get' . ucfirst($key)))
+      {
+        $this->validateRequired($key, $returnClass->{'get' . ucfirst($key)}, $settings);
+      }
+      else
+      {
+        $this->validateRequired($key, $returnClass->$key, $settings);
+      }
     }
 
     return $returnClass;
