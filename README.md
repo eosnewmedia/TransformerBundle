@@ -124,12 +124,13 @@ The following array structure is needed for each parameter:
         'children' => array(), // Only if complex is true, Description under "Child Objects" or "Collections"
         'methodClass' => '{METHOD_HOLDER_CLASS}' // Only if complex is true, Description under "Own Validation Methods"
         'method' => '{METHOD}' // Only if complex is true, Description under "Own Validation Methods"
-        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false
+        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false or type collection is needed
         'options' => array(
           'required' => (true|false),
           'min' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
-          'expected' => array(), // Only if complex is false, Description under "Enumerations"
+          'expected' => array(), // Only if complex is false, Description under "Enumerations",
+          'date' => '(date|time|datetime)', // Only if comlex is false, format: Y-m-d|H:i:s|Y-m-d H:i:s
           'returnClass' => '{NAMESPACE\CLASS_NAME}' // Only if complex is true, Description under "Child Objects" or "Collections"
         )
       )
