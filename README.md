@@ -218,14 +218,14 @@ Your validation method must be in a class, which you have to give into the confi
 
     class UserValidation
     {
-      // Method holder class must not have an constructor which needs parameters
+      // Method holder class can not have an constructor which needs parameters
 
       /**
-      * @param array $params | original param array
+      * @param mixed $value
       *
-      * @return value
+      * @return $value
       */
-      public function yourMethod(array $params)
+      public function yourMethod($value)
       {
         // do something
       }
@@ -240,9 +240,6 @@ Your validation method must be in a class, which you have to give into the confi
         'complex' => true,
         'methodClass' => 'Own\Validation\UserValidation', // Class name, including namespace
         'method' => 'yourMethod', // Method to call
-        'options' => array(
-            // your needed options for the configuration of 'username'
-        )
       )
     );
 

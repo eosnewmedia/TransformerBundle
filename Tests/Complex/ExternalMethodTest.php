@@ -1,0 +1,35 @@
+<?php
+
+
+namespace Ssc\ApiBundle\Tests\Complex;
+
+use ENM\TransformerBundle\Tests\BaseTest;
+
+class ExternalMethodTest extends BaseTest
+{
+
+  public function testMethod()
+  {
+    $config = array(
+      'test' => [
+        'complex'     => true,
+        'methodClass' => 'ENM\TransformerBundle\Resources\TestClass\SpecialMethodTestClass',
+        'method'      => 'specialMethod'
+      ]
+    );
+
+    $params = array(
+      'test' => 'Hallo Welt'
+    );
+
+    try
+    {
+      $result = $this->container->get('enm.array.transformer.service')->transform(new \stdClass(), $config, $params);
+      $this->assertTrue(true);
+    }
+    catch (\Exception $e)
+    {
+      $this->fail($e->getMessage());
+    }
+  }
+} 

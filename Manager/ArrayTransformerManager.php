@@ -187,7 +187,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     {
       $class = new $settings['methodClass']();
 
-      return $class->{$settings['method']}($params);
+      return $class->{$settings['method']}($params[$key]);
     }
 
     throw new MissingRequiredConfigArgumentException('It must be defined at least one of the following parameters: complex(false), children(count > 0), method(!= null)');
