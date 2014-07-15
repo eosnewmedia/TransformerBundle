@@ -6,7 +6,7 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace Ssc\ApiBundle\Tests;
+namespace Ssc\ApiBundle\Tests\Complex;
 
 use ENM\TransformerBundle\Tests\BaseTest;
 
