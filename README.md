@@ -130,7 +130,7 @@ The following array structure is needed for each parameter:
           'min' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'expected' => array(), // Only if complex is false, Description under "Enumerations",
-          'date' => '(date|time|datetime)', // Only if comlex is false, format: Y-m-d|H:i:s|Y-m-d H:i:s
+          'date' => '(date|time|datetime)', // Only if comlex is false and type is string, format: Y-m-d|H:i:s|Y-m-d H:i:s
           'returnClass' => '{NAMESPACE\CLASS_NAME}' // Only if complex is true, Description under "Child Objects" or "Collections"
         )
       )
