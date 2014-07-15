@@ -177,6 +177,48 @@ abstract class BaseTest extends KernelAwareTest
 
   /**
    * @param array   $config
+   * @param  string $key
+   */
+  protected function exceptionWithPositiveFloatTest(array $config, $key)
+  {
+    try
+    {
+      $transformer = $this->container->get('enm.array.transformer.service');
+      $input       = 3.5;
+      $transformer->transform(new \stdClass(), $config, array($key => $input));
+      $this->fail(sprintf('No exception thrown with invalid value (zero) for %s.', $key));
+    }
+    catch (\Exception $e)
+    {
+      $this->assertTrue(true);
+    }
+  }
+
+
+
+  /**
+   * @param array   $config
+   * @param  string $key
+   */
+  protected function exceptionWithNegativeFloatTest(array $config, $key)
+  {
+    try
+    {
+      $transformer = $this->container->get('enm.array.transformer.service');
+      $input       = -3.5;
+      $transformer->transform(new \stdClass(), $config, array($key => $input));
+      $this->fail(sprintf('No exception thrown with invalid value (zero) for %s.', $key));
+    }
+    catch (\Exception $e)
+    {
+      $this->assertTrue(true);
+    }
+  }
+
+
+
+  /**
+   * @param array   $config
    * @param string  $key
    * @param   mixed $expectedValue
    */

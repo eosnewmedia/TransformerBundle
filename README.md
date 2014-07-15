@@ -124,13 +124,18 @@ The following array structure is needed for each parameter:
         'children' => array(), // Only if complex is true, Description under "Child Objects" or "Collections"
         'methodClass' => '{METHOD_HOLDER_CLASS}' // Only if complex is true, Description under "Own Validation Methods"
         'method' => '{METHOD}' // Only if complex is true, Description under "Own Validation Methods"
-        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false or type collection is needed
+        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false or type 'collection' is needed
         'options' => array(
           'required' => (true|false),
+          'assoc' => (true|false) // Only if type is 'array' and complex is false. Tells the transformer, whether the array is associative or not
           'min' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'expected' => array(), // Only if complex is false, Description under "Enumerations",
-          'date' => '(date|time|datetime)', // Only if comlex is false and type is string, format: Y-m-d|H:i:s|Y-m-d H:i:s
+          'date' => '(date|time|datetime)', // Only if comlex is false and type is 'string', format: Y-m-d|H:i:s|Y-m-d H:i:s
+          'length' => array( // Length validation, only if type is 'string' n complex is false
+            'min' => (int),
+            'max' => (int)
+          ),
           'returnClass' => '{NAMESPACE\CLASS_NAME}' // Only if complex is true, Description under "Child Objects" or "Collections"
         )
       )

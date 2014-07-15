@@ -31,6 +31,8 @@ class EnumTest extends BaseTest
     $this->exceptionWithObjectTest($config, 'test');
     $this->exceptionWithPositiveIntegerTest($config, 'test');
     $this->exceptionWithZeroTest($config, 'test');
+    $this->exceptionWithNegativeFloatTest($config, 'test');
+    $this->exceptionWithPositiveFloatTest($config, 'test');
   }
 
 
@@ -60,5 +62,7 @@ class EnumTest extends BaseTest
     $this->exceptionWithObjectTest($config, 'test');
     $this->exceptionWithPositiveIntegerTest($config, 'test');
     $this->exceptionWithZeroTest($config, 'test');
+    $this->exceptionWithNegativeFloatTest($config, 'test');
+    $this->exceptionWithPositiveFloatTest($config, 'test');
   }
 } 

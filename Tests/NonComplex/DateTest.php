@@ -55,6 +55,8 @@ class DateTest extends BaseTest
     $this->exceptionWithArrayTest($config, 'date');
     $this->exceptionWithBooleanTest($config, 'date');
     $this->exceptionWithStringTest($config, 'date');
+    $this->exceptionWithNegativeFloatTest($config, 'test');
+    $this->exceptionWithPositiveFloatTest($config, 'test');
   }
 
 
@@ -80,5 +82,7 @@ class DateTest extends BaseTest
     $this->exceptionWithArrayTest($config, 'date');
     $this->exceptionWithBooleanTest($config, 'date');
     $this->exceptionWithStringTest($config, 'date');
+    $this->exceptionWithNegativeFloatTest($config, 'test');
+    $this->exceptionWithPositiveFloatTest($config, 'test');
   }
 }
