@@ -132,6 +132,7 @@ The following array structure is needed for each parameter:
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'expected' => array(), // Only if complex is false, Description under "Enumerations",
           'date' => '(date|time|datetime)', // Only if comlex is false and type is 'string', format: Y-m-d|H:i:s|Y-m-d H:i:s
+          'convertToDateTime' => (true|false) // Only if type is 'string' and options->date is 'date' or 'datetime'
           'length' => array( // Length validation, only if type is 'string' n complex is false
             'min' => (int),
             'max' => (int)

@@ -49,7 +49,7 @@ class TestConfiguration
             ]
           ],
           'country' => [
-            'complex' => false,
+            // 'complex' => false,
             'type'    => 'string',
             'options' => [
               'required' => true,
@@ -64,7 +64,11 @@ class TestConfiguration
       ],
       'birthday' => [
         'complex' => false,
-        'type'    => 'string'
+        'type'    => 'string',
+        'options' => [
+          'date'              => 'date',
+          'convertToDateTime' => true
+        ]
       ],
       'hobbys'   => [
         'complex'  => true,

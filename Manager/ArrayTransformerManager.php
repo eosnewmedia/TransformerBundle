@@ -47,7 +47,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
    */
   public function transform($returnClass, array $config, array $params = array())
   {
-    $this->validateConfiguration($config);
+    $config = $this->validateConfiguration($config);
 
     foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
     {
@@ -94,7 +94,8 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   protected function validateConfiguration(array $config = array())
   {
     $processor = new Processor();
-    $processor->processConfiguration(new TransformerConfiguration(), array('config' => $config));
+
+    return $processor->processConfiguration(new TransformerConfiguration(), array('config' => $config));
   }
 
 
@@ -123,14 +124,6 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
    */
   protected function canBeNull(array $settings = array())
   {
-    if (!array_key_exists('options', $settings))
-    {
-      return true;
-    }
-    if (!array_key_exists('required', $settings['options']))
-    {
-      return true;
-    }
     if ($settings['options']['required'] === false)
     {
       return true;
@@ -157,18 +150,18 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     {
       return null;
     }
-    // primitive Typen verarbeiten
-    if (!array_key_exists('complex', $settings) || !$settings['complex'])
+
+    if ($settings['complex'] === false)
     {
       return $this->prepareNonComplex($params[$key], $settings);
     }
 
     // Wenn das ein verschachteltes Objekt ist.
-    if (array_key_exists('children', $settings) && is_array($settings['children']))
+    if (count($settings['children']))
     {
       if (is_array($params[$key]))
       {
-        if (array_key_exists('type', $settings) && $settings['type'] === 'collection')
+        if ($settings['type'] === 'collection')
         {
           if (array_key_exists('dynamic', $settings['children']) && is_array($settings['children']['dynamic']))
           {
@@ -279,6 +272,14 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         return array_values($value);
       }
 
+      if (
+        ($settings['options']['date'] === 'date' || $settings['options']['date'] === 'datetime')
+        && $settings['options']['convertToDateTime'] === true
+      )
+      {
+        $value = new \DateTime($value);
+      }
+
       return $value;
     }
     throw new InvalidParameterException($violationList);
@@ -296,17 +297,14 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   protected function getConstraintsByOptions($settings)
   {
     $constraints = array();
-    if (array_key_exists('options', $settings))
+    if (in_array($settings['type'], array('integer', 'float')))
     {
-      if (in_array($settings['type'], array('integer', 'float')))
-      {
-        $constraints = array_merge($constraints, $this->getConstraintsByOptionMin($settings));
-        $constraints = array_merge($constraints, $this->getConstraintsByOptionMax($settings));
-      }
-      $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
-      $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
-      $constraints = array_merge($constraints, $this->getConstraintsByOptionDate($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionMin($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionMax($settings));
     }
+    $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
+    $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
+    $constraints = array_merge($constraints, $this->getConstraintsByOptionDate($settings));
 
     return $constraints;
   }
@@ -323,7 +321,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   protected function getConstraintsByOptionMin(array $settings = array())
   {
     $constraints = array();
-    if (array_key_exists('min', $settings['options']))
+    if ($settings['options']['min'] !== null)
     {
       $constraints[] = new Constraints\GreaterThanOrEqual(array('value' => $settings['options']['min']));
     }
@@ -343,7 +341,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   protected function getConstraintsByOptionMax(array $settings = array())
   {
     $constraints = array();
-    if (array_key_exists('max', $settings['options']))
+    if ($settings['options']['max'] !== null)
     {
       $constraints[] = new Constraints\LessThanOrEqual(array('value' => $settings['options']['max']));
     }
@@ -364,7 +362,7 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   {
     $constraints = array();
 
-    if (array_key_exists('expected', $settings['options']) && count($settings['options']['expected']))
+    if (count($settings['options']['expected']))
     {
       $config = array('choices' => $settings['options']['expected']);
 
@@ -402,20 +400,19 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
   {
     $constraints = array();
 
-    if (array_key_exists('date', $settings['options']))
+    switch ($settings['options']['date'])
     {
-      switch ($settings['options']['date'])
-      {
-        case 'date':
-          $constraints[] = new Constraints\Date();
-          break;
-        case 'datetime':
-          $constraints[] = new Constraints\DateTime();
-          break;
-        case 'time':
-          $constraints[] = new Constraints\Time();
-          break;
-      }
+      case 'date':
+        $constraints[] = new Constraints\Date();
+        break;
+      case 'datetime':
+        $constraints[] = new Constraints\DateTime();
+        break;
+      case 'time':
+        $constraints[] = new Constraints\Time();
+        break;
+      default:
+        break;
     }
 
     return $constraints;
