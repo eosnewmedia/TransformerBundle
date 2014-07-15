@@ -13,76 +13,20 @@ class DateTest extends BaseTest
     $config = array(
       'date' => [
         'complex' => false,
-        'type'    => 'string',
+        'type'    => 'date',
         'options' => [
-          'date' => 'date'
+          'date' => [
+            'format' => 'Y/m/d',
+            'convertToFormat' => 'c',
+          ]
         ]
       ]
     );
 
-    $this->expectSuccess($config, 'date', '2014-07-21');
-    $this->expectFailure($config, 'date', '2014-07-45');
-
-    $this->exceptionWithZeroTest($config, 'date');
-    $this->exceptionWithPositiveIntegerTest($config, 'date');
-    $this->exceptionWithObjectTest($config, 'date');
-    $this->exceptionWithNegativeIntegerTest($config, 'date');
-    $this->exceptionWithArrayTest($config, 'date');
-    $this->exceptionWithBooleanTest($config, 'date');
-    $this->exceptionWithStringTest($config, 'date');
-  }
-
-
-
-  public function testDateTime()
-  {
-    $config = array(
-      'date' => [
-        'complex' => false,
-        'type'    => 'string',
-        'options' => [
-          'date' => 'datetime'
-        ]
-      ]
+    $date = $this->container->get('enm.array.transformer.service')->transform(
+                            new \stdClass(),
+                              $config,
+                              array('date' => '2014/07/10')
     );
-    $this->expectSuccess($config, 'date', '2014-07-21 12:30:00');
-    $this->expectFailure($config, 'date', '2014-07-45 12:30:00');
-
-    $this->exceptionWithZeroTest($config, 'date');
-    $this->exceptionWithPositiveIntegerTest($config, 'date');
-    $this->exceptionWithObjectTest($config, 'date');
-    $this->exceptionWithNegativeIntegerTest($config, 'date');
-    $this->exceptionWithArrayTest($config, 'date');
-    $this->exceptionWithBooleanTest($config, 'date');
-    $this->exceptionWithStringTest($config, 'date');
-    $this->exceptionWithNegativeFloatTest($config, 'test');
-    $this->exceptionWithPositiveFloatTest($config, 'test');
-  }
-
-
-
-  public function testTime()
-  {
-    $config = array(
-      'date' => [
-        'complex' => false,
-        'type'    => 'string',
-        'options' => [
-          'date' => 'time'
-        ]
-      ]
-    );
-    $this->expectSuccess($config, 'date', '12:45:34');
-    $this->expectFailure($config, 'date', '25:12:00');
-
-    $this->exceptionWithZeroTest($config, 'date');
-    $this->exceptionWithPositiveIntegerTest($config, 'date');
-    $this->exceptionWithObjectTest($config, 'date');
-    $this->exceptionWithNegativeIntegerTest($config, 'date');
-    $this->exceptionWithArrayTest($config, 'date');
-    $this->exceptionWithBooleanTest($config, 'date');
-    $this->exceptionWithStringTest($config, 'date');
-    $this->exceptionWithNegativeFloatTest($config, 'test');
-    $this->exceptionWithPositiveFloatTest($config, 'test');
   }
 }

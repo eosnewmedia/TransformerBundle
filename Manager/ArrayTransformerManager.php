@@ -151,6 +151,11 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       return null;
     }
 
+    if ($settings['type'] === 'date')
+    {
+      return $this->validateDate($settings, $key, $params[$key]);
+    }
+
     if ($settings['complex'] === false)
     {
       return $this->prepareNonComplex($params[$key], $settings);
@@ -272,14 +277,6 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         return array_values($value);
       }
 
-      if (
-        ($settings['options']['date'] === 'date' || $settings['options']['date'] === 'datetime')
-        && $settings['options']['convertToDateTime'] === true
-      )
-      {
-        $value = new \DateTime($value);
-      }
-
       return $value;
     }
     throw new InvalidParameterException($violationList);
@@ -304,7 +301,6 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     }
     $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
     $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
-    $constraints = array_merge($constraints, $this->getConstraintsByOptionDate($settings));
 
     return $constraints;
   }
@@ -396,30 +392,44 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
 
 
 
-  protected function getConstraintsByOptionDate(array $settings = array())
+  /**
+   * @param array  $settings
+   * @param string $key
+   * @param mixed  $value
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   */
+  protected function validateDate(array $settings = array(), $key, $value)
   {
-    $constraints = array();
-
-    switch ($settings['options']['date'])
+    $options = $settings['options']['date'];
+    $date    = \DateTime::createFromFormat($options['format'], $value);
+    if (!$date instanceof \DateTime)
     {
-      case 'date':
-        $constraints[] = new Constraints\Date();
-        break;
-      case 'datetime':
-        $constraints[] = new Constraints\DateTime();
-        break;
-      case 'time':
-        $constraints[] = new Constraints\Time();
-        break;
-      default:
-        break;
+      throw new InvalidArgumentException($key . ' is not a date string of format "' . $options['format'] . '"');
     }
 
-    return $constraints;
+    if ($options['convertToObject'] === true)
+    {
+      $value = $date;
+    }
+    elseif ($options['convertToFormat'] !== null)
+    {
+      $value = $date->format($options['convertToFormat']);
+    }
+
+    return $value;
   }
 
 
 
+  /**
+   * @param array $options
+   * @param array $config
+   * @param array $parameter
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   */
   protected function prepareCollection(array $options = array(), array $config = array(), array $parameter = array())
   {
     if (class_exists($options['returnClass']))

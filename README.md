@@ -124,7 +124,7 @@ The following array structure is needed for each parameter:
         'children' => array(), // Only if complex is true, Description under "Child Objects" or "Collections"
         'methodClass' => '{METHOD_HOLDER_CLASS}' // Only if complex is true, Description under "Own Validation Methods"
         'method' => '{METHOD}' // Only if complex is true, Description under "Own Validation Methods"
-        'type' => '(bool|integer|string|float|array|collection)', // Only if complex is false or type 'collection' is needed
+        'type' => '(bool|integer|string|float|array|collection|date)', // Only if complex is false or type 'collection' is needed
         'options' => array(
           'required' => (true|false),
           'assoc' => (true|false) // Only if type is 'array' and complex is false. Tells the transformer, whether the array is associative or not

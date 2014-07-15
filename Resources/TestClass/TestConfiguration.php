@@ -64,10 +64,12 @@ class TestConfiguration
       ],
       'birthday' => [
         'complex' => false,
-        'type'    => 'string',
+        'type'    => 'date',
         'options' => [
-          'date'              => 'date',
-          'convertToDateTime' => true
+          'date'              => [
+            'format' => 'Y-m-d',
+            'convertToObject' => true
+          ],
         ]
       ],
       'hobbys'   => [
