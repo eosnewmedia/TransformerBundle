@@ -15,6 +15,7 @@ use ENM\TransformerBundle\Exceptions\InvalidParameterException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredArgumentException;
 use ENM\TransformerBundle\Exceptions\MissingRequiredConfigArgumentException;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -22,6 +23,20 @@ use Symfony\Component\Validator\Validation;
 
 class ArrayTransformerManager implements ArrayTransformerManagerInterface
 {
+
+  /**
+   * @var \Symfony\Component\DependencyInjection\Container
+   */
+  protected $container;
+
+
+
+  function __construct(Container $container)
+  {
+    $this->container = $container;
+  }
+
+
 
   /**
    * @param object $returnClass
@@ -58,7 +73,14 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       }
 
       // prüfen, ob der Wert vorhanden ist, wenn er benötigt wird
-      $this->validateRequired($key, $returnClass->$key, $settings);
+      if (method_exists($returnClass, 'get' . ucfirst($key)))
+      {
+        $this->validateRequired($key, $returnClass->{'get' . ucfirst($key)}(), $settings);
+      }
+      else
+      {
+        $this->validateRequired($key, $returnClass->$key, $settings);
+      }
     }
 
     return $returnClass;
@@ -136,26 +158,35 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
       return null;
     }
     // primitive Typen verarbeiten
-    if (!$settings['complex'])
+    if (!array_key_exists('complex', $settings) || !$settings['complex'])
     {
       return $this->prepareNonComplex($params[$key], $settings);
     }
 
     // Wenn das ein verschachteltes Objekt ist.
-    if (count($settings['children']))
+    if (array_key_exists('children', $settings) && is_array($settings['children']))
     {
       if (is_array($params[$key]))
       {
+        if (array_key_exists('type', $settings) && $settings['type'] === 'collection')
+        {
+          if (array_key_exists('dynamic', $settings['children']) && is_array($settings['children']['dynamic']))
+          {
+            return $this->prepareCollection($settings['options'], $settings['children']['dynamic'], $params[$key]);
+          }
+          throw new MissingRequiredConfigArgumentException('Dynamic is undefined!');
+        }
+
         return $this->prepareNested($settings['options'], $settings['children'], $params[$key]);
       }
       throw new InvalidArgumentException('"' . $key . '" have to be an array. ' . gettype($params[$key]) . ' given!');
     }
 
-    // komplexer Typ
     // Ruft die übergebene Methode aus der übergebenen Klasse auf
     if (method_exists(new $settings['methodClass'](), $settings['method']))
     {
       $class = new $settings['methodClass']();
+
       return $class->{$settings['method']}($params);
     }
 
@@ -273,6 +304,8 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
         $constraints = array_merge($constraints, $this->getConstraintsByOptionMax($settings));
       }
       $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
+      $constraints = array_merge($constraints, $this->getConstraintsByOptionDate($settings));
     }
 
     return $constraints;
@@ -344,5 +377,75 @@ class ArrayTransformerManager implements ArrayTransformerManagerInterface
     }
 
     return $constraints;
+  }
+
+
+
+  protected function getConstraintsByOptionLength(array $settings = array())
+  {
+    $constraints = array();
+
+    if (array_key_exists('length', $settings['options']))
+    {
+      $constraints[] = new Constraints\Length(array(
+        'min' => $settings['options']['length']['min'],
+        'max' => $settings['options']['length']['max'],
+      ));
+    }
+
+    return $constraints;
+  }
+
+
+
+  protected function getConstraintsByOptionDate(array $settings = array())
+  {
+    $constraints = array();
+
+    if (array_key_exists('date', $settings['options']))
+    {
+      switch ($settings['options']['date'])
+      {
+        case 'date':
+          $constraints[] = new Constraints\Date();
+          break;
+        case 'datetime':
+          $constraints[] = new Constraints\DateTime();
+          break;
+        case 'time':
+          $constraints[] = new Constraints\Time();
+          break;
+      }
+    }
+
+    return $constraints;
+  }
+
+
+
+  protected function prepareCollection(array $options = array(), array $config = array(), array $parameter = array())
+  {
+    if (class_exists($options['returnClass']))
+    {
+      $returnClass = $options['returnClass'];
+
+      $collection_array = array();
+
+      foreach ($parameter as $params)
+      {
+        if (is_object($params))
+        {
+          $params = $this->container->get('enm.json.transformer.service')->objectToArray($params);
+        }
+        if (!is_array($params))
+        {
+          throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($params) . ' given!');
+        }
+        array_push($collection_array, $this->transform(new $returnClass(), $config, $params));
+      }
+
+      return $collection_array;
+    }
+    throw new InvalidArgumentException('The Class ' . $options['returnClass'] . ' does not exists');
   }
 }
