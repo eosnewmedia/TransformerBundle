@@ -4,6 +4,7 @@
 namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
+use ENM\TransformerBundle\Interfaces\TransformerInterface;
 
 /**
  * Class TransformerManager
@@ -11,11 +12,11 @@ use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
  * @package ENM\TransformerBundle\Manager
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
-class TransformerManager extends BaseTransformerManager
+class TransformerManager extends BaseTransformerManager implements TransformerInterface
 {
 
   /**
-   * @param object              $returnClass
+   * @param object|string       $returnClass
    * @param array               $config
    * @param array|object|string $values
    *
@@ -24,6 +25,7 @@ class TransformerManager extends BaseTransformerManager
    */
   public function transform($returnClass, array $config, $values)
   {
+    $returnClass = $this->validateReturnClass($returnClass);
     switch (gettype($values))
     {
       case 'array':
@@ -42,7 +44,30 @@ class TransformerManager extends BaseTransformerManager
           gettype($values)
         ));
     }
+
     return $returnClass;
+  }
+
+
+
+  /**
+   * @param $returnClass
+   *
+   * @return object
+   * @throws \Exception
+   */
+  protected function validateReturnClass($returnClass)
+  {
+    if (is_object($returnClass))
+    {
+      return $returnClass;
+    }
+
+    if (class_exists($returnClass))
+    {
+      return new $returnClass();
+    }
+    throw new \Exception(sprintf('Class %s does not exist.'));
   }
 
 

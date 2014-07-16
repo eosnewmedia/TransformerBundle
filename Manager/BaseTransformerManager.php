@@ -135,7 +135,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
     {
       $returnClass = $options['returnClass'];
 
-      return $this->transform(new $returnClass(), $config, $params);
+      return $this->createClass(new $returnClass(), $config, $params);
     }
     throw new InvalidArgumentException('The Class ' . $options['returnClass'] . ' does not exists');
   }
@@ -261,7 +261,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
         {
           throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($params) . ' given!');
         }
-        array_push($collection_array, $this->transform(new $returnClass(), $config, $params));
+        array_push($collection_array, $this->createClass(new $returnClass(), $config, $params));
       }
 
       return $collection_array;
@@ -274,7 +274,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
   /**
    * Converts an Object to an Array
    *
-   * @todo ReflectionClass
+   * @todo ReflectionClass for protected properties
    *
    * @param $object
    *
