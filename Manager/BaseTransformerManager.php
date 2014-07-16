@@ -13,25 +13,29 @@ abstract class BaseTransformerManager extends BaseValidationManager
 {
 
   /**
-   * @param object $returnClass
-   * @param array  $config
-   * @param array  $params
+   * @param object|string $returnClass
+   * @param array         $config
+   * @param array         $params
    *
    * @return object
    */
   protected function createClass($returnClass, array $config, array $params = array())
   {
+    $returnClass = $this->validateReturnClass($returnClass);
+
     $config = $this->validateConfiguration($config);
+
+    $params = array_change_key_case($params, CASE_LOWER);
 
     foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
     {
       // Standard-Wert auf NULL setzen
       $result = null;
       // prüfen, ob ein passender Eintrag im Array vorhanden ist.
-      if (array_key_exists($key, $params))
+      if (array_key_exists(strtolower($key), $params))
       {
         // Value validieren und wenn nötig verarbeiten
-        $result = $this->prepare($key, $params, $settings);
+        $result = $this->prepare(strtolower($key), $params, $settings);
       }
       $this->setValue($returnClass, $key, $result, $settings);
     }
@@ -112,32 +116,9 @@ abstract class BaseTransformerManager extends BaseValidationManager
         throw new MissingRequiredConfigArgumentException('Dynamic is undefined!');
       }
 
-      return $this->prepareMultidimensional($settings['options'], $settings['children'], $value);
+      return $this->createClass($settings['options']['returnClass'], $settings['children'], $value);
     }
     throw new InvalidArgumentException('"' . $key . '" have to be an array. ' . gettype($value) . ' given!');
-  }
-
-
-
-  /**
-   * Diese Funktion verarbeitet Unter-Konfigurationen
-   *
-   * @param array $options
-   * @param array $config
-   * @param array $params
-   *
-   * @return Object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
-   */
-  protected function prepareMultidimensional(array $options = array(), array $config = array(), array $params = array())
-  {
-    if (class_exists($options['returnClass']))
-    {
-      $returnClass = $options['returnClass'];
-
-      return $this->createClass(new $returnClass(), $config, $params);
-    }
-    throw new InvalidArgumentException('The Class ' . $options['returnClass'] . ' does not exists');
   }
 
 
@@ -243,30 +224,25 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @return array
    * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
    */
-  protected function prepareCollection(array $options = array(), array $config = array(), array $parameter = array())
+  protected function prepareCollection(array $options = array(), array $config = array(), array $values = array())
   {
-    if (class_exists($options['returnClass']))
+    $collection_array = array();
+
+    foreach ($values as $value)
     {
-      $returnClass = $options['returnClass'];
-
-      $collection_array = array();
-
-      foreach ($parameter as $params)
+      if (is_object($value))
       {
-        if (is_object($params))
-        {
-          $params = $this->objectToArray($params);
-        }
-        if (!is_array($params))
-        {
-          throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($params) . ' given!');
-        }
-        array_push($collection_array, $this->createClass(new $returnClass(), $config, $params));
+        $value = $this->objectToArray($value);
+      }
+      if (!is_array($value))
+      {
+        throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($value) . ' given!');
       }
 
-      return $collection_array;
+      array_push($collection_array, $this->createClass($options['returnClass'], $config, $value));
     }
-    throw new InvalidArgumentException('The Class ' . $options['returnClass'] . ' does not exists');
+
+    return $collection_array;
   }
 
 
@@ -274,15 +250,20 @@ abstract class BaseTransformerManager extends BaseValidationManager
   /**
    * Converts an Object to an Array
    *
-   * @todo ReflectionClass for protected properties
-   *
    * @param $object
    *
    * @return array
    */
   public function objectToArray($object)
   {
+    if (!$object instanceof \stdClass)
+    {
+      $object = new \ReflectionObject($object);
+      $object = $object->getDefaultProperties();
+    }
+
     $array = array();
+
     foreach ($object as $key => $value)
     {
       if (is_object($value))
@@ -296,5 +277,27 @@ abstract class BaseTransformerManager extends BaseValidationManager
     }
 
     return $array;
+  }
+
+
+
+  /**
+   * @param object|string $returnClass
+   *
+   * @return object
+   * @throws \Exception
+   */
+  protected function validateReturnClass($returnClass)
+  {
+    if (is_object($returnClass))
+    {
+      return $returnClass;
+    }
+
+    if (class_exists($returnClass))
+    {
+      return new $returnClass();
+    }
+    throw new \Exception(sprintf('Class %s does not exist.'));
   }
 }

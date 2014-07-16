@@ -25,7 +25,6 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    */
   public function transform($returnClass, array $config, $values)
   {
-    $returnClass = $this->validateReturnClass($returnClass);
     switch (gettype($values))
     {
       case 'array':
@@ -35,8 +34,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
         $returnClass = $this->createClass($returnClass, $config, $this->objectToArray($values));
         break;
       case 'string':
-        $stdClass    = '';
-        $returnClass = $this->createClass($returnClass, $config, $this->objectToArray($stdClass));
+        $returnClass = $this->createClass($returnClass, $config, $this->transformJsonToArray($values));
         break;
       default:
         throw new InvalidArgumentException(sprintf(
@@ -51,38 +49,16 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
 
 
   /**
-   * @param $returnClass
-   *
-   * @return object
-   * @throws \Exception
-   */
-  protected function validateReturnClass($returnClass)
-  {
-    if (is_object($returnClass))
-    {
-      return $returnClass;
-    }
-
-    if (class_exists($returnClass))
-    {
-      return new $returnClass();
-    }
-    throw new \Exception(sprintf('Class %s does not exist.'));
-  }
-
-
-
-  /**
    * @param string $value
    *
    * @return object
    * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
    */
-  protected function convertStringToJson($value)
+  public function transformJsonToArray($value)
   {
     try
     {
-      return json_decode($value);
+      return $this->objectToArray(json_decode($value));
     }
     catch (\Exception $e)
     {
