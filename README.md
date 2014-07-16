@@ -13,6 +13,8 @@ the method to call is
 
     transform(NEEDED_OBJECT, CONFIGURATION, VALUES)
 
+you can validate that the transformer is an instance of "ENM\TransformerBundle\TransformerInterface"
+
 ### NEEDED_OBJECT
 has to be an instance of the object or a string containing the class name of the object you want to get.
 #### Example
