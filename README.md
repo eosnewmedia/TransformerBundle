@@ -1,29 +1,20 @@
 # ENM\TransformerBundle
 
 ## What is it for?
-This Bundle is used to transform an array, which is following a defined structure, to a needed object.
+This Bundle is used to transform an array, an object or a json string, which is following a defined structure, to a needed object.
 
 
 ## How to use?
 You can use this Transformer through the following service:
 
-    enm.array.transformer.service
+    enm.transformer.service
 
 the method to call is
 
-    transform(NEEDED_OBJECT, PARAM_STUCTURE_CONFIGURATION, PARAMS)
-
-#### JSON
-If you want JSON instead of the param array, please use:
-
-    enm.json.transformer.service
-
-and give the JSON string instead of the param array to the transform-method:
-
-  transform(NEEDED_OBJECT, PARAM_STUCTURE_CONFIGURATION, JSON_STRING)
+    transform(NEEDED_OBJECT, CONFIGURATION, VALUES)
 
 ### NEEDED_OBJECT
-has to be an instance of the object you want to get.
+has to be an instance of the object or a string containing the class name of the object you want to get.
 #### Example
 Your class:
 
@@ -42,56 +33,44 @@ get Instance:
 
     $user = new User();
 
-### PARAM_STUCTURE_CONFIGURATION
+### CONFIGURATION
 has to be an array which follows the defined structure of the TransformerConfiguration class
 #### Example
-Your class:
+    $config = array(
+                'username' => [
+                  'complex' => false,
+                  'type' => 'string',
+                  'options' => [
+                    'required' => true
+                  ]
+                ],
+                'email' => [
+                  'complex' => false,
+                  'type' => 'string',
+                  'options' => [
+                    'required' => true
+                  ]
+                ],
+                'address' => [
+                  'complex' => true,
+                  'children' => [
+                    'street' => [
+                      // configuration array
+                    ],
+                    // other properties
+                  ],
+                  'options' => [
+                    'required' => true
+                  ]
+                ],
+             );
 
-    class UserParamStructureConfiguration implements ParamStructureConfigurationInterface
-    {
-      public static function getConfig()
-      {
-       return array(
-        'username' => [
-          'complex' => false,
-          'type' => 'string',
-          'options' => [
-            'required' => true
-          ]
-        ],
-        'email' => [
-          'complex' => false,
-          'type' => 'string',
-          'options' => [
-            'required' => true
-          ]
-        ],
-        'address' => [
-          'complex' => true,
-          'children' => [
-            'street' => [
-              // configuration array
-            ],
-            // other properties
-          ],
-          'options' => [
-            'required' => true
-          ]
-        ],
-       );
-      }
-    }
-
-get Array:
-
-    $config = UserParamStructureConfiguration::getConfig();
-
-### PARAMS
-has to be an array of the given values
+### VALUES
+has to be an array, an object or a json string of the given values
 #### Example
 Your array:
 
-    $params = array(
+    $values = array(
       'username' => 'Test User',
       'email' => 'test@user.de'
       'address' => array(
@@ -100,22 +79,15 @@ Your array:
       ),
     );
 
+Or your JSON:
+
+    $values = '{"username":"Test User","email":"test@user.de","address":{"street":"Schanzenstraße 70"}}';
+
 ### Example how it works together:
 
-    $object = $this->container->get('enm.array.transformer.service')->transform($user, $config, $params);
+    $object = $this->container->get('enm.transformer.service')->transform($user, $config, $values);
 
-### JSON_STRING
-Please note, that the JSON string must contain key-value-pairs, exactly as the param array.
-#### Example
-Your JSON:
-
-    $json = '{"username":"Test User","email":"test@user.de","address":{"street":"Schanzenstraße 70"}}';
-
-#### How it works together:
-
-    $object = $this->container->get('enm.json.transformer.service')->transform($user, $config, $json);
-
-## The ParamStructureConfiguration
+## The Configuration
 ### Configuration Array
 The following array structure is needed for each parameter:
 
