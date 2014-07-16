@@ -8,6 +8,12 @@
 
 namespace ENM\TransformerBundle\Interfaces;
 
+/**
+ * Interface ParamStructureConfigurationInterface
+ *
+ * @package ENM\TransformerBundle\Interfaces
+ * @deprecated
+ */
 interface ParamStructureConfigurationInterface
 {
 

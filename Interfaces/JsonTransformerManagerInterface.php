@@ -8,6 +8,12 @@
 
 namespace ENM\TransformerBundle\Interfaces;
 
+/**
+ * Interface JsonTransformerManagerInterface
+ *
+ * @package ENM\TransformerBundle\Interfaces
+ * @deprecated
+ */
 interface JsonTransformerManagerInterface
 {
 
@@ -17,6 +23,7 @@ interface JsonTransformerManagerInterface
    * @param string $json
    *
    * @return object
+   * @deprecated
    */
   public function transform($returnClass, array $config, $json);
 } 

@@ -8,6 +8,12 @@
 
 namespace ENM\TransformerBundle\Interfaces;
 
+/**
+ * Interface ArrayTransformerManagerInterface
+ *
+ * @package ENM\TransformerBundle\Interfaces
+ * @deprecated
+ */
 interface ArrayTransformerManagerInterface
 {
 
@@ -17,6 +23,7 @@ interface ArrayTransformerManagerInterface
    * @param array  $params
    *
    * @return object
+   * @deprecated
    */
   public function transform($returnClass, array $config, array $params = array());
 } 
