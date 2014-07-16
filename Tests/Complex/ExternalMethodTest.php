@@ -24,7 +24,7 @@ class ExternalMethodTest extends BaseTest
 
     try
     {
-      $this->container->get('enm.array.transformer.service')->transform(new \stdClass(), $config, $params);
+      $this->container->get('enm.transformer.service')->transform(new \stdClass(), $config, $params);
       $this->assertTrue(true);
     }
     catch (\Exception $e)

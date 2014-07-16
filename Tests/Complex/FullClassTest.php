@@ -37,7 +37,7 @@ class FullClassTest extends BaseTest
       ]
     );
 
-    $transformer = $this->container->get('enm.array.transformer.service');
+    $transformer = $this->container->get('enm.transformer.service');
 
     try
     {

@@ -15,7 +15,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = new \stdClass('Invalid param');
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (object) for %s.', $key));
@@ -36,7 +36,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = array('Invalid param');
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (array) for %s.', $key));
@@ -57,7 +57,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = true;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (boolean) for %s.', $key));
@@ -78,7 +78,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = 'Invalid param';
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (string) for %s.', $key));
@@ -99,7 +99,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = -2;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (negative integer) for %s.', $key));
@@ -120,7 +120,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = 5;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (positive integer) for %s.', $key));
@@ -141,7 +141,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = null;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (null) for %s.', $key));
@@ -162,7 +162,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = 0;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (zero) for %s.', $key));
@@ -183,7 +183,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = 3.5;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (zero) for %s.', $key));
@@ -204,7 +204,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $input       = -3.5;
       $transformer->transform(new \stdClass(), $config, array($key => $input));
       $this->fail(sprintf('No exception thrown with invalid value (zero) for %s.', $key));
@@ -226,7 +226,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $params      = array($key => $expectedValue);
       $rightClass  = $transformer->transform(new \stdClass(), $config, $params);
 
@@ -249,7 +249,7 @@ abstract class BaseTest extends KernelAwareTest
   {
     try
     {
-      $transformer = $this->container->get('enm.array.transformer.service');
+      $transformer = $this->container->get('enm.transformer.service');
       $params      = array($key => $unexpectedValue);
       $transformer->transform(new \stdClass(), $config, $params);
 

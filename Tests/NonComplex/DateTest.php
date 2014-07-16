@@ -23,7 +23,7 @@ class DateTest extends BaseTest
       ]
     );
 
-    $date = $this->container->get('enm.array.transformer.service')->transform(
+    $date = $this->container->get('enm.transformer.service')->transform(
                             new \stdClass(),
                               $config,
                               array('date' => '2014/07/10')

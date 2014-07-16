@@ -41,6 +41,7 @@ class TransformerConfiguration implements ConfigurationInterface
                 ->floatNode('min')->defaultValue(null)->end()
                 ->floatNode('max')->defaultValue(null)->end()
                 ->scalarNode('returnClass')->defaultValue(null)->end()
+                ->scalarNode('regex')->defaultValue(null)->end()
                 ->arrayNode('date')
                   ->addDefaultsIfNotSet()
                   ->children()

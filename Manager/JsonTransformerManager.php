@@ -9,20 +9,16 @@
 namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\Interfaces\JsonTransformerManagerInterface;
-use Symfony\Component\DependencyInjection\Container;
 
-class JsonTransformerManager implements JsonTransformerManagerInterface
+/**
+ * Class JsonTransformerManager
+ *
+ * @package    ENM\TransformerBundle\Manager
+ * @author     Philipp Marien <marien@eosnewmedia.de>
+ * @deprecated Use TransformerManager instead
+ */
+class JsonTransformerManager extends BaseTransformerManager implements JsonTransformerManagerInterface
 {
-
-  protected $container;
-
-
-
-  function __construct(Container $container)
-  {
-    $this->container = $container;
-  }
-
 
 
   /**
@@ -31,32 +27,13 @@ class JsonTransformerManager implements JsonTransformerManagerInterface
    * @param string $json
    *
    * @return object
+   * @deprecated Use TransformerManager->transform() instead
    */
   public function transform($returnClass, array $config, $json)
   {
     $jsonClass = json_decode($json);
     $params    = $this->objectToArray($jsonClass);
 
-    return $this->container->get('enm.array.transformer.service')->transform($returnClass, $config, $params);
-  }
-
-
-
-  public function objectToArray($object)
-  {
-    $array = array();
-    foreach ($object as $key => $value)
-    {
-      if (is_object($value))
-      {
-        $array[$key] = $this->objectToArray($value);
-      }
-      else
-      {
-        $array[$key] = $value;
-      }
-    }
-
-    return $array;
+    return $this->createClass($returnClass, $config, $params);
   }
 }

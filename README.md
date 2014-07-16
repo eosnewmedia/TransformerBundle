@@ -127,6 +127,7 @@ The following array structure is needed for each parameter:
         'type' => '(bool|integer|string|float|array|collection|date)', // Only if complex is false or type 'collection' is needed
         'options' => array(
           'required' => (true|false),
+          'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
           'assoc' => (true|false) // Only if type is 'array' and complex is false. Tells the transformer, whether the array is associative or not
           'min' => (int|float), // Only if type is 'integer' or 'float' and complex is false
           'max' => (int|float), // Only if type is 'integer' or 'float' and complex is false
