@@ -78,4 +78,22 @@ class OptionsTest extends BaseTest
     $this->expectSuccess($config, 'test', 'Hallo Welt');
     $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
   }
+
+
+
+  public function testRegex()
+  {
+    $config = array(
+      'test' => [
+        'complex' => false,
+        'type'    => 'string',
+        'options' => [
+          'regex' => '/^[0-9]+$/'
+        ]
+      ]
+    );
+
+    $this->expectSuccess($config, 'test', '123');
+    $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
+  }
 } 
