@@ -39,13 +39,13 @@ abstract class BaseValidationManager
    */
   protected function validateRequired($key, $value, array $settings)
   {
-    if ($settings['defaultValue'] !== null && is_null($value))
+    if (is_null($value))
     {
       $value = $settings['defaultValue'];
-    }
-    if ($settings['options']['required'] === true && is_null($value))
-    {
-      throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
+      if ($settings['options']['required'] === true && is_null($value))
+      {
+        throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
+      }
     }
 
     return $value;
