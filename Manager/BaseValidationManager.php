@@ -41,7 +41,7 @@ abstract class BaseValidationManager
   {
     if (is_null($value))
     {
-      $value = $settings['defaultValue'];
+      $value = $settings['options']['defaultValue'];
       if ($settings['options']['required'] === true && is_null($value))
       {
         throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
