@@ -51,7 +51,14 @@ abstract class BaseTransformerManager extends BaseValidationManager
    */
   protected function setValue($returnClass, $key, $value, array $settings)
   {
-    $this->validateRequired($key, $value, $settings);
+    $value = $this->validateRequired($key, $value, $settings);
+
+    // Anderer Name im Objekt?
+    if ($settings['renameTo'] !== null)
+    {
+      $key = $settings['renameTo'];
+    }
+
     // Überprüfen, ob Setter vorhanden sind
     if (method_exists($returnClass, 'set' . $key))
     {
