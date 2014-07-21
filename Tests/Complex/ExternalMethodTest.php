@@ -12,7 +12,7 @@ class ExternalMethodTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex'     => true,
+        'type' => 'method',
         'methodClass' => 'ENM\TransformerBundle\Resources\TestClass\SpecialMethodTestClass',
         'method'      => 'specialMethod'
       ]

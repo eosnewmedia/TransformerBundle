@@ -12,7 +12,6 @@ class OptionsTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'string',
         'options' => [
           'required' => true
@@ -29,7 +28,6 @@ class OptionsTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'integer',
         'options' => [
           'min' => 0
@@ -46,7 +44,6 @@ class OptionsTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'integer',
         'options' => [
           'max' => 0
@@ -64,7 +61,6 @@ class OptionsTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'string',
         'options' => [
           'length' => [
@@ -85,7 +81,6 @@ class OptionsTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'string',
         'options' => [
           'regex' => '/^[0-9]+$/'

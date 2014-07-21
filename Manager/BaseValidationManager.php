@@ -4,7 +4,7 @@
 namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
-use ENM\TransformerBundle\Exceptions\MissingRequiredArgumentException;
+use ENM\TransformerBundle\Exceptions\MissingTransformerParameterException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -14,6 +14,8 @@ abstract class BaseValidationManager
 {
 
   /**
+   * Konfiguration überprüfen
+   *
    * @param array $config
    */
   protected function validateConfiguration(array $config = array())
@@ -26,23 +28,27 @@ abstract class BaseValidationManager
 
 
   /**
+   * Pflichtfelder überprüfen
+   *
    * @param string $key
    * @param mixed  $value
    * @param array  $settings
    *
-   * @throws \ENM\TransformerBundle\Exceptions\MissingRequiredArgumentException
+   * @throws \ENM\TransformerBundle\Exceptions\MissingTransformerParameterException
    */
   protected function validateRequired($key, $value, array $settings)
   {
     if ($settings['options']['required'] === true && is_null($value))
     {
-      throw new MissingRequiredArgumentException('Required parameter "' . $key . '" is missing.');
+      throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
     }
   }
 
 
 
   /**
+   * Validierung zusammensetzen
+   *
    * @param array $settings
    *
    * @return array
@@ -141,7 +147,7 @@ abstract class BaseValidationManager
 
 
   /**
-   * Diese Methode fügt der Validierung eine Regel für erwartete-Werte hinzu.
+   * Diese Methode fügt der Validierung eine Regel für erwartete Werte hinzu.
    *
    * @param array $settings
    *
@@ -168,6 +174,13 @@ abstract class BaseValidationManager
 
 
 
+  /**
+   * Validierung für Sting-Länge hinzufügen
+   *
+   * @param array $settings
+   *
+   * @return array
+   */
   protected function getConstraintsByOptionLength(array $settings = array())
   {
     $constraints = array();
@@ -185,6 +198,13 @@ abstract class BaseValidationManager
 
 
 
+  /**
+   * Validierung für RegEx hinzufügen
+   *
+   * @param array $settings
+   *
+   * @return array
+   */
   protected function getConstraintsByOptionRegex(array $settings = array())
   {
     $constraints = array();
@@ -205,7 +225,7 @@ abstract class BaseValidationManager
    * @param mixed $value
    * @param array $settings
    *
-   * @return bool
+   * @return bool|mixed
    */
   protected function normalizeBoolean($value, array $settings)
   {
@@ -225,10 +245,10 @@ abstract class BaseValidationManager
 
 
   /**
-   * @param       $value
+   * @param mixed $value
    * @param array $settings
    *
-   * @return int
+   * @return int|mixed
    */
   protected function normalizeInteger($value, array $settings)
   {
@@ -245,10 +265,10 @@ abstract class BaseValidationManager
 
 
   /**
-   * @param       $value
+   * @param mixed $value
    * @param array $settings
    *
-   * @return float
+   * @return float|mixed
    */
   protected function normalizeFloat($value, array $settings)
   {
@@ -264,6 +284,12 @@ abstract class BaseValidationManager
 
 
 
+  /**
+   * @param mixed $value
+   * @param array $settings
+   *
+   * @return array|bool|float|int|mixed
+   */
   protected function normalizeType($value, array $settings)
   {
     $value = $this->normalizeBoolean($value, $settings);
@@ -280,10 +306,10 @@ abstract class BaseValidationManager
 
 
   /**
-   * @param       $value
+   * @param mixed $value
    * @param array $settings
    *
-   * @return array
+   * @return array|mixed
    */
   protected function normalizeArray($value, array $settings)
   {

@@ -12,7 +12,6 @@ class EnumTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'string',
         'options' => [
           'expected' => array('Hallo', 'Welt')
@@ -41,7 +40,6 @@ class EnumTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'array',
         'options' => [
           'expected' => array('Hallo', 'Welt')

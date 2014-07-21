@@ -3,7 +3,7 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
+use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\Interfaces\TransformerInterface;
 
 /**
@@ -16,12 +16,14 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
 {
 
   /**
+   * Diese Methode transformiert ein Array, ein Objekt oder einen JSON-String in ein gewünschtes Objekt und validiert die Werte
+   *
    * @param object|string       $returnClass
    * @param array               $config
    * @param array|object|string $values
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function transform($returnClass, array $config, $values)
   {
@@ -37,7 +39,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
         $returnClass = $this->createClass($returnClass, $config, $this->transformJsonToArray($values));
         break;
       default:
-        throw new InvalidArgumentException(sprintf(
+        throw new InvalidTransformerParameterException(sprintf(
           'Value of type %s can not be transformed by this Method.',
           gettype($values)
         ));
@@ -49,10 +51,12 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
 
 
   /**
+   * Diese Methode wandelt einen JSON-String in ein Array um.
+   *
    * @param string $value
    *
-   * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function transformJsonToArray($value)
   {
@@ -63,6 +67,6 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
     catch (\Exception $e)
     {
     }
-    throw new InvalidArgumentException("The given Value isn't a valid JSON-String.");
+    throw new InvalidTransformerParameterException("The given Value isn't a valid JSON-String.");
   }
 } 

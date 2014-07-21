@@ -8,8 +8,6 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Interfaces\JsonTransformerManagerInterface;
-
 /**
  * Class JsonTransformerManager
  *
@@ -17,7 +15,7 @@ use ENM\TransformerBundle\Interfaces\JsonTransformerManagerInterface;
  * @author     Philipp Marien <marien@eosnewmedia.de>
  * @deprecated Use TransformerManager instead
  */
-class JsonTransformerManager extends BaseTransformerManager implements JsonTransformerManagerInterface
+class JsonTransformerManager extends BaseTransformerManager
 {
 
 

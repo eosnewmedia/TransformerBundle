@@ -3,10 +3,8 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Exceptions\InvalidArgumentException;
-use ENM\TransformerBundle\Exceptions\InvalidParameterException;
-use ENM\TransformerBundle\Exceptions\MissingRequiredConfigArgumentException;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use Symfony\Component\Validator\Validation;
 
 abstract class BaseTransformerManager extends BaseValidationManager
@@ -45,6 +43,12 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
 
+  /**
+   * @param object $returnClass
+   * @param string $key
+   * @param mixed  $value
+   * @param array  $settings
+   */
   protected function setValue($returnClass, $key, $value, array $settings)
   {
     $this->validateRequired($key, $value, $settings);
@@ -68,8 +72,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param array  $params
    * @param array  $settings
    *
-   * @return mixed|Object|bool|null
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @return array|bool|\DateTime|mixed|null|object|string
    */
   protected function prepare($key, array $params = array(), array $settings = array())
   {
@@ -86,13 +89,13 @@ abstract class BaseTransformerManager extends BaseValidationManager
     }
 
     // verschachteltes Objekt
-    if (count($settings['children']) > 0)
+    if (count($settings['children']) > 0 || in_array($settings['type'], array('object', 'collection')))
     {
       return $this->prepareNested($settings, $key, $params[$key]);
     }
 
     // externe Methode
-    if ($settings['methodClass'] !== null)
+    if ($settings['methodClass'] !== null || $settings['type'] === 'method')
     {
       return $this->useExternalValidation($settings, $params[$key]);
     }
@@ -103,6 +106,15 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
 
+  /**
+   * @param array  $settings
+   * @param string $key
+   * @param mixed  $value
+   *
+   * @return array|object
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
   protected function prepareNested(array $settings, $key, $value)
   {
     if (is_array($value))
@@ -113,12 +125,13 @@ abstract class BaseTransformerManager extends BaseValidationManager
         {
           return $this->prepareCollection($settings['options'], $settings['children']['dynamic'], $value);
         }
-        throw new MissingRequiredConfigArgumentException('Dynamic is undefined!');
+        throw new InvalidTransformerConfigurationException('Dynamic is undefined!');
       }
 
       return $this->createClass($settings['options']['returnClass'], $settings['children'], $value);
     }
-    throw new InvalidArgumentException('"' . $key . '" have to be an array. ' . gettype($value) . ' given!');
+    throw new InvalidTransformerParameterException('"' . $key . '" have to be an array. ' . gettype($value)
+                                                   . ' given!');
   }
 
 
@@ -128,7 +141,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param mixed $value
    *
    * @return mixed
-   * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function useExternalValidation(array $settings, $value)
   {
@@ -140,7 +153,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
         return $class->{$settings['method']}($value);
       }
 
-      throw new InvalidConfigurationException(sprintf(
+      throw new InvalidTransformerConfigurationException(sprintf(
         'Method %s of class %s does not exist.',
         array(
           $settings['method'],
@@ -149,7 +162,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
       ));
     }
 
-    throw new InvalidConfigurationException(sprintf('Class %s does not exist.', $settings['methodClass']));
+    throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.', $settings['methodClass']));
   }
 
 
@@ -160,8 +173,8 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param mixed $value
    * @param array $settings
    *
-   * @return array|bool|string
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidParameterException
+   * @return array|bool|float|int|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function prepareNonComplex($value, array $settings = array())
   {
@@ -181,7 +194,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
     {
       return $value;
     }
-    throw new InvalidParameterException($violationList);
+    throw new InvalidTransformerParameterException($violationList);
   }
 
 
@@ -191,7 +204,8 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param string $key
    * @param mixed  $value
    *
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @return \DateTime|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function prepareDate(array $settings = array(), $key, $value)
   {
@@ -199,7 +213,8 @@ abstract class BaseTransformerManager extends BaseValidationManager
     $date    = \DateTime::createFromFormat($options['format'], $value);
     if (!$date instanceof \DateTime)
     {
-      throw new InvalidArgumentException($key . ' is not a date string of format "' . $options['format'] . '"');
+      throw new InvalidTransformerParameterException($key . ' is not a date string of format "' . $options['format']
+                                                     . '"');
     }
 
     if ($options['convertToObject'] === true)
@@ -222,7 +237,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param array $parameter
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function prepareCollection(array $options = array(), array $config = array(), array $values = array())
   {
@@ -236,7 +251,8 @@ abstract class BaseTransformerManager extends BaseValidationManager
       }
       if (!is_array($value))
       {
-        throw new InvalidArgumentException('Item of Collection has to be an array. ' . gettype($value) . ' given!');
+        throw new InvalidTransformerParameterException('Item of Collection has to be an array. ' . gettype($value)
+                                                       . ' given!');
       }
 
       array_push($collection_array, $this->createClass($options['returnClass'], $config, $value));
@@ -298,6 +314,6 @@ abstract class BaseTransformerManager extends BaseValidationManager
     {
       return new $returnClass();
     }
-    throw new \Exception(sprintf('Class %s does not exist.'));
+    throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.'));
   }
 }

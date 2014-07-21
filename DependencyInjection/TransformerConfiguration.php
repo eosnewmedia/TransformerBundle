@@ -28,8 +28,8 @@ class TransformerConfiguration implements ConfigurationInterface
       ->useAttributeAsKey('name')
         ->prototype('array')
           ->children()
-            ->booleanNode('complex')->defaultValue(false)->end()
-            ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array', 'collection', 'date'))->defaultValue(null)->end()
+            ->booleanNode('complex')->defaultValue(null)->end() // @deprecated
+            ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array', 'collection', 'date', 'object', 'method'))->defaultValue(null)->end()
             ->scalarNode('methodClass')->defaultValue(null)->end()
             ->scalarNode('method')->defaultValue(null)->end()
             ->arrayNode('children')->prototype('variable')->end()->end()

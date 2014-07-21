@@ -11,5 +11,10 @@ namespace ENM\TransformerBundle\Interfaces;
 interface EnumInterface
 {
 
+  /**
+   * This function returns an array with static properties of the extending class.
+   *
+   * @return array
+   */
   public static function toArray();
 } 

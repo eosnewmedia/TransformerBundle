@@ -10,7 +10,6 @@ class TestConfiguration
   {
     return array(
       'username' => [
-        'complex' => false,
         'type'    => 'string',
         'options' => [
           'required' => true,
@@ -21,17 +20,15 @@ class TestConfiguration
         ]
       ],
       'address'  => [
-        'complex'  => true,
+        'type'     => 'object',
         'children' => [
           'street'  => [
-            'complex' => false,
             'type'    => 'string',
             'options' => [
               'required' => true
             ]
           ],
           'plz'     => [
-            'complex' => false,
             'type'    => 'string',
             'options' => [
               'required' => true,
@@ -42,14 +39,12 @@ class TestConfiguration
             ]
           ],
           'place'   => [
-            'complex' => false,
             'type'    => 'string',
             'options' => [
               'required' => true
             ]
           ],
           'country' => [
-            // 'complex' => false,
             'type'    => 'string',
             'options' => [
               'required' => true,
@@ -63,32 +58,28 @@ class TestConfiguration
         ]
       ],
       'birthday' => [
-        'complex' => false,
         'type'    => 'date',
         'options' => [
-          'date'              => [
-            'format' => 'Y-m-d',
+          'date' => [
+            'format'          => 'Y-m-d',
             'convertToObject' => true
           ],
         ]
       ],
       'hobbys'   => [
-        'complex'  => true,
+        'type'     => 'collection',
         'children' => [
           'dynamic' => [
             'name'       => [
-              'complex' => false,
-              'type'    => 'string'
+              'type' => 'string'
             ],
             'years'      => [
-              'complex' => false,
               'type'    => 'float',
               'options' => [
                 'min' => 0
               ]
             ],
             'daysInWeek' => [
-              'complex' => false,
               'type'    => 'integer',
               'options' => [
                 'min' => 0,
@@ -97,7 +88,6 @@ class TestConfiguration
             ]
           ]
         ],
-        'type'     => 'collection',
         'options'  => [
           'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\HobbyTestClass'
         ]

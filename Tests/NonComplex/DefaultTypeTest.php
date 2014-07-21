@@ -12,7 +12,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'bool',
       ]
     );
@@ -36,7 +35,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'string',
       ]
     );
@@ -59,7 +57,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'array',
         'options' => [
           'assoc' => false,
@@ -85,7 +82,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'array',
         'options' => [
           'assoc' => true,
@@ -111,7 +107,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'integer',
       ]
     );
@@ -134,7 +129,6 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'complex' => false,
         'type'    => 'float',
       ]
     );

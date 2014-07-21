@@ -19,11 +19,9 @@ class CollectionTest extends BaseTest
 
     $config = array(
       'list' => array(
-        'complex'  => true,
         'children' => array(
           'dynamic' => array(
             'test' => array(
-              'complex' => false,
               'type'    => 'string',
               'options' => array(
                 'required' => true,

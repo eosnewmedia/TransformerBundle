@@ -12,7 +12,7 @@ interface TransformerInterface
    * @param array|object|string $values
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidArgumentException
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function transform($returnClass, array $config, $values);
 } 

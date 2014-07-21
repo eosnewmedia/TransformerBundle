@@ -8,8 +8,6 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Interfaces\ArrayTransformerManagerInterface;
-
 /**
  * Class ArrayTransformerManager
  *
@@ -17,7 +15,7 @@ use ENM\TransformerBundle\Interfaces\ArrayTransformerManagerInterface;
  * @author     Philipp Marien <marien@eosnewmedia.de>
  * @deprecated Use TransformerManager instead
  */
-class ArrayTransformerManager extends BaseTransformerManager implements ArrayTransformerManagerInterface
+class ArrayTransformerManager extends BaseTransformerManager
 {
 
 
