@@ -92,6 +92,7 @@ The following array structure is needed for each parameter:
 
       '{KEY}' => array( // Description under "Key"
         'type' => '(bool|integer|string|float|array|collection|date|object|method)',
+        'renameTo' => (string), // The property name in the object, if it differs to the key
         'children' => array(), // If 'type' is 'object' or 'collection',  Description under "Child Objects" or "Collections"
         'methodClass' => '{METHOD_HOLDER_CLASS}' If 'type' is 'method', Description under "Own Validation Methods"
         'method' => '{METHOD}' // If 'type' is 'method', Description under "Own Validation Methods"
@@ -102,6 +103,7 @@ The following array structure is needed for each parameter:
           'min' => (int|float), // Only if type is 'integer' or 'float'
           'max' => (int|float), // Only if type is 'integer' or 'float'
           'expected' => array(), // Description under "Enumerations",
+          'defaultValue' => (any), // The default, if no value is set
           'date' => array( // Only if type is 'date'
             'format' => (string), // Expected Date Format, Default: Y-m-d
             'convertToObject' => (true|false), // True, if Date should converted to DateTime-Object
