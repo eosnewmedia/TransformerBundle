@@ -91,4 +91,44 @@ class OptionsTest extends BaseTest
     $this->expectSuccess($config, 'test', '123');
     $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
   }
+
+
+
+  public function testDefaultValue()
+  {
+    $config = array(
+      'test' => [
+        'type'    => 'string',
+        'options' => [
+          'required'     => true,
+          'defaultValue' => 'Hallo Welt!'
+        ]
+      ]
+    );
+
+    $class = $this->container->get('enm.transformer.service')->transform(new \stdClass(), $config, array());
+    $this->assertEquals('Hallo Welt!', $class->test);
+  }
+
+
+
+  public function testRename()
+  {
+    $config = array(
+      'test' => [
+        'type'     => 'string',
+        'renameTo' => 'abc',
+        'options'  => [
+          'required' => true,
+        ]
+      ]
+    );
+
+    $class = $this->container->get('enm.transformer.service')->transform(
+                             new \stdClass(),
+                               $config,
+                               array('test' => 'Hallo Welt!')
+    );
+    $this->assertEquals('Hallo Welt!', $class->abc);
+  }
 } 
