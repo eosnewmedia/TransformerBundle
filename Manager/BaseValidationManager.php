@@ -6,12 +6,27 @@ namespace ENM\TransformerBundle\Manager;
 use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
 use ENM\TransformerBundle\Exceptions\MissingTransformerParameterException;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 abstract class BaseValidationManager
 {
+
+  /**
+   * @var \Symfony\Component\DependencyInjection\Container
+   */
+  protected $container;
+
+
+
+  public function __construct(Container $container)
+  {
+    $this->container = $container;
+  }
+
+
 
   /**
    * Konfiguration überprüfen

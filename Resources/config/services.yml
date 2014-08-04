@@ -1,9 +1,13 @@
 services:
     enm.array.transformer.service:
         class: ENM\TransformerBundle\Manager\ArrayTransformerManager
+        arguments: [ @service_container ]
+
     enm.json.transformer.service:
         class: ENM\TransformerBundle\Manager\JsonTransformerManager
+        arguments: [ @service_container ]
 
     enm.transformer.service:
         class: ENM\TransformerBundle\Manager\TransformerManager
+        arguments: [ @service_container ]
 

@@ -5,10 +5,19 @@ namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Validation;
 
 abstract class BaseTransformerManager extends BaseValidationManager
 {
+
+
+  public function __construct(Container $container)
+  {
+    parent::__construct($container);
+  }
+
+
 
   /**
    * @param object|string $returnClass
@@ -186,7 +195,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
   protected function prepareNonComplex($value, array $settings = array())
   {
     $constrains = $this->createValidationConstrains($settings);
-    $validator  = Validation::createValidator();
+    $validator  = $this->container->get('validator');
     $value      = $this->normalizeType($value, $settings);
     try
     {

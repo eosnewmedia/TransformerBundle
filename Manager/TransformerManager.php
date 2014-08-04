@@ -5,6 +5,7 @@ namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\Interfaces\TransformerInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class TransformerManager
@@ -14,6 +15,13 @@ use ENM\TransformerBundle\Interfaces\TransformerInterface;
  */
 class TransformerManager extends BaseTransformerManager implements TransformerInterface
 {
+
+  public function __construct(Container $container)
+  {
+    parent::__construct($container);
+  }
+
+
 
   /**
    * Diese Methode transformiert ein Array, ein Objekt oder einen JSON-String in ein gewünschtes Objekt und validiert die Werte

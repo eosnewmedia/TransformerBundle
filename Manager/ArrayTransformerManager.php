@@ -18,6 +18,12 @@ namespace ENM\TransformerBundle\Manager;
 class ArrayTransformerManager extends BaseTransformerManager
 {
 
+  public function __construct(Container $container)
+  {
+    parent::__construct($container);
+  }
+
+
 
   /**
    * @param object $returnClass
