@@ -38,22 +38,16 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
     switch (gettype($values))
     {
       case 'array':
-        $returnClass = $this->createClass($returnClass, $config, $values);
-        break;
+        return $this->createClass($returnClass, $config, $values);
       case 'object':
-        $returnClass = $this->createClass($returnClass, $config, $this->objectToArray($values));
-        break;
+        return $this->createClass($returnClass, $config, $this->objectToArray($values));
       case 'string':
-        $returnClass = $this->createClass($returnClass, $config, $this->transformJsonToArray($values));
-        break;
-      default:
-        throw new InvalidTransformerParameterException(sprintf(
-          'Value of type %s can not be transformed by this Method.',
-          gettype($values)
-        ));
+        return $this->createClass($returnClass, $config, $this->transformJsonToArray($values));
     }
-
-    return $returnClass;
+    throw new InvalidTransformerParameterException(sprintf(
+      'Value of type %s can not be transformed by this Method.',
+      gettype($values)
+    ));
   }
 
 
@@ -76,5 +70,35 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
     {
     }
     throw new InvalidTransformerParameterException("The given Value isn't a valid JSON-String.");
+  }
+
+
+
+  /**
+   * Diese Methode transformiert ein Objekt zurück in einen JSON-String, ein Array oder eine Standard-Klasse
+   *
+   * @param object $object
+   * @param array  $config
+   * @param string $result_type
+   *
+   * @return array|\stdClass|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  public function reverseTransform($object, array $config, $result_type)
+  {
+    switch (gettype($result_type))
+    {
+      case 'array':
+        return $this->objectToArray($this->reverseClass($config, $object));
+      case 'object':
+        return $this->reverseClass($config, $object);
+      case 'json':
+      case 'string':
+        return json_encode($this->reverseClass($config, $object));
+    }
+    throw new InvalidTransformerParameterException(sprintf(
+      "The given Object can't be converted to %s by this Method!",
+      $result_type
+    ));
   }
 } 

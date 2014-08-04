@@ -53,17 +53,45 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
   /**
+   * @param array  $config
+   * @param object $object
+   *
+   * @return \stdClass
+   */
+  protected function reverseClass(array $config, $object)
+  {
+    $returnClass = new \stdClass();
+    $params      = array_change_key_case(
+      $this->objectToArray($this->createClass(new \stdClass(), $config, $this->objectToArray($object))),
+      CASE_LOWER
+    );
+
+    foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
+    {
+      if (array_key_exists('renameTo', $settings) && $settings['renameTo'] !== null)
+      {
+        $key = $settings['renameTo'];
+      }
+      $this->setValue($returnClass, $key, $params[$key], $settings, false);
+    }
+
+    return $returnClass;
+  }
+
+
+
+  /**
    * @param object $returnClass
    * @param string $key
    * @param mixed  $value
    * @param array  $settings
    */
-  protected function setValue($returnClass, $key, $value, array $settings)
+  protected function setValue($returnClass, $key, $value, array $settings, $reverse = false)
   {
     $value = $this->validateRequired($key, $value, $settings);
 
     // Anderer Name im Objekt?
-    if ($settings['renameTo'] !== null)
+    if ($settings['renameTo'] !== null && $reverse === false)
     {
       $key = $settings['renameTo'];
     }
