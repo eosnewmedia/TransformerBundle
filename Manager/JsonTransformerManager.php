@@ -8,6 +8,8 @@
 
 namespace ENM\TransformerBundle\Manager;
 
+use Symfony\Component\DependencyInjection\Container;
+
 /**
  * Class JsonTransformerManager
  *
