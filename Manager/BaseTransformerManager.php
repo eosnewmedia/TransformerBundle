@@ -102,19 +102,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
       $key = $settings['renameTo'];
     }
 
-    $pieces = explode('_', $key);
-    $setter = 'set';
-    if (count($pieces) > 0)
-    {
-      foreach ($pieces as $piece)
-      {
-        $setter .= ucfirst($piece);
-      }
-    }
-    else
-    {
-      $setter .= ucfirst($key);
-    }
+    $setter = $this->getSetter($key);
 
     // Überprüfen, ob Setter vorhanden sind
     if (method_exists($returnClass, $setter))
@@ -127,6 +115,25 @@ abstract class BaseTransformerManager extends BaseValidationManager
       // setzt den Property Wert
       $returnClass->$key = $value;
     }
+  }
+
+
+
+  protected function getSetter($key)
+  {
+    $pieces = explode('_', $key);
+    $setter = 'set';
+    if (count($pieces) > 0)
+    {
+      foreach ($pieces as $piece)
+      {
+        $setter .= ucfirst($piece);
+      }
+
+      return $setter;
+    }
+
+    return $setter . ucfirst($key);
   }
 
 

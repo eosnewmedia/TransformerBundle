@@ -15,7 +15,7 @@ class FullClassTest extends BaseTest
     $config = TestConfiguration::getConfig();
 
     $params = array(
-      'username' => 'testUser',
+      'user' => 'testUser',
       'address'  => [
         'street'  => 'Test Straße 3a',
         'plz'     => '21031',

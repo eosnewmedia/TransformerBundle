@@ -15,7 +15,7 @@ class JsonTest extends BaseTest
     $config = TestConfiguration::getConfig();
     $params = json_encode(
       array(
-        'username' => 'testUser',
+        'user' => 'testUser',
         'address'  => [
           'street'  => 'Test Straße 3a',
           'plz'     => '21031',
