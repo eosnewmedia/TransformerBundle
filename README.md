@@ -268,6 +268,21 @@ Using the enumeration class in the configuration:
 The parameter array you give to the transform method is a simple array of key-value-pairs.
 The key must be always the same as the property of the needed object and the configuration key.
 
+# reverseTransform
+With this Method, you're in a position to transform back your object to a stdClass, JSON-String or array.
+
+Simply call the Transformer-Service and then
+
+    $transformer->reverseTransform($object, $config, $type)
+
+I think, object and config are clearly...
+
+The type have to be a string. Possible values are:
+
+  - array
+  - string
+  - json (same result as string)
+  - object
 
 ## Questions?
 Write an email to "marien@eosnewmedia.de"!
