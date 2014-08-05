@@ -15,14 +15,14 @@ class ReverseTransformTest extends BaseTest
     $config = TestConfiguration::getConfig();
 
     $params = array(
-      'username' => 'testUser',
+      'user'     => 'testUser',
       'address'  => [
         'street'  => 'Test Straße 3a',
         'plz'     => '21031',
         'place'   => 'Test Place',
         'country' => 'Germany'
       ],
-      'birthday' => '1990-01-01',
+      'birthday' => '1992-10-14',
       'hobbys'   => [
         [
           'name'       => 'Musik',
@@ -30,9 +30,9 @@ class ReverseTransformTest extends BaseTest
           'daysInWeek' => 1
         ],
         [
-          'name'       => 'Fitness',
-          'years'      => 1.4,
-          'daysInWeek' => 3
+          'name'         => 'Fitness',
+          'years'        => 1.4,
+          'days_in_week' => 3
         ]
       ]
     );
@@ -42,9 +42,8 @@ class ReverseTransformTest extends BaseTest
     try
     {
       $object = $transformer->transform(new UserTestClass(), $config, $params);
-
-      $this->assertArrayHasKey('username', $transformer->reverseTransform($object, $config, 'array'));
-      $this->assertObjectHasAttribute('username', $transformer->reverseTransform($object, $config, 'object'));
+      $this->assertArrayHasKey('user', $transformer->reverseTransform($object, $config, 'array'));
+      $this->assertObjectHasAttribute('user', $transformer->reverseTransform($object, $config, 'object'));
       $this->assertJson($transformer->reverseTransform($object, $config, 'string'));
       $this->assertJson($transformer->reverseTransform($object, $config, 'json'));
 
@@ -52,7 +51,7 @@ class ReverseTransformTest extends BaseTest
     }
     catch (\Exception $e)
     {
-      $this->fail($e);
+      $this->fail($e->getMessage());
     }
   }
 }

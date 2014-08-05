@@ -86,7 +86,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    */
   public function reverseTransform($object, array $config, $result_type)
   {
-    switch (gettype($result_type))
+    switch ($result_type)
     {
       case 'array':
         return $this->objectToArray($this->reverseClass($config, $object));

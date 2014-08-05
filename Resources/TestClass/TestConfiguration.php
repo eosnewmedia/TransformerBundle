@@ -9,9 +9,10 @@ class TestConfiguration
   public static function getConfig()
   {
     return array(
-      'username' => [
-        'type'    => 'string',
-        'options' => [
+      'user'     => [
+        'renameTo' => 'username',
+        'type'     => 'string',
+        'options'  => [
           'required' => true,
           'length'   => [
             'min' => 3,
@@ -70,16 +71,16 @@ class TestConfiguration
         'type'     => 'collection',
         'children' => [
           'dynamic' => [
-            'name'       => [
+            'name'         => [
               'type' => 'string'
             ],
-            'years'      => [
+            'years'        => [
               'type'    => 'float',
               'options' => [
                 'min' => 0
               ]
             ],
-            'daysInWeek' => [
+            'days_in_week' => [
               'type'    => 'integer',
               'options' => [
                 'min' => 0,

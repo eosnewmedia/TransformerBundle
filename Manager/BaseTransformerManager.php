@@ -44,6 +44,12 @@ abstract class BaseTransformerManager extends BaseValidationManager
         // Value validieren und wenn nötig verarbeiten
         $result = $this->prepare(strtolower($key), $params, $settings);
       }
+      // anderer Key ("renameTo" aus der Konfiguration)
+      elseif (array_key_exists(strtolower($settings['renameTo']), $params))
+      {
+        // Value validieren und wenn nötig verarbeiten
+        $result = $this->prepare(strtolower($settings['renameTo']), $params, $settings);
+      }
       $this->setValue($returnClass, $key, $result, $settings);
     }
 
@@ -61,18 +67,18 @@ abstract class BaseTransformerManager extends BaseValidationManager
   protected function reverseClass(array $config, $object)
   {
     $returnClass = new \stdClass();
-    $params      = array_change_key_case(
-      $this->objectToArray($this->createClass(new \stdClass(), $config, $this->objectToArray($object))),
-      CASE_LOWER
-    );
 
+    $object = $this->createClass(new \stdClass(), $config, $this->objectToArray($object));
+    $config = $this->validateConfiguration($config);
     foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
     {
       if (array_key_exists('renameTo', $settings) && $settings['renameTo'] !== null)
       {
-        $key = $settings['renameTo'];
+        $temp                 = $key;
+        $key                  = $settings['renameTo'];
+        $settings['renameTo'] = $temp;
       }
-      $this->setValue($returnClass, $key, $params[$key], $settings, false);
+      $this->setValue($returnClass, $key, $object->$key, $settings, false);
     }
 
     return $returnClass;
@@ -96,11 +102,25 @@ abstract class BaseTransformerManager extends BaseValidationManager
       $key = $settings['renameTo'];
     }
 
+    $pieces = explode('_', $key);
+    $setter = 'set';
+    if (count($pieces) > 0)
+    {
+      foreach ($pieces as $piece)
+      {
+        $setter .= ucfirst($piece);
+      }
+    }
+    else
+    {
+      $setter .= ucfirst($key);
+    }
+
     // Überprüfen, ob Setter vorhanden sind
-    if (method_exists($returnClass, 'set' . $key))
+    if (method_exists($returnClass, $setter))
     {
       // Ruft die Setter der ReturnClass auf
-      $returnClass->{'set' . $key}($value);
+      $returnClass->{$setter}($value);
     }
     else
     {
@@ -243,6 +263,26 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
 
+  protected function createDateFromArray($key, array $array, $format)
+  {
+    if (array_key_exists('date', $array))
+    {
+      try
+      {
+        $date = new \DateTime($array['date']);
+
+        return $date->format($format);
+      }
+      catch (\Exception $e)
+      {
+      }
+    }
+    throw new InvalidTransformerParameterException(
+      $key . ' is not a date string of format "' . $format . '"');
+  }
+
+
+
   /**
    * @param array  $settings
    * @param string $key
@@ -254,7 +294,14 @@ abstract class BaseTransformerManager extends BaseValidationManager
   protected function prepareDate(array $settings = array(), $key, $value)
   {
     $options = $settings['options']['date'];
-    $date    = \DateTime::createFromFormat($options['format'], $value);
+
+    if (is_array($value))
+    {
+      $value = $this->createDateFromArray($key, $value, $options['format']);
+    }
+
+    $date = \DateTime::createFromFormat($options['format'], $value);
+
     if (!$date instanceof \DateTime)
     {
       throw new InvalidTransformerParameterException($key . ' is not a date string of format "' . $options['format']
@@ -310,33 +357,45 @@ abstract class BaseTransformerManager extends BaseValidationManager
   /**
    * Converts an Object to an Array
    *
-   * @param $object
+   * @param object|array $object
    *
    * @return array
    */
-  public function objectToArray($object)
+  public function objectToArray($input)
   {
-    if (!$object instanceof \stdClass)
+    // Rückgabe Array erstellen
+    $final = array();
+    // Object in Array umwandeln
+    $array = (array) $input;
+
+    foreach ($array as $key => $value)
     {
-      $object = new \ReflectionObject($object);
-      $object = $object->getDefaultProperties();
+      // Protected und Private Properties des Objektes im Array erreichbar machen
+      if (is_object($input))
+      {
+        // PHP Benennungen vom Konvertieren Rückgängigmachen
+        $key = str_replace("\0*\0", '', $key);
+        $key = str_replace("\0" . get_class($input) . "\0", '', $key);
+
+        // Die Reflection-Klasse wird an dieser Stelle benötigt, da PHP Integer-Werte aus dem Objekt nicht in das Array übernimmts
+        $reflectionClass = new \ReflectionClass(get_class($input));
+        if ($reflectionClass->hasProperty($key))
+        {
+          $property = $reflectionClass->getProperty($key);
+          $property->setAccessible(true);
+          $value = $property->getValue($input);
+        }
+      }
+      // Tiefer verschachtelt?
+      if (is_object($value) || is_array($value))
+      {
+        $value = $this->objectToArray($value);
+      }
+      // Wert ins Array setzen
+      $final[$key] = $value;
     }
 
-    $array = array();
-
-    foreach ($object as $key => $value)
-    {
-      if (is_object($value))
-      {
-        $array[$key] = $this->objectToArray($value);
-      }
-      else
-      {
-        $array[$key] = $value;
-      }
-    }
-
-    return $array;
+    return $final;
   }
 
 
