@@ -25,9 +25,10 @@ class ReverseTransformTest extends BaseTest
       'birthday' => '1992-10-14',
       'hobbys'   => [
         [
-          'name'       => 'Musik',
-          'years'      => 4,
-          'daysInWeek' => 1
+          'abc'          => 'lalala',
+          'name'         => 'Musik',
+          'years'        => 4,
+          'days_in_week' => 1
         ],
         [
           'name'         => 'Fitness',
@@ -51,7 +52,7 @@ class ReverseTransformTest extends BaseTest
     }
     catch (\Exception $e)
     {
-      $this->fail($e->getMessage());
+      $this->fail($e->getFile() . ' - ' . $e->getLine() . ': ' . $e->getMessage());
     }
   }
 }

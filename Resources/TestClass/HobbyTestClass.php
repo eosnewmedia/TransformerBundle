@@ -9,6 +9,11 @@ class HobbyTestClass
   /**
    * @var string
    */
+  protected $test = '';
+
+  /**
+   * @var string
+   */
   protected $name;
 
   /**
@@ -85,5 +90,27 @@ class HobbyTestClass
   public function getYears()
   {
     return $this->years;
+  }
+
+
+
+  /**
+   * @param string $test
+   */
+  public function setTest($test)
+  {
+    $this->test = $test;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return string
+   */
+  public function getTest()
+  {
+    return $this->test;
   }
 }

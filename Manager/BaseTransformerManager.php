@@ -45,7 +45,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
         $result = $this->prepare(strtolower($key), $params, $settings);
       }
       // anderer Key ("renameTo" aus der Konfiguration)
-      elseif (array_key_exists(strtolower($settings['renameTo']), $params))
+      elseif ($settings['renameTo'] !== null && array_key_exists(strtolower($settings['renameTo']), $params))
       {
         // Value validieren und wenn nötig verarbeiten
         $result = $this->prepare(strtolower($settings['renameTo']), $params, $settings);
@@ -72,16 +72,73 @@ abstract class BaseTransformerManager extends BaseValidationManager
     $config = $this->validateConfiguration($config);
     foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
     {
-      if (array_key_exists('renameTo', $settings) && $settings['renameTo'] !== null)
+      if ($settings['renameTo'] !== null)
       {
         $temp                 = $key;
         $key                  = $settings['renameTo'];
         $settings['renameTo'] = $temp;
       }
-      $this->setValue($returnClass, $key, $object->$key, $settings, false);
+
+      $value = $this->reverseNested($settings, $object->$key);
+
+      $this->setValue($returnClass, $key, $value, $settings);
     }
 
     return $returnClass;
+  }
+
+
+
+  /**
+   * @param array $settings
+   * @param mixed $value
+   *
+   * @return array|\stdClass|mixed
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function reverseNested(array $settings, $value)
+  {
+    try
+    {
+      if (is_array($value) && $settings['type'] === 'collection')
+      {
+        if (!array_key_exists('dynamic', $settings['children']) || !is_array($settings['children']['dynamic']))
+        {
+          throw new InvalidTransformerConfigurationException('Dynamic is undefined!');
+        }
+        $value = $this->reverseCollection($settings['children']['dynamic'], $value);
+      }
+      elseif (is_object($value))
+      {
+        $value = $this->reverseClass($settings['children'], $value);
+      }
+    }
+    catch (\Exception $e)
+    {
+      throw new InvalidTransformerParameterException($e->getMessage());
+    }
+
+    return $value;
+  }
+
+
+
+  /**
+   * @param array $config
+   * @param array $values
+   *
+   * @return array
+   */
+  protected function reverseCollection(array $config, array $values)
+  {
+    $collection_array = array();
+
+    foreach ($values as $value)
+    {
+      array_push($collection_array, $this->reverseClass($config, $value));
+    }
+
+    return $collection_array;
   }
 
 
@@ -92,12 +149,12 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param mixed  $value
    * @param array  $settings
    */
-  protected function setValue($returnClass, $key, $value, array $settings, $reverse = false)
+  protected function setValue($returnClass, $key, $value, array $settings)
   {
     $value = $this->validateRequired($key, $value, $settings);
 
     // Anderer Name im Objekt?
-    if ($settings['renameTo'] !== null && $reverse === false)
+    if ($settings['renameTo'] !== null)
     {
       $key = $settings['renameTo'];
     }
@@ -270,22 +327,35 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
 
-  protected function createDateFromArray($key, array $array, $format)
+  /**
+   * Diese Funktion generiert aus einem Array wieder ein Dateime-Objekt
+   *
+   * @param string $key
+   * @param mixed  $value
+   * @param string $format
+   *
+   * @return mixed
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function createDateFromArray($key, $value, $format)
   {
-    if (array_key_exists('date', $array))
+    if (is_array($value))
     {
       try
       {
-        $date = new \DateTime($array['date']);
+        // 'date' ist der Standard-Key, wenn ein DateTime-Objekt in Array umgewandelt wird
+        $date = new \DateTime($value['date']);
 
         return $date->format($format);
       }
       catch (\Exception $e)
       {
+        throw new InvalidTransformerParameterException(
+          $key . ' is not a date string of format "' . $format . '"');
       }
     }
-    throw new InvalidTransformerParameterException(
-      $key . ' is not a date string of format "' . $format . '"');
+
+    return $value;
   }
 
 
@@ -302,10 +372,8 @@ abstract class BaseTransformerManager extends BaseValidationManager
   {
     $options = $settings['options']['date'];
 
-    if (is_array($value))
-    {
-      $value = $this->createDateFromArray($key, $value, $options['format']);
-    }
+    // Wenn Value ein Array ist, wird es zum String normalisiert
+    $value = $this->createDateFromArray($key, $value, $options['format']);
 
     $date = \DateTime::createFromFormat($options['format'], $value);
 
@@ -364,12 +432,20 @@ abstract class BaseTransformerManager extends BaseValidationManager
   /**
    * Converts an Object to an Array
    *
-   * @param object|array $object
+   * @param object|array $input
    *
    * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function objectToArray($input)
   {
+    if (!in_array(gettype($input), array('object', 'array')))
+    {
+      throw new InvalidTransformerParameterException(sprintf(
+        "Value of type %s can't be converted by this method!",
+        gettype($input)
+      ));
+    }
     // Rückgabe Array erstellen
     $final = array();
     // Object in Array umwandeln

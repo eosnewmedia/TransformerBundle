@@ -71,6 +71,10 @@ class TestConfiguration
         'type'     => 'collection',
         'children' => [
           'dynamic' => [
+            'abc' => [
+              'type' => 'string',
+              'renameTo' => 'test'
+            ],
             'name'         => [
               'type' => 'string'
             ],

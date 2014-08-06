@@ -27,12 +27,12 @@ class FullClassTest extends BaseTest
         [
           'name'       => 'Musik',
           'years'      => 4,
-          'daysInWeek' => 1
+          'days_in_week' => 1
         ],
         [
           'name'       => 'Fitness',
           'years'      => 1.4,
-          'daysInWeek' => 3
+          'days_in_week' => 3
         ]
       ]
     );
