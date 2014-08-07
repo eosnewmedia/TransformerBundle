@@ -430,6 +430,28 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
   /**
+   * Converts a JSON-String to an Array
+   *
+   * @param string $value
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function jsonToArray($value)
+  {
+    try
+    {
+      return $this->objectToArray(json_decode($value));
+    }
+    catch (\Exception $e)
+    {
+      throw new InvalidTransformerParameterException("The given Value isn't a valid JSON-String.");
+    }
+  }
+
+
+
+  /**
    * Converts an Object to an Array
    *
    * @param object|array $input

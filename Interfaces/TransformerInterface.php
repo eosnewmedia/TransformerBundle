@@ -31,4 +31,14 @@ interface TransformerInterface
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function reverseTransform($object, array $config, $result_type);
+
+
+
+  /**
+   * @param mixed $value
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  public function toArray($value);
 } 

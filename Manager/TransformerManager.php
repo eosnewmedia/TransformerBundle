@@ -55,21 +55,15 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
   /**
    * Diese Methode wandelt einen JSON-String in ein Array um.
    *
-   * @param string $value
+   * @param $value
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   *
+   * @deprecated Use jsonToArray instead
    */
   public function transformJsonToArray($value)
   {
-    try
-    {
-      return $this->objectToArray(json_decode($value));
-    }
-    catch (\Exception $e)
-    {
-    }
-    throw new InvalidTransformerParameterException("The given Value isn't a valid JSON-String.");
+    return $this->jsonToArray($value);
   }
 
 
@@ -97,8 +91,32 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
         return json_encode($this->reverseClass($config, $object));
     }
     throw new InvalidTransformerParameterException(sprintf(
-      "The given Object can't be converted to %s by this Method!",
+      "The given Object can't be converted to %s by this method!",
       $result_type
     ));
   }
-} 
+
+
+
+  /**
+   * @param mixed $value
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  public function toArray($value)
+  {
+    switch (gettype($value))
+    {
+      case 'array':
+      case 'object':
+        return $this->objectToArray($value);
+      case 'string':
+        return $this->jsonToArray($value);
+    }
+    throw new InvalidTransformerParameterException(sprintf(
+      'Value of type %s can not be transformed to array by this method.',
+      gettype($value)
+    ));
+  }
+}
