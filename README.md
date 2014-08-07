@@ -3,6 +3,8 @@
 ## What is it for?
 This Bundle is used to transform an array, an object or a json string, which is following a defined structure, to a needed object.
 
+## Requirements
+The TransformerBundle requires PHP in a Version 5.5 or higher
 
 ## How to use?
 You can use this Transformer through the following service:
