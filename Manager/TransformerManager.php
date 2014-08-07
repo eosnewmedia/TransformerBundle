@@ -40,9 +40,8 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
       case 'array':
         return $this->createClass($returnClass, $config, $values);
       case 'object':
-        return $this->createClass($returnClass, $config, $this->objectToArray($values));
       case 'string':
-        return $this->createClass($returnClass, $config, $this->transformJsonToArray($values));
+        return $this->createClass($returnClass, $config, $this->toArray($values));
     }
     throw new InvalidTransformerParameterException(sprintf(
       'Value of type %s can not be transformed by this Method.',
@@ -83,7 +82,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
     switch (strtolower($result_type))
     {
       case 'array':
-        return $this->objectToArray($this->reverseClass($config, $object));
+        return $this->toArray($this->reverseClass($config, $object));
       case 'object':
         return $this->reverseClass($config, $object);
       case 'json':
