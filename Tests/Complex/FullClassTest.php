@@ -15,7 +15,7 @@ class FullClassTest extends BaseTest
     $config = TestConfiguration::getConfig();
 
     $params = array(
-      'user' => 'testUser',
+      'user'     => 'testUser',
       'address'  => [
         'street'  => 'Test Straße 3a',
         'plz'     => '21031',
@@ -25,13 +25,13 @@ class FullClassTest extends BaseTest
       'birthday' => '1990-01-01',
       'hobbys'   => [
         [
-          'name'       => 'Musik',
-          'years'      => 4,
+          'name'         => 'Musik',
+          'years'        => 4,
           'days_in_week' => 1
         ],
         [
-          'name'       => 'Fitness',
-          'years'      => 1.4,
+          'name'         => 'Fitness',
+          'years'        => 1.4,
           'days_in_week' => 3
         ]
       ]

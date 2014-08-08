@@ -118,4 +118,31 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
       gettype($value)
     ));
   }
+
+
+
+  public function getSampleArrayFromConfig(array $config)
+  {
+    $config = $this->validateConfiguration($config);
+    $array  = array();
+
+    foreach ($config as $key => $settings)
+    {
+      if ($settings['type'] === 'collection')
+      {
+        $value = $this->getSampleArrayFromConfig($settings['children']['dynamic']);
+      }
+      elseif ($settings['type'] === 'object')
+      {
+        $value = $this->getSampleArrayFromConfig($settings['children']);
+      }
+      else
+      {
+        $value = $settings['options']['defaultValue'];
+      }
+      $array[$key] = $value;
+    }
+
+    return $array;
+  }
 }
