@@ -520,7 +520,9 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
     if (class_exists($returnClass))
     {
-      return new $returnClass();
+      $reflection = new \ReflectionClass($returnClass);
+
+      return $reflection->newInstanceWithoutConstructor();
     }
     throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.'));
   }

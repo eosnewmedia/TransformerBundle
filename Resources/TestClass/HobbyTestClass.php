@@ -28,6 +28,16 @@ class HobbyTestClass
 
 
 
+  function __construct($days_in_week, $name, $test, $years)
+  {
+    $this->days_in_week = $days_in_week;
+    $this->name         = $name;
+    $this->test         = $test;
+    $this->years        = $years;
+  }
+
+
+
   /**
    * @param int $days_in_week
    */
