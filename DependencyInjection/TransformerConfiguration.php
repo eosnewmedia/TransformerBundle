@@ -47,7 +47,7 @@ class TransformerConfiguration implements ConfigurationInterface
                 ->arrayNode('date')
                   ->addDefaultsIfNotSet()
                   ->children()
-                    ->scalarNode('format')->defaultValue('Y-m-d')->end()
+                    ->variableNode('format')->defaultValue('Y-m-d')->end()
                     ->booleanNode('convertToObject')->defaultValue(false)->end()
                     ->scalarNode('convertToFormat')->defaultValue(null)->end()
                   ->end()

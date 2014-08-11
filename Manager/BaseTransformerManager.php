@@ -375,7 +375,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
     // Wenn Value ein Array ist, wird es zum String normalisiert
     $value = $this->createDateFromArray($key, $value, $options['format']);
 
-    $date = \DateTime::createFromFormat($options['format'], $value);
+    $date = $this->getDateTimeFromFormat($options['format'], $value);
 
     if (!$date instanceof \DateTime)
     {
@@ -393,6 +393,41 @@ abstract class BaseTransformerManager extends BaseValidationManager
     }
 
     return $value;
+  }
+
+
+
+  /**
+   * @param string|array $format
+   * @param string       $value
+   *
+   * @return bool|\DateTime
+   */
+  protected function getDateTimeFromFormat($format, $value)
+  {
+    $date = false;
+
+    switch (gettype($format))
+    {
+      case 'string':
+        $date = \DateTime::createFromFormat($format, $value);
+        break;
+      case 'array':
+        foreach ($format as $f)
+        {
+          $date = \DateTime::createFromFormat($f, $value);
+          if ($date instanceof \DateTime)
+          {
+            break;
+          }
+        }
+        break;
+      default:
+        throw new InvalidTransformerConfigurationException('"date" => "format" has to be a string or an array. "'
+                                                           . gettype($format) . '" given!');
+    }
+
+    return $date;
   }
 
 
