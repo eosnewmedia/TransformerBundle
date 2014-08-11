@@ -96,8 +96,6 @@ The following array structure is needed for each parameter:
         'type' => '(bool|integer|string|float|array|collection|date|object|method)',
         'renameTo' => (string), // The property name in the object, if it differs to the key
         'children' => array(), // If 'type' is 'object' or 'collection',  Description under "Child Objects" or "Collections"
-        'methodClass' => '{METHOD_HOLDER_CLASS}' If 'type' is 'method', Description under "Own Validation Methods"
-        'method' => '{METHOD}' // If 'type' is 'method', Description under "Own Validation Methods"
         'options' => array(
           'required' => (true|false),
           'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
@@ -105,16 +103,19 @@ The following array structure is needed for each parameter:
           'min' => (int|float), // Only if type is 'integer' or 'float'
           'max' => (int|float), // Only if type is 'integer' or 'float'
           'expected' => array(), // Description under "Enumerations",
-          'defaultValue' => (any), // The default, if no value is set
+          'defaultValue' => (array|object|string|integer|float), // The default, if no value is set
           'date' => array( // Only if type is 'date'
-            'format' => (string), // Expected Date Format, Default: Y-m-d
-            'convertToObject' => (true|false), // True, if Date should converted to DateTime-Object
-            'convertToFormat' => (null|string) // If not null, it has to be a valid date format, which is returned
+            'format' => (string|array), // Expected Date Format, Default: Y-m-d, can be an array of formats like array('Y-m-d', 'd.m.Y')
+            'convertToObject' => (true|false), // True, if Date should converted to DateTime-Object, Default: false
+            'convertToFormat' => (null|string) // If not null, it has to be a valid date format, which is returned, default Outputs-Format is the same as the Input-Format
           ),
           'length' => array( // Length validation, only if type is 'string'
             'min' => (int),
             'max' => (int)
           ),
+          'methodClass' => (string) If 'type' is 'method', Description under "Own Validation Methods"
+          'methodClassParameter' => (array) If 'type' is 'method', Description under "Own Validation Methods"
+          'method' => (string) // If 'type' is 'method', Description under "Own Validation Methods"
           'returnClass' => '{NAMESPACE\CLASS_NAME}' // If 'type' is 'object' or 'collection', Description under "Child Objects" or "Collections"
         )
       )
@@ -197,8 +198,6 @@ Your validation method must be in a class, which you have to give into the confi
 
     class UserValidation
     {
-      // Method holder class can not have an constructor which needs parameters
-
       /**
       * @param mixed $value
       *
@@ -216,9 +215,12 @@ Your validation method must be in a class, which you have to give into the confi
 
     $configuration = array(
       'username' => array(
-        'methodClass' => 'Own\Validation\UserValidation', // Class name, including namespace
-        'method' => 'yourMethod', // Method to call
-        'type' => 'method'
+        'type' => 'method',
+        'options' => array(
+          'methodClass' => 'Own\Validation\UserValidation', // Class name, including namespace
+          'methodClassParameter' => array(), // Parameters for the Constructor of the Method-Class
+          'method' => 'yourMethod', // Method to call
+        )
       )
     );
 

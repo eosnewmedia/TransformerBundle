@@ -31,8 +31,6 @@ class TransformerConfiguration implements ConfigurationInterface
             ->booleanNode('complex')->defaultValue(null)->end() // @deprecated
             ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array', 'collection', 'date', 'object', 'method'))->defaultValue(null)->end()
             ->scalarNode('renameTo')->defaultValue(null)->end()
-            ->scalarNode('methodClass')->defaultValue(null)->end()
-            ->scalarNode('method')->defaultValue(null)->end()
             ->arrayNode('children')->prototype('variable')->end()->end()
             ->arrayNode('options')
             ->addDefaultsIfNotSet()
@@ -59,6 +57,9 @@ class TransformerConfiguration implements ConfigurationInterface
                     ->floatNode('max')->isRequired()->end()
                   ->end()
                 ->end()
+                ->scalarNode('methodClass')->defaultValue(null)->end()
+                ->arrayNode('methodClassParameter')->prototype('variable')->end()->end()
+                ->scalarNode('method')->defaultValue(null)->end()
               ->end()
             ->end()
           ->end()

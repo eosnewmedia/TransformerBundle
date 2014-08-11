@@ -223,7 +223,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
     }
 
     // externe Methode
-    if ($settings['methodClass'] !== null || $settings['type'] === 'method')
+    if ($settings['type'] === 'method')
     {
       return $this->useExternalValidation($settings, $params[$key]);
     }
@@ -273,24 +273,28 @@ abstract class BaseTransformerManager extends BaseValidationManager
    */
   protected function useExternalValidation(array $settings, $value)
   {
-    if (class_exists($settings['methodClass']))
+    $class_name = $settings['options']['methodClass'];
+    $method     = $settings['options']['method'];
+    if (class_exists($class_name))
     {
-      $class = new $settings['methodClass']();
-      if (method_exists($class, $settings['method']))
+      $reflection = new \ReflectionClass($class_name);
+      $class      = $reflection->newInstanceArgs($settings['options']['methodClassParameter']);
+      
+      if (method_exists($class, $method))
       {
-        return $class->{$settings['method']}($value);
+        return $class->{$method}($value);
       }
 
       throw new InvalidTransformerConfigurationException(sprintf(
         'Method %s of class %s does not exist.',
         array(
-          $settings['method'],
-          $settings['methodClass']
+          $method,
+          $class_name
         )
       ));
     }
 
-    throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.', $settings['methodClass']));
+    throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.', $class_name));
   }
 
 
