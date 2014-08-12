@@ -97,7 +97,7 @@ The following array structure is needed for each parameter:
         'renameTo' => (string), // The property name in the object, if it differs to the key
         'children' => array(), // If 'type' is 'object' or 'collection',  Description under "Child Objects" or "Collections"
         'options' => array(
-          'required' => (true|false), // Always force that this key have a value
+          'required' => (true|false), // Always required, if you use 'requiredIf...', the value of 'required' has to be false
           'requiredIfAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys has a value
           'requiredIfNotAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys has not a value
           'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
