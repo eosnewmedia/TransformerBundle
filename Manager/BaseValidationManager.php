@@ -60,8 +60,7 @@ abstract class BaseValidationManager
       $value = $settings['options']['defaultValue'];
 
       $params   = array_change_key_case($params, CASE_LOWER);
-      $settings = $this->requiredIfNotAvailable($params, $settings);
-      $settings = $this->requiredIfAvailable($params, $settings);
+      $settings = $this->requiredIf($params, $settings);
 
       if ($settings['options']['required'] === true && is_null($value))
       {
@@ -71,8 +70,8 @@ abstract class BaseValidationManager
 
     if (!is_null($value))
     {
-      $this->forbiddenIfAvailable($key, $params, $settings);
-      $this->forbiddenIfNotAvailable($key, $params, $settings);
+      // $this->forbiddenIfAvailable($key, $params, $settings);
+      // $this->forbiddenIfNotAvailable($key, $params, $settings);
     }
 
     return $value;
@@ -80,18 +79,34 @@ abstract class BaseValidationManager
 
 
 
-  protected function requiredIfNotAvailable(array $params, array $settings)
+  /**
+   * @param array $params
+   * @param array $settings
+   *
+   * @return array $settings
+   */
+  protected function requiredIf(array $params, array $settings)
   {
-    $if_not_available = $settings['options']['requiredIfNotAvailable'];
-
-    foreach ($if_not_available as $param)
+    $required = $settings['options']['required'];
+    if ($required === false)
     {
-      $param = strtolower($param);
-      if (!array_key_exists($param, $params) || $params[$param] === null)
+      if ($this->requiredIfNotAvailableAnd($params, $settings['options']['requiredIfNotAvailable']['or']) === true)
       {
-        $settings['options']['required'] = true;
-        break;
+        $required = true;
       }
+      elseif ($this->requiredIfNotAvailableOr($params, $settings['options']['requiredIfNotAvailable']['and']) === true)
+      {
+        $required = true;
+      }
+      elseif ($this->requiredIfAvailableAnd($params, $settings['options']['requiredIfAvailable']['or']) === true)
+      {
+        $required = true;
+      }
+      elseif ($this->requiredIfAvailableOr($params, $settings['options']['requiredIfAvailable']['and']) === true)
+      {
+        $required = true;
+      }
+      $settings['options']['required'] = $required;
     }
 
     return $settings;
@@ -99,21 +114,100 @@ abstract class BaseValidationManager
 
 
 
-  protected function requiredIfAvailable(array $params, array $settings)
+  /**
+   * @param array $params
+   * @param array $or
+   *
+   * @return bool
+   */
+  protected function requiredIfNotAvailableOr(array $params, array $or)
   {
-    $if_available = $settings['options']['requiredIfAvailable'];
+    foreach ($or as $param)
+    {
+      $param = strtolower($param);
+      if (!array_key_exists($param, $params) || $params[$param] === null)
+      {
+        return true;
+      }
+    }
 
-    foreach ($if_available as $param)
+    return false;
+  }
+
+
+
+  /**
+   * @param array $params
+   * @param array $and
+   *
+   * @return bool
+   */
+  protected function requiredIfNotAvailableAnd(array $params, array $and)
+  {
+    if (count($and) > 0)
+    {
+      foreach ($and as $param)
+      {
+        $param = strtolower($param);
+        if (array_key_exists($param, $params) && $params[$param] !== null)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+
+
+  /**
+   * @param array $params
+   * @param array $or
+   *
+   * @return bool
+   */
+  protected function requiredIfAvailableOr(array $params, array $or)
+  {
+    foreach ($or as $param)
     {
       $param = strtolower($param);
       if (array_key_exists($param, $params) && $params[$param] !== null)
       {
-        $settings['options']['required'] = true;
-        break;
+        return true;
       }
     }
 
-    return $settings;
+    return false;
+  }
+
+
+
+  /**
+   * @param array $params
+   * @param array $and
+   *
+   * @return bool
+   */
+  protected function requiredIfAvailableAnd(array $params, array $and)
+  {
+    if (count($and) > 0)
+    {
+      foreach ($and as $param)
+      {
+        $param = strtolower($param);
+        if (!array_key_exists($param, $params) || $params[$param] === null)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   }
 
 
@@ -125,7 +219,7 @@ abstract class BaseValidationManager
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  protected function forbiddenIfNotAvailable($key, array $params, array $settings)
+  protected function forbiddenIfNotAvailableOr($key, array $params, array $settings)
   {
     $if_not_available = $settings['options']['forbiddenIfNotAvailable'];
     foreach ($if_not_available as $param)
@@ -147,7 +241,7 @@ abstract class BaseValidationManager
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  protected function forbiddenIfAvailable($key, array $params, array $settings)
+  protected function forbiddenIfAvailableOr($key, array $params, array $settings)
   {
     $if_available = $settings['options']['forbiddenIfAvailable'];
     foreach ($if_available as $param)
