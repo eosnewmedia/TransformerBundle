@@ -98,8 +98,10 @@ The following array structure is needed for each parameter:
         'children' => array(), // If 'type' is 'object' or 'collection',  Description under "Child Objects" or "Collections"
         'options' => array(
           'required' => (true|false), // Always required, if you use 'requiredIf...', the value of 'required' has to be false
-          'requiredIfAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys has a value
-          'requiredIfNotAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys has not a value
+          'requiredIfAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys have a value
+          'requiredIfNotAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys have not a value
+          'forbiddenIfAvailable' => array({KEY_1}, {KEY_2}), // Forbidden, if one of the given keys have a value
+          'forbiddenIfNotAvailable' => array({KEY_1}, {KEY_2}), // Required, if one of the given keys have not a value
           'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
           'assoc' => (true|false) // Only if type is 'array'. Tells the transformer, whether the array is associative or not
           'min' => (int|float), // Only if type is 'integer' or 'float'

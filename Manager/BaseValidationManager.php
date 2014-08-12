@@ -4,6 +4,7 @@
 namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
+use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\Exceptions\MissingTransformerParameterException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Container;
@@ -67,6 +68,11 @@ abstract class BaseValidationManager
         throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
       }
     }
+    else
+    {
+      $this->forbiddenIfAvailable($key, $params, $settings);
+      $this->forbiddenIfNotAvailable($key, $params, $settings);
+    }
 
     return $value;
   }
@@ -83,6 +89,7 @@ abstract class BaseValidationManager
       if (!array_key_exists($param, $params) || $params[$param] === null)
       {
         $settings['options']['required'] = true;
+        break;
       }
     }
 
@@ -101,10 +108,55 @@ abstract class BaseValidationManager
       if (array_key_exists($param, $params) && $params[$param] !== null)
       {
         $settings['options']['required'] = true;
+        break;
       }
     }
 
     return $settings;
+  }
+
+
+
+  /**
+   * @param string $key
+   * @param array  $params
+   * @param array  $settings
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function forbiddenIfNotAvailable($key, array $params, array $settings)
+  {
+    $if_not_available = $settings['options']['forbiddenIfNotAvailable'];
+    foreach ($if_not_available as $param)
+    {
+      $param = strtolower($param);
+      if (!array_key_exists($param, $params) || $params[$param] === null)
+      {
+        throw new InvalidTransformerParameterException(sprintf('%s can not be used, if %s is missing', $key, $param));
+      }
+    }
+  }
+
+
+
+  /**
+   * @param string $key
+   * @param array  $params
+   * @param array  $settings
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function forbiddenIfAvailable($key, array $params, array $settings)
+  {
+    $if_available = $settings['options']['forbiddenIfAvailable'];
+    foreach ($if_available as $param)
+    {
+      $param = strtolower($param);
+      if (array_key_exists($param, $params) && $params[$param] !== null)
+      {
+        throw new InvalidTransformerParameterException(sprintf('%s can not be used, if %s is set', $key, $param));
+      }
+    }
   }
 
 
