@@ -68,7 +68,8 @@ abstract class BaseValidationManager
         throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
       }
     }
-    else
+
+    if (!is_null($value))
     {
       $this->forbiddenIfAvailable($key, $params, $settings);
       $this->forbiddenIfNotAvailable($key, $params, $settings);
