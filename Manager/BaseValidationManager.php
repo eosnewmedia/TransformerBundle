@@ -68,11 +68,7 @@ abstract class BaseValidationManager
       }
     }
 
-    if (!is_null($value))
-    {
-      // $this->forbiddenIfAvailable($key, $params, $settings);
-      // $this->forbiddenIfNotAvailable($key, $params, $settings);
-    }
+    $this->forbiddenIf($key, $value, $params, $settings);
 
     return $value;
   }
@@ -212,17 +208,27 @@ abstract class BaseValidationManager
 
 
 
+  protected function forbiddenIf($key, $value, array $params, array $settings)
+  {
+    if (!is_null($value))
+    {
+      $this->forbiddenIfAvailable($key, $params, $settings['options']['forbiddenIfAvailable']);
+      $this->forbiddenIfNotAvailable($key, $params, $settings['options']['forbiddenIfNotAvailable']);
+    }
+  }
+
+
+
   /**
    * @param string $key
    * @param array  $params
-   * @param array  $settings
+   * @param array  $available
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  protected function forbiddenIfNotAvailableOr($key, array $params, array $settings)
+  protected function forbiddenIfNotAvailable($key, array $params, array $available)
   {
-    $if_not_available = $settings['options']['forbiddenIfNotAvailable'];
-    foreach ($if_not_available as $param)
+    foreach ($available as $param)
     {
       $param = strtolower($param);
       if (!array_key_exists($param, $params) || $params[$param] === null)
@@ -241,10 +247,9 @@ abstract class BaseValidationManager
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  protected function forbiddenIfAvailableOr($key, array $params, array $settings)
+  protected function forbiddenIfAvailable($key, array $params, array $available)
   {
-    $if_available = $settings['options']['forbiddenIfAvailable'];
-    foreach ($if_available as $param)
+    foreach ($available as $param)
     {
       $param = strtolower($param);
       if (array_key_exists($param, $params) && $params[$param] !== null)
