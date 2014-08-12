@@ -4,6 +4,7 @@
 namespace Ssc\ApiBundle\Tests\NonComplex;
 
 use ENM\TransformerBundle\Tests\BaseTest;
+use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 
 class OptionsTest extends BaseTest
 {
@@ -20,6 +21,31 @@ class OptionsTest extends BaseTest
     );
 
     $this->exceptionWithNullTest($config, 'test');
+  }
+
+
+
+  public function testRequiredIf()
+  {
+    $config = array(
+      'testA' => [
+        'type'    => 'string',
+        'options' => [
+          'required'               => false,
+          'requiredIfNotAvailable' => array('testB')
+        ]
+      ],
+      'testB' => [
+        'type'    => 'string',
+        'options' => [
+          'required'               => false,
+          'requiredIfNotAvailable' => array('testA')
+        ]
+      ]
+    );
+    
+    $this->exceptionWithNullTest($config, 'testA');
+    $this->exceptionWithNullTest($config, 'testB');
   }
 
 

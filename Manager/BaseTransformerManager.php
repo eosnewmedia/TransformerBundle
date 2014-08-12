@@ -50,7 +50,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
         // Value validieren und wenn nötig verarbeiten
         $result = $this->prepare(strtolower($settings['renameTo']), $params, $settings);
       }
-      $this->setValue($returnClass, $key, $result, $settings);
+      $this->setValue($returnClass, $key, $result, $params, $settings);
     }
 
     return $returnClass;
@@ -81,7 +81,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
       $value = $this->reverseNested($settings, $object->$key);
 
-      $this->setValue($returnClass, $key, $value, $settings);
+      $this->setValue($returnClass, $key, $value, (array) $object, $settings);
     }
 
     return $returnClass;
@@ -149,9 +149,9 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param mixed  $value
    * @param array  $settings
    */
-  protected function setValue($returnClass, $key, $value, array $settings)
+  protected function setValue($returnClass, $key, $value, array $params, array $settings)
   {
-    $value = $this->validateRequired($key, $value, $settings);
+    $value = $this->validateRequired($key, $value, $params, $settings);
 
     // Anderer Name im Objekt?
     if ($settings['renameTo'] !== null)
@@ -279,7 +279,7 @@ abstract class BaseTransformerManager extends BaseValidationManager
     {
       $reflection = new \ReflectionClass($class_name);
       $class      = $reflection->newInstanceArgs($settings['options']['methodClassParameter']);
-      
+
       if (method_exists($class, $method))
       {
         return $class->{$method}($value);

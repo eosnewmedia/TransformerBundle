@@ -52,11 +52,16 @@ abstract class BaseValidationManager
    * @return mixed
    * @throws \ENM\TransformerBundle\Exceptions\MissingTransformerParameterException
    */
-  protected function validateRequired($key, $value, array $settings)
+  protected function validateRequired($key, $value, array $params, array $settings)
   {
     if (is_null($value))
     {
       $value = $settings['options']['defaultValue'];
+
+      $params   = array_change_key_case($params, CASE_LOWER);
+      $settings = $this->requiredIfNotAvailable($params, $settings);
+      $settings = $this->requiredIfAvailable($params, $settings);
+
       if ($settings['options']['required'] === true && is_null($value))
       {
         throw new MissingTransformerParameterException('Required parameter "' . $key . '" is missing.');
@@ -64,6 +69,42 @@ abstract class BaseValidationManager
     }
 
     return $value;
+  }
+
+
+
+  protected function requiredIfNotAvailable(array $params, array $settings)
+  {
+    $if_not_available = $settings['options']['requiredIfNotAvailable'];
+
+    foreach ($if_not_available as $param)
+    {
+      $param = strtolower($param);
+      if (!array_key_exists($param, $params) || $params[$param] === null)
+      {
+        $settings['options']['required'] = true;
+      }
+    }
+
+    return $settings;
+  }
+
+
+
+  protected function requiredIfAvailable(array $params, array $settings)
+  {
+    $if_available = $settings['options']['requiredIfAvailable'];
+
+    foreach ($if_available as $param)
+    {
+      $param = strtolower($param);
+      if (array_key_exists($param, $params) && $params[$param] !== null)
+      {
+        $settings['options']['required'] = true;
+      }
+    }
+
+    return $settings;
   }
 
 
