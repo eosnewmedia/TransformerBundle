@@ -109,6 +109,7 @@ The following array structure is needed for each parameter:
           'forbiddenIfAvailable' => array(), // Forbidden, if one of the given keys have a value
           'forbiddenIfNotAvailable' => array(), // Required, if one of the given keys have not a value
           'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
+          'stringValidation' => (ip|url|email), // Only if type is 'string'
           'assoc' => (true|false) // Only if type is 'array'. Tells the transformer, whether the array is associative or not
           'min' => (int|float), // Only if type is 'integer' or 'float'
           'max' => (int|float), // Only if type is 'integer' or 'float'
