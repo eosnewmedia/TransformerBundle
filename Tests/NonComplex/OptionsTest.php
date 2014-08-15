@@ -235,9 +235,15 @@ class OptionsTest extends BaseTest
         ]
       ]
     );
-
-    $class = $this->container->get('enm.transformer.service')->transform(new \stdClass(), $config, array());
-    $this->assertEquals('Hallo Welt!', $class->test);
+    try
+    {
+      $class = $this->container->get('enm.transformer.service')->transform(new \stdClass(), $config, array());
+      $this->assertEquals('Hallo Welt!', $class->test);
+    }
+    catch (\Exception $e)
+    {
+      $this->fail($e->getMessage());
+    }
   }
 
 
@@ -254,11 +260,74 @@ class OptionsTest extends BaseTest
       ]
     );
 
-    $class = $this->container->get('enm.transformer.service')->transform(
-                             new \stdClass(),
-                               $config,
-                               array('test' => 'Hallo Welt!')
+    try
+    {
+      $class = $this->container->get('enm.transformer.service')->transform(
+                               new \stdClass(),
+                                 $config,
+                                 array('test' => 'Hallo Welt!')
+      );
+      $this->assertEquals('Hallo Welt!', $class->abc);
+    }
+    catch (\Exception $e)
+    {
+      $this->fail($e->getMessage());
+    }
+  }
+
+
+
+  public function testStringValidationEmail()
+  {
+    $config = array(
+      'test' => [
+        'type'    => 'string',
+        'options' => [
+          'stringValidation' => 'email',
+          'required'         => true,
+        ]
+      ]
     );
-    $this->assertEquals('Hallo Welt!', $class->abc);
+    $this->expectSuccess($config, 'test', 'marien@eosnewmedia.de');
+    $this->expectFailure($config, 'test', 'marien@eeoossnneewwmmeeddiiaa.de');
+    $this->expectFailure($config, 'test', 'Hallo');
+  }
+
+
+
+  public function testStringValidationUrl()
+  {
+    $config = array(
+      'test' => [
+        'type'    => 'string',
+        'options' => [
+          'stringValidation' => 'url',
+          'required'         => true,
+        ]
+      ]
+    );
+    $this->expectSuccess($config, 'test', 'http://eosnewmedia.de');
+    $this->expectSuccess($config, 'test', 'https://eosnewmedia.de');
+    $this->expectSuccess($config, 'test', 'ftp://eosnewmedia.de');
+    $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
+  }
+
+
+
+  public function testStringValidationIp()
+  {
+    $config = array(
+      'test' => [
+        'type'    => 'string',
+        'options' => [
+          'stringValidation' => 'IP',
+          'required'         => true,
+        ]
+      ]
+    );
+    $this->expectSuccess($config, 'test', '172.0.0.180');
+    $this->expectSuccess($config, 'test', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344');
+    $this->expectFailure($config, 'test', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344:4444');
+    $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
   }
 } 

@@ -37,6 +37,7 @@ class TransformerConfiguration implements ConfigurationInterface
               ->children()
                 ->booleanNode('assoc')->defaultValue(true)->end()
                 ->arrayNode('expected')->prototype('scalar')->end()->end()
+                ->scalarNode('stringValidation')->defaultValue(null)->end()
                 ->floatNode('min')->defaultValue(null)->end()
                 ->floatNode('max')->defaultValue(null)->end()
                 ->scalarNode('returnClass')->defaultValue(null)->end()

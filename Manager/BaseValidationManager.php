@@ -313,6 +313,7 @@ abstract class BaseValidationManager
     $constraints = array_merge($constraints, $this->getConstraintsByOptionMin($settings));
     $constraints = array_merge($constraints, $this->getConstraintsByOptionMax($settings));
     $constraints = array_merge($constraints, $this->getConstraintsByOptionExpected($settings));
+    $constraints = array_merge($constraints, $this->getConstraintsByOptionStringValidation($settings));
     $constraints = array_merge($constraints, $this->getConstraintsByOptionLength($settings));
     $constraints = array_merge($constraints, $this->getConstraintsByOptionRegex($settings));
 
@@ -328,7 +329,7 @@ abstract class BaseValidationManager
    *
    * @return array
    */
-  protected function getConstraintsByOptionMin(array $settings = array())
+  protected function getConstraintsByOptionMin(array $settings)
   {
     $constraints = array();
     if ($settings['options']['min'] !== null)
@@ -348,7 +349,7 @@ abstract class BaseValidationManager
    *
    * @return array
    */
-  protected function getConstraintsByOptionMax(array $settings = array())
+  protected function getConstraintsByOptionMax(array $settings)
   {
     $constraints = array();
     if ($settings['options']['max'] !== null)
@@ -368,7 +369,7 @@ abstract class BaseValidationManager
    *
    * @return array
    */
-  protected function getConstraintsByOptionExpected(array $settings = array())
+  protected function getConstraintsByOptionExpected(array $settings)
   {
     $constraints = array();
 
@@ -389,6 +390,28 @@ abstract class BaseValidationManager
 
 
 
+  public function getConstraintsByOptionStringValidation(array $settings)
+  {
+    $constraints = array();
+
+    switch (strtolower($settings['options']['stringValidation']))
+    {
+      case 'email':
+        $constraints[] = new Constraints\Email(array('checkMX' => true, 'checkHost' => true));
+        break;
+      case 'url':
+        $constraints[] = new Constraints\Url(array('protocols' => array('http', 'https', 'ftp')));
+        break;
+      case 'ip':
+        $constraints[] = new Constraints\Ip(array('version' => 'all'));
+        break;
+    }
+
+    return $constraints;
+  }
+
+
+
   /**
    * Validierung für Sting-Länge hinzufügen
    *
@@ -396,7 +419,7 @@ abstract class BaseValidationManager
    *
    * @return array
    */
-  protected function getConstraintsByOptionLength(array $settings = array())
+  protected function getConstraintsByOptionLength(array $settings)
   {
     $constraints = array();
 
@@ -420,7 +443,7 @@ abstract class BaseValidationManager
    *
    * @return array
    */
-  protected function getConstraintsByOptionRegex(array $settings = array())
+  protected function getConstraintsByOptionRegex(array $settings)
   {
     $constraints = array();
 
