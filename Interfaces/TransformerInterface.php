@@ -14,7 +14,7 @@ interface TransformerInterface
    * @param array|object|string $values
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
   public function transform($returnClass, array $config, $values);
 
@@ -28,7 +28,7 @@ interface TransformerInterface
    * @param string $result_type
    *
    * @return array|\stdClass|string
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
   public function reverseTransform($object, array $config, $result_type);
 
@@ -38,7 +38,7 @@ interface TransformerInterface
    * @param mixed $value
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
   public function toArray($value);
 } 

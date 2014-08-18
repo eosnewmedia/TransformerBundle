@@ -3,7 +3,7 @@
 
 namespace ENM\TransformerBundle\Exceptions;
 
-class TransformerBaseException extends \Exception
+class TransformerException extends \Exception
 {
 
 } 
