@@ -65,9 +65,9 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    *
    * @return array|object|string
    */
-  public function getEmptyObjectStructureFromConfig($returnClass, array $config, $result_type = 'object')
+  public function getEmptyObjectStructureFromConfig(array $config, $result_type = 'object')
   {
-    $return = $this->createEmptyObjectStructure($returnClass, $config);
+    $return = $this->createEmptyObjectStructure($config);
 
     return $this->convertTo($return, $result_type);
   }
@@ -127,6 +127,6 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    */
   public function getSampleArrayFromConfig(array $config)
   {
-    return $this->getEmptyObjectStructureFromConfig(new \stdClass(), $config, 'array');
+    return $this->getEmptyObjectStructureFromConfig($config, 'array');
   }
 }

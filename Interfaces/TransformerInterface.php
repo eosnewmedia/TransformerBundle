@@ -54,5 +54,5 @@ interface TransformerInterface
    * @return array|object|string
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  public function getEmptyObjectStructureFromConfig($returnClass, array $config, $result_type = 'object');
+  public function getEmptyObjectStructureFromConfig(array $config, $result_type = 'object');
 } 

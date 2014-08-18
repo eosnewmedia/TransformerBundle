@@ -633,9 +633,9 @@ abstract class BaseTransformerManager extends BaseValidationManager
    *
    * @return object
    */
-  protected function createEmptyObjectStructure($returnClass, array $config)
+  protected function createEmptyObjectStructure(array $config)
   {
-    $returnClass = $this->validateReturnClass($returnClass);
+    $returnClass = new \stdClass();
     $config      = $this->validateConfiguration($config);
 
     foreach ($config as $key => $settings)
@@ -654,10 +654,10 @@ abstract class BaseTransformerManager extends BaseValidationManager
         case 'array':
           break;
         case 'collection':
-          $value = array($this->createEmptyObjectStructure($nextClass, $settings['children']['dynamic']));
+          $value = array($this->createEmptyObjectStructure($settings['children']['dynamic']));
           break;
         case 'object':
-          $value = $this->createEmptyObjectStructure($nextClass, $settings['children']);
+          $value = $this->createEmptyObjectStructure($settings['children']);
           break;
       }
 

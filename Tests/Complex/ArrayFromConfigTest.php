@@ -17,7 +17,7 @@ class ArrayFromConfigTest extends BaseTest
 
     try
     {
-      $array = $transformer->getEmptyObjectStructureFromConfig(new \stdClass(), $config, 'array');
+      $array = $transformer->getEmptyObjectStructureFromConfig($config, 'array');
       $this->assertArrayHasKey('user', $array);
       $this->assertArrayHasKey('address', $array);
       $this->assertArrayHasKey('street', $array['address']);
