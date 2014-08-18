@@ -16,7 +16,7 @@ interface TransformerInterface
    * @return object
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function transform($returnClass, array $config, $values);
+  public function transform($returnClass, array $config, $values, $result_type = 'object');
 
 
 
@@ -30,7 +30,7 @@ interface TransformerInterface
    * @return array|\stdClass|string
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function reverseTransform($object, array $config, $result_type);
+  public function reverseTransform($object, array $config, $result_type = 'object');
 
 
 
@@ -41,4 +41,18 @@ interface TransformerInterface
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
   public function toArray($value);
+
+
+
+  /**
+   * Creates the Structure of an Object with NULL-Values
+   *
+   * @param object $returnClass
+   * @param array  $config
+   * @param string $type
+   *
+   * @return array|object|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  public function getEmptyObjectStructureFromConfig($returnClass, array $config, $result_type = 'object');
 } 

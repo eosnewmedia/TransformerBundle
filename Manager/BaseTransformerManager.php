@@ -26,12 +26,15 @@ abstract class BaseTransformerManager extends BaseValidationManager
    *
    * @return object
    */
-  protected function createClass($returnClass, array $config, array $params = array())
+  protected function createClass($returnClass, array $config, $params)
   {
     $returnClass = $this->validateReturnClass($returnClass);
 
     $config = $this->validateConfiguration($config);
-
+    /**
+     * @var array $params
+     */
+    $params = $this->toArray($params);
     $params = array_change_key_case($params, CASE_LOWER);
 
     foreach ($config as $key => $settings) // config-Array mit den erwarteten Werten durchlaufen
@@ -149,9 +152,12 @@ abstract class BaseTransformerManager extends BaseValidationManager
    * @param mixed  $value
    * @param array  $settings
    */
-  protected function setValue($returnClass, $key, $value, array $params, array $settings)
+  protected function setValue($returnClass, $key, $value, array $params, array $settings, $validate_required = true)
   {
-    $value = $this->validateRequired($key, $value, $params, $settings);
+    if ($validate_required === true)
+    {
+      $value = $this->validateRequired($key, $value, $params, $settings);
+    }
 
     // Anderer Name im Objekt?
     if ($settings['renameTo'] !== null)
@@ -469,6 +475,31 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
   /**
+   * @param mixed $value
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   */
+  public function toArray($value)
+  {
+    switch (gettype($value))
+    {
+      case 'array':
+        return $value;
+      case 'object':
+        return $this->objectToArray($value);
+      case 'string':
+        return $this->jsonToArray($value);
+    }
+    throw new InvalidTransformerParameterException(sprintf(
+      'Value of type %s can not be transformed to array by this method.',
+      gettype($value)
+    ));
+  }
+
+
+
+  /**
    * Converts a JSON-String to an Array
    *
    * @param string $value
@@ -545,6 +576,34 @@ abstract class BaseTransformerManager extends BaseValidationManager
 
 
   /**
+   * @param object $object
+   * @param string $result_type
+   *
+   * @return array|string|object
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function convertTo($object, $result_type)
+  {
+    switch (strtolower($result_type))
+    {
+      case 'array':
+        return $this->toArray($object);
+      case 'string':
+      case 'json':
+        return json_encode($object);
+      case 'object':
+        return $object;
+      default:
+        throw new InvalidTransformerParameterException(sprintf(
+          "The given Object can't be converted to %s by this method!",
+          gettype($result_type)
+        ));
+    }
+  }
+
+
+
+  /**
    * @param object|string $returnClass
    *
    * @return object
@@ -564,5 +623,54 @@ abstract class BaseTransformerManager extends BaseValidationManager
       return $reflection->newInstanceWithoutConstructor();
     }
     throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.'));
+  }
+
+
+
+  /**
+   * @param object $returnClass
+   * @param array  $config
+   *
+   * @return object
+   */
+  protected function createEmptyObjectStructure($returnClass, array $config)
+  {
+    $returnClass = $this->validateReturnClass($returnClass);
+    $config      = $this->validateConfiguration($config);
+
+    foreach ($config as $key => $settings)
+    {
+      $nextClass = $settings['options']['returnClass'];
+      $value     = null;
+      switch ($settings['type'])
+      {
+        case 'integer':
+        case 'float':
+        case 'string':
+        case 'bool':
+        case 'date':
+        case 'method':
+          break;
+        case 'array':
+          break;
+        case 'collection':
+          $value = array($this->createEmptyObjectStructure($nextClass, $settings['children']['dynamic']));
+          break;
+        case 'object':
+          $value = $this->createEmptyObjectStructure($nextClass, $settings['children']);
+          break;
+      }
+
+      if ($settings['renameTo'] !== null)
+      {
+        $temp                 = $key;
+        $key                  = $settings['renameTo'];
+        $settings['renameTo'] = $temp;
+      }
+
+      $this->setValue($returnClass, $key, $value, array(), $settings, false);
+    }
+
+    return $returnClass;
   }
 }

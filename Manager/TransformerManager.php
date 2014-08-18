@@ -32,38 +32,9 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    *
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function transform($returnClass, array $config, $values)
+  public function transform($returnClass, array $config, $values, $result_type = 'object')
   {
-    switch (gettype($values))
-    {
-      case 'array':
-        return $this->createClass($returnClass, $config, $values);
-      case 'object':
-      case 'string':
-        return $this->createClass($returnClass, $config, $this->toArray($values));
-    }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be transformed by this Method.',
-      gettype($values)
-    ));
-  }
-
-
-
-  /**
-   * Diese Methode wandelt einen JSON-String in ein Array um.
-   *
-   * @param $value
-   *
-   * @return array
-   *
-   * @deprecated Use jsonToArray instead
-   *
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerBaseException
-   */
-  public function transformJsonToArray($value)
-  {
-    return $this->jsonToArray($value);
+    return $this->convertTo($this->createClass($returnClass, $config, $values), $result_type);
   }
 
 
@@ -78,22 +49,27 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @return array|\stdClass|string
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function reverseTransform($object, array $config, $result_type)
+  public function reverseTransform($object, array $config, $result_type = 'object')
   {
-    switch (strtolower($result_type))
-    {
-      case 'array':
-        return $this->toArray($this->reverseClass($config, $object));
-      case 'object':
-        return $this->reverseClass($config, $object);
-      case 'json':
-      case 'string':
-        return json_encode($this->reverseClass($config, $object));
-    }
-    throw new InvalidTransformerParameterException(sprintf(
-      "The given Object can't be converted to %s by this method!",
-      $result_type
-    ));
+    return $this->convertTo($this->reverseClass($config, $object), $result_type);
+  }
+
+
+
+  /**
+   * Creates the Structure of an Object with NULL-Values
+   *
+   * @param object $returnClass
+   * @param array  $config
+   * @param string $result_type
+   *
+   * @return array|object|string
+   */
+  public function getEmptyObjectStructureFromConfig($returnClass, array $config, $result_type = 'object')
+  {
+    $return = $this->createEmptyObjectStructure($returnClass, $config);
+
+    return $this->convertTo($return, $result_type);
   }
 
 
@@ -106,18 +82,39 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    */
   public function toArray($value)
   {
-    switch (gettype($value))
-    {
-      case 'array':
-      case 'object':
-        return $this->objectToArray($value);
-      case 'string':
-        return $this->jsonToArray($value);
-    }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be transformed to array by this method.',
-      gettype($value)
-    ));
+    return parent::toArray($value);
+  }
+
+
+
+  /**
+   * @param object $object
+   * @param string $result_type
+   *
+   * @return array|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   */
+  protected function convertTo($object, $result_type)
+  {
+    return parent::convertTo($object, $result_type);
+  }
+
+
+
+  /**
+   * Diese Methode wandelt einen JSON-String in ein Array um.
+   *
+   * @param $value
+   *
+   * @return array
+   *
+   * @deprecated Use toArray instead
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   */
+  public function transformJsonToArray($value)
+  {
+    return $this->toArray($value);
   }
 
 
@@ -125,31 +122,11 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
   /**
    * @param array $config
    *
-   * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @return array|object|string
+   * @deprecated use getEmptyObjectStructureFromConfig() instead
    */
   public function getSampleArrayFromConfig(array $config)
   {
-    $config = $this->validateConfiguration($config);
-    $array  = array();
-
-    foreach ($config as $key => $settings)
-    {
-      if ($settings['type'] === 'collection')
-      {
-        $value = $this->getSampleArrayFromConfig($settings['children']['dynamic']);
-      }
-      elseif ($settings['type'] === 'object')
-      {
-        $value = $this->getSampleArrayFromConfig($settings['children']);
-      }
-      else
-      {
-        $value = $settings['options']['defaultValue'];
-      }
-      $array[$key] = $value;
-    }
-
-    return $array;
+    return $this->getEmptyObjectStructureFromConfig(new \stdClass(), $config, 'array');
   }
 }
