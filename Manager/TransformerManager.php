@@ -3,7 +3,9 @@
 
 namespace ENM\TransformerBundle\Manager;
 
+use ENM\TransformerBundle\Exceptions\GeneralTransformerException;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
+use ENM\TransformerBundle\Exceptions\TransformerBaseException;
 use ENM\TransformerBundle\Interfaces\TransformerInterface;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -30,23 +32,30 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @param array               $config
    * @param array|object|string $values
    *
-   * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\GeneralTransformerException
    */
   public function transform($returnClass, array $config, $values)
   {
-    switch (gettype($values))
+    try
     {
-      case 'array':
-        return $this->createClass($returnClass, $config, $values);
-      case 'object':
-      case 'string':
-        return $this->createClass($returnClass, $config, $this->toArray($values));
+      switch (gettype($values))
+      {
+        case 'array':
+          return $this->createClass($returnClass, $config, $values);
+        case 'object':
+        case 'string':
+          return $this->createClass($returnClass, $config, $this->toArray($values));
+      }
+      throw new InvalidTransformerParameterException(sprintf(
+        'Value of type %s can not be transformed by this Method.',
+        gettype($values)
+      ));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be transformed by this Method.',
-      gettype($values)
-    ));
+    catch (TransformerBaseException $e)
+    {
+      throw new GeneralTransformerException($e->getMessage() . ' (' . $e->getCode() . '): ' . $e->getFile() . ' - '
+                                            . $e->getLine());
+    }
   }
 
 
@@ -59,10 +68,20 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @return array
    *
    * @deprecated Use jsonToArray instead
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\GeneralTransformerException
    */
   public function transformJsonToArray($value)
   {
-    return $this->jsonToArray($value);
+    try
+    {
+      return $this->jsonToArray($value);
+    }
+    catch (TransformerBaseException $e)
+    {
+      throw new GeneralTransformerException($e->getMessage() . ' (' . $e->getCode() . '): ' . $e->getFile() . ' - '
+                                            . $e->getLine());
+    }
   }
 
 
@@ -75,24 +94,32 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @param string $result_type
    *
    * @return array|\stdClass|string
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\GeneralTransformerException
    */
   public function reverseTransform($object, array $config, $result_type)
   {
-    switch (strtolower($result_type))
+    try
     {
-      case 'array':
-        return $this->toArray($this->reverseClass($config, $object));
-      case 'object':
-        return $this->reverseClass($config, $object);
-      case 'json':
-      case 'string':
-        return json_encode($this->reverseClass($config, $object));
+      switch (strtolower($result_type))
+      {
+        case 'array':
+          return $this->toArray($this->reverseClass($config, $object));
+        case 'object':
+          return $this->reverseClass($config, $object);
+        case 'json':
+        case 'string':
+          return json_encode($this->reverseClass($config, $object));
+      }
+      throw new InvalidTransformerParameterException(sprintf(
+        "The given Object can't be converted to %s by this method!",
+        $result_type
+      ));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      "The given Object can't be converted to %s by this method!",
-      $result_type
-    ));
+    catch (TransformerBaseException $e)
+    {
+      throw new GeneralTransformerException($e->getMessage() . ' (' . $e->getCode() . '): ' . $e->getFile() . ' - '
+                                            . $e->getLine());
+    }
   }
 
 
@@ -101,48 +128,70 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @param mixed $value
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \ENM\TransformerBundle\Exceptions\GeneralTransformerException
    */
   public function toArray($value)
   {
-    switch (gettype($value))
+    try
     {
-      case 'array':
-      case 'object':
-        return $this->objectToArray($value);
-      case 'string':
-        return $this->jsonToArray($value);
+      switch (gettype($value))
+      {
+        case 'array':
+        case 'object':
+          return $this->objectToArray($value);
+        case 'string':
+          return $this->jsonToArray($value);
+      }
+      throw new InvalidTransformerParameterException(sprintf(
+        'Value of type %s can not be transformed to array by this method.',
+        gettype($value)
+      ));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be transformed to array by this method.',
-      gettype($value)
-    ));
+    catch (TransformerBaseException $e)
+    {
+      throw new GeneralTransformerException($e->getMessage() . ' (' . $e->getCode() . '): ' . $e->getFile() . ' - '
+                                            . $e->getLine());
+    }
   }
 
 
 
+  /**
+   * @param array $config
+   *
+   * @return array
+   * @throws \ENM\TransformerBundle\Exceptions\GeneralTransformerException
+   */
   public function getSampleArrayFromConfig(array $config)
   {
-    $config = $this->validateConfiguration($config);
-    $array  = array();
-
-    foreach ($config as $key => $settings)
+    try
     {
-      if ($settings['type'] === 'collection')
-      {
-        $value = $this->getSampleArrayFromConfig($settings['children']['dynamic']);
-      }
-      elseif ($settings['type'] === 'object')
-      {
-        $value = $this->getSampleArrayFromConfig($settings['children']);
-      }
-      else
-      {
-        $value = $settings['options']['defaultValue'];
-      }
-      $array[$key] = $value;
-    }
+      $config = $this->validateConfiguration($config);
+      $array  = array();
 
-    return $array;
+      foreach ($config as $key => $settings)
+      {
+        if ($settings['type'] === 'collection')
+        {
+          $value = $this->getSampleArrayFromConfig($settings['children']['dynamic']);
+        }
+        elseif ($settings['type'] === 'object')
+        {
+          $value = $this->getSampleArrayFromConfig($settings['children']);
+        }
+        else
+        {
+          $value = $settings['options']['defaultValue'];
+        }
+        $array[$key] = $value;
+      }
+
+      return $array;
+    }
+    catch (TransformerBaseException $e)
+    {
+      throw new GeneralTransformerException($e->getMessage() . ' (' . $e->getCode() . '): ' . $e->getFile() . ' - '
+                                            . $e->getLine());
+    }
   }
 }
