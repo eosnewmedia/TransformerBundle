@@ -6,7 +6,7 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace Ssc\ApiBundle\Tests\Complex;
+namespace ENM\TransformerBundle\Tests\Complex;
 
 use ENM\TransformerBundle\Tests\BaseTest;
 
@@ -20,12 +20,10 @@ class CollectionTest extends BaseTest
     $config = array(
       'list' => array(
         'children' => array(
-          'dynamic' => array(
-            'test' => array(
-              'type'    => 'string',
-              'options' => array(
-                'required' => true,
-              )
+          'test' => array(
+            'type'    => 'string',
+            'options' => array(
+              'required' => true,
             )
           ),
         ),

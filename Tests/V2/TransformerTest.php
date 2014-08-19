@@ -1,20 +1,22 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests\Complex;
+namespace ENM\TransformerBundle\Tests\V2;
 
-use ENM\TransformerBundle\Tests\BaseTest;
+use ENM\TransformerBundle\Manager\BaseTransformerManagerV2;
 use ENM\TransformerBundle\Resources\TestClass\TestConfiguration;
 use ENM\TransformerBundle\Resources\TestClass\UserTestClass;
+use ENM\TransformerBundle\Tests\BaseTest;
 
-class FullClassTest extends BaseTest
+class TransformerTest extends BaseTest
 {
 
-  public function testTestCase()
+  public function testTransformer()
   {
-    $config = TestConfiguration::getConfig();
-
-    $params = array(
+    $manager = new BaseTransformerManagerV2($this->container->get('event_dispatcher'), $this->container->get(
+                                                                                                       'validator'
+    ));
+    $params  = array(
       'user'     => 'testUser',
       'address'  => [
         'street'  => 'Test Straße 3a',
@@ -37,16 +39,6 @@ class FullClassTest extends BaseTest
       ]
     );
 
-    $transformer = $this->container->get('enm.transformer.service');
-
-    try
-    {
-      $transformer->transform(new UserTestClass(), $config, $params);
-      $this->assertTrue(true);
-    }
-    catch (\Exception $e)
-    {
-      $this->fail($e->getMessage());
-    }
+    var_dump($manager->process(new UserTestClass(), TestConfiguration::getConfig(), $params));
   }
 } 

@@ -8,6 +8,8 @@
 
 namespace ENM\TransformerBundle\DependencyInjection;
 
+use ENM\TransformerBundle\ConfigurationStructure\StringValidationEnum;
+use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -28,7 +30,7 @@ class TransformerConfiguration implements ConfigurationInterface
       ->useAttributeAsKey('name')
         ->prototype('array')
           ->children()
-            ->enumNode('type')->values(array('integer', 'float', 'string', 'bool', 'array', 'collection', 'date', 'object', 'method'))->defaultValue(null)->end()
+            ->enumNode('type')->values(TypeEnum::toArray())->defaultValue(null)->end()
             ->scalarNode('renameTo')->defaultValue(null)->end()
             ->arrayNode('children')->prototype('variable')->end()->end()
             ->arrayNode('options')
@@ -36,7 +38,7 @@ class TransformerConfiguration implements ConfigurationInterface
               ->children()
                 ->booleanNode('assoc')->defaultValue(true)->end()
                 ->arrayNode('expected')->prototype('scalar')->end()->end()
-                ->scalarNode('stringValidation')->defaultValue(null)->end()
+                ->enumNode('stringValidation')->values(StringValidationEnum::toArray())->defaultValue(null)->end()
                 ->floatNode('min')->defaultValue(null)->end()
                 ->floatNode('max')->defaultValue(null)->end()
                 ->scalarNode('returnClass')->defaultValue(null)->end()
@@ -86,14 +88,13 @@ class TransformerConfiguration implements ConfigurationInterface
                   ->defaultValue(array())
                 ->end()
                 ->arrayNode('length')
+                  ->addDefaultsIfNotSet()
                   ->children()
-                    ->floatNode('min')->isRequired()->end()
-                    ->floatNode('max')->isRequired()->end()
+                    ->floatNode('min')->defaultValue(null)->end()
+                    ->floatNode('max')->defaultValue(null)->end()
                   ->end()
                 ->end()
-                ->scalarNode('methodClass')->defaultValue(null)->end()
-                ->arrayNode('methodClassParameter')->prototype('variable')->end()->end()
-                ->scalarNode('method')->defaultValue(null)->end()
+                ->arrayNode('individual')->prototype('variable')->end()->end()
               ->end()
             ->end()
           ->end()

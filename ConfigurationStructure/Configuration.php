@@ -9,6 +9,11 @@ class Configuration
   /**
    * @var string
    */
+  protected $key;
+
+  /**
+   * @var string
+   */
   protected $type = null;
 
   /**
@@ -17,7 +22,7 @@ class Configuration
   protected $renameTo = null;
 
   /**
-   * @var array
+   * @var \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   protected $children = array();
 
@@ -28,15 +33,38 @@ class Configuration
 
 
 
-  function __construct()
+  public function __construct($key)
   {
+    $this->key     = $key;
     $this->options = new ConfigurationOptions();
   }
 
 
 
   /**
-   * @param array
+   * @param string $key
+   */
+  public function setKey($key)
+  {
+    $this->key = $key;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return string
+   */
+  public function getKey()
+  {
+    return $this->key;
+  }
+
+
+
+  /**
+   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   public function setChildren(array $children)
   {
@@ -48,7 +76,7 @@ class Configuration
 
 
   /**
-   * @return array
+   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   public function getChildren()
   {

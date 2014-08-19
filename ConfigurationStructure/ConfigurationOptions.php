@@ -8,6 +8,7 @@ use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
+use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
@@ -80,9 +81,9 @@ class ConfigurationOptions
   protected $arrayOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions
+   * @var OptionStructures\IndividualOptions
    */
-  protected $methodOptions;
+  protected $individualOptions;
 
 
 
@@ -96,7 +97,7 @@ class ConfigurationOptions
     $this->dateOptions            = new DateOptions();
     $this->floatOptions           = new FloatOptions();
     $this->integerOptions         = new IntegerOptions();
-    $this->methodOptions          = new MethodOptions();
+    $this->individualOptions      = new IndividualOptions();
     $this->objectOptions          = new ObjectOptions();
     $this->stringOptions          = new StringOptions();
   }
@@ -346,11 +347,11 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions $methodOptions
+   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions $individualOptions
    */
-  public function setMethodOptions(MethodOptions $methodOptions)
+  public function setIndividualOptions(IndividualOptions $individualOptions)
   {
-    $this->methodOptions = $methodOptions;
+    $this->individualOptions = $individualOptions;
 
     return $this;
   }
@@ -358,11 +359,11 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions
+   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions
    */
-  public function getMethodOptions()
+  public function getIndividualOptions()
   {
-    return $this->methodOptions;
+    return $this->individualOptions;
   }
 
 

@@ -3,3 +3,6 @@ services:
         class: ENM\TransformerBundle\Manager\TransformerManager
         arguments: [ @service_container ]
 
+    enm.transformer.configuration.manager:
+        class: ENM\TransformerBundle\Manager\ConfigurationManager
+        arguments: [ @event_dispatcher ]

@@ -70,7 +70,6 @@ class TestConfiguration
       'hobbys'   => [
         'type'     => 'collection',
         'children' => [
-          'dynamic' => [
             'abc' => [
               'type' => 'string',
               'renameTo' => 'test'
@@ -91,7 +90,6 @@ class TestConfiguration
                 'max' => 7
               ]
             ]
-          ]
         ],
         'options'  => [
           'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\HobbyTestClass'
