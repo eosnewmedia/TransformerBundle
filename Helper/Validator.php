@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ValidationManager
+class Validator
 {
 
   /**
@@ -177,7 +177,7 @@ class ValidationManager
     if (count($expected))
     {
       $config = array(
-        'choices' => $expected,
+        'choices'  => $expected,
         'multiple' => $multiple
       );
 
@@ -411,4 +411,4 @@ class ValidationManager
                        new ValidatorEvent($configuration, $parameter, $this)
     );
   }
-}
+} 

@@ -4,11 +4,16 @@
 namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
+use ENM\TransformerBundle\ConfigurationStructure\ConversionEnum;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
 use ENM\TransformerBundle\Event\TransformerEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\TransformerException;
+use ENM\TransformerBundle\Helper\ClassBuilder;
+use ENM\TransformerBundle\Helper\Configurator;
+use ENM\TransformerBundle\Helper\Converter;
+use ENM\TransformerBundle\Helper\Normalizer;
+use ENM\TransformerBundle\Helper\Validator;
 use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,25 +22,30 @@ class BaseTransformerManagerV2
 {
 
   /**
-   * @var ClassBuilderManager
+   * @var \ENM\TransformerBundle\Helper\ClassBuilder
    */
   protected $classBuilder;
 
 
   /**
-   * @var ValidationManager
+   * @var \ENM\TransformerBundle\Helper\Validator
    */
   protected $validator;
 
   /**
-   * @var NormalizerManager
+   * @var \ENM\TransformerBundle\Helper\Normalizer
    */
   protected $normalizer;
 
   /**
-   * @var ConfigurationManager
+   * @var \ENM\TransformerBundle\Helper\Converter
    */
-  protected $configurationManager;
+  protected $converter;
+
+  /**
+   * @var \ENM\TransformerBundle\Helper\Configurator
+   */
+  protected $configurator;
 
   /**
    * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -46,20 +56,31 @@ class BaseTransformerManagerV2
 
   public function __construct(EventDispatcherInterface $dispatcher, ValidatorInterface $validator)
   {
-    $this->classBuilder         = new ClassBuilderManager($dispatcher);
-    $this->configurationManager = new ConfigurationManager($dispatcher);
-    $this->validator            = new ValidationManager($dispatcher, $validator);
-    $this->normalizer           = new NormalizerManager($dispatcher);
-    $this->dispatcher           = $dispatcher;
+    $this->dispatcher   = $dispatcher;
+    $this->classBuilder = new ClassBuilder($this->dispatcher);
+    $this->configurator = new Configurator($this->dispatcher);
+    $this->converter    = new Converter();
+    $this->validator    = new Validator($this->dispatcher, $validator);
+    $this->normalizer   = new Normalizer($this->dispatcher);
   }
 
 
 
-  public function process($returnClass, array $config, $params)
+  /**
+   * @param string|object $returnClass
+   * @param mixed         $config
+   * @param mixed         $params
+   *
+   * @return object
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   */
+  public function process($returnClass, $config, $params)
   {
     try
     {
-      $config = $this->configurationManager->getConfig($config);
+      $config = $this->converter->convertTo($config, ConversionEnum::ARRAY_CONVERSION);
+      $config = $this->configurator->getConfig($config);
+      $params = $this->converter->convertTo($params, ConversionEnum::ARRAY_CONVERSION);
 
       return $this->build($returnClass, $config, $params);
     }
@@ -75,6 +96,8 @@ class BaseTransformerManagerV2
    * @param string|object   $returnClass
    * @param Configuration[] $config
    * @param array           $params
+   *
+   * @return object
    */
   protected function build($returnClass, array $config, array $params)
   {

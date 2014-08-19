@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions;
@@ -11,7 +11,6 @@ use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
@@ -24,7 +23,7 @@ use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ConfigurationManager
+class Configurator
 {
 
   /**
@@ -110,6 +109,8 @@ class ConfigurationManager
   /**
    * @param array  $config
    * @param string $key
+   *
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function getChildren(array $config, $key)
   {
@@ -311,4 +312,4 @@ class ConfigurationManager
     $options->setMin($config['options']['length']['min']);
     $this->configuration[$key]->getOptions()->setStringOptions($options);
   }
-}
+} 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
@@ -11,7 +11,7 @@ use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class NormalizerManager
+class Normalizer
 {
 
   /**
@@ -150,4 +150,4 @@ class NormalizerManager
       }
     }
   }
-}
+} 

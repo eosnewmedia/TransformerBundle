@@ -5,6 +5,7 @@ namespace ENM\TransformerBundle\Event;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
+use ENM\TransformerBundle\Helper\Validator;
 use ENM\TransformerBundle\Manager\ValidationManager;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -22,13 +23,13 @@ class ValidatorEvent extends Event
   protected $parameter;
 
   /**
-   * @var \ENM\TransformerBundle\Manager\ValidationManager
+   * @var \ENM\TransformerBundle\Helper\Validator
    */
   protected $validator;
 
 
 
-  function __construct(Configuration $configuration, Parameter $parameter, ValidationManager $validator)
+  function __construct(Configuration $configuration, Parameter $parameter, Validator $validator)
   {
     $this->configuration = $configuration;
     $this->parameter     = $parameter;
@@ -58,7 +59,7 @@ class ValidatorEvent extends Event
 
 
   /**
-   * @return \ENM\TransformerBundle\Manager\ValidationManager
+   * @return Validator
    */
   public function getValidator()
   {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
@@ -10,7 +10,7 @@ use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ClassBuilderManager
+class ClassBuilder
 {
 
   /**
@@ -89,8 +89,9 @@ class ClassBuilderManager
 
 
   /**
-   * @param object    $returnClass
-   * @param Parameter $parameter
+   * @param object        $returnClass
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
    */
   protected function setValue($returnClass, Configuration $configuration, Parameter $parameter)
   {
@@ -130,4 +131,4 @@ class ClassBuilderManager
 
     return $setter . ucfirst($key);
   }
-}
+} 
