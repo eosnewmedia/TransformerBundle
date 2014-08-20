@@ -112,17 +112,12 @@ class Normalizer
       try
       {
         // 'date' ist der Standard-Key, wenn ein DateTime-Objekt in Array umgewandelt wird
-        $date = new \DateTime($parameter->getValue()['date']);
-
-        $parameter->setValue($date->format($configuration->getOptions()->getDateOptions()->getFormat()[0]));
+        $date = $parameter->getValue()['date'];
+        $parameter->setValue($date);
       }
       catch (\Exception $e)
       {
-        throw new InvalidTransformerParameterException(
-          $configuration->getKey() . ' is not a date string of format "' . implode(
-            ' or ',
-            $configuration->getOptions()->getDateOptions()->getFormat()
-          ) . '"');
+        throw new InvalidTransformerParameterException($configuration->getKey().' is not a date string.');
       }
     }
   }

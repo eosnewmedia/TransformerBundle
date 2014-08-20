@@ -29,7 +29,7 @@ class Validator
   /**
    * @var array
    */
-  protected $constrains;
+  protected $constraints = array();
 
   /**
    * @var \Symfony\Component\Validator\Validator\ValidatorInterface
@@ -56,7 +56,7 @@ class Validator
    */
   public function validate(Configuration $configuration, Parameter $parameter)
   {
-    $this->constrains = array();
+    $this->constraints = array();
     $this->dispatcher->dispatch(
                      TransformerEvents::BEFORE_VALIDATION,
                        new ValidatorEvent($configuration, $parameter, $this)
@@ -91,7 +91,7 @@ class Validator
         $this->validateIndividual($configuration, $parameter);
         break;
     }
-    $this->validateConstrains($this->constrains, $parameter);
+    $this->validateConstrains($this->constraints, $parameter);
     $this->dispatcher->dispatch(
                      TransformerEvents::AFTER_VALIDATION,
                        new ValidatorEvent($configuration, $parameter, $this)
@@ -102,11 +102,14 @@ class Validator
 
   public function addConstraint(Constraint $constraint)
   {
-    if (!is_array($this->constrains))
-    {
-      $this->constrains = array();
-    }
-    array_push($this->constrains, $constraint);
+    array_push($this->constraints, $constraint);
+  }
+
+
+
+  public function getConstraints()
+  {
+    return $this->constraints;
   }
 
 
@@ -116,14 +119,14 @@ class Validator
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  public function validateConstrains(array $constrains, Parameter $parameter)
+  public function validateConstrains(array $constraints, Parameter $parameter)
   {
     try
     {
       $violationList = $this->validator->validate(
                                        $parameter->getValue(),
-                                         $constrains,
-                                         Constraint::PROPERTY_CONSTRAINT
+                                         $constraints,
+                                         array(Constraint::PROPERTY_CONSTRAINT, Constraint::DEFAULT_GROUP)
       );
     }
     catch (\Exception $e)
@@ -146,8 +149,8 @@ class Validator
    */
   public function requireValue(Configuration $configuration, Parameter $parameter, array $params)
   {
-    $not_null   = false;
-    $constrains = array();
+    $not_null    = false;
+    $constraints = array();
     if ($configuration->getOptions()->getRequired() === true)
     {
       $not_null = true;
@@ -161,7 +164,7 @@ class Validator
       {
         foreach ($requiredIfAvailable->getOr() as $key)
         {
-          if (in_array(strtolower($key), $params))
+          if (array_key_exists(strtolower($key), $params))
           {
             $not_null = true;
             break;
@@ -173,7 +176,7 @@ class Validator
       {
         foreach ($requiredIfNotAvailable->getOr() as $key)
         {
-          if (!in_array(strtolower($key), $params))
+          if (!array_key_exists(strtolower($key), $params))
           {
             $not_null = true;
             break;
@@ -186,7 +189,7 @@ class Validator
         foreach ($requiredIfAvailable->getAnd() as $key)
         {
           $not_null = true;
-          if (!in_array(strtolower($key), $params))
+          if (!array_key_exists(strtolower($key), $params))
           {
             $not_null = false;
             break;
@@ -199,7 +202,7 @@ class Validator
         foreach ($requiredIfNotAvailable->getAnd() as $key)
         {
           $not_null = true;
-          if (in_array(strtolower($key), $params))
+          if (array_key_exists(strtolower($key), $params))
           {
             $not_null = false;
             break;
@@ -209,8 +212,8 @@ class Validator
     }
     if ($not_null === true)
     {
-      array_push($constrains, new Constraints\NotBlank());
-      $this->validateConstrains($constrains, $parameter);
+      array_push($constraints, new Constraints\NotBlank());
+      $this->validateConstrains($constraints, $parameter);
     }
   }
 
@@ -223,7 +226,7 @@ class Validator
    */
   public function forbidValue(Configuration $configuration, Parameter $parameter, array $params)
   {
-    $constrains = array();
+    $constraints = array();
 
     $forbidden = false;
 
@@ -234,7 +237,7 @@ class Validator
     {
       foreach ($ifAvailable as $key)
       {
-        if (in_array(strtolower($key), $params))
+        if (array_key_exists(strtolower($key), $params))
         {
           $forbidden = true;
           break;
@@ -245,7 +248,7 @@ class Validator
     {
       foreach ($ifNotAvailable as $key)
       {
-        if (!in_array(strtolower($key), $params))
+        if (!array_key_exists(strtolower($key), $params))
         {
           $forbidden = true;
           break;
@@ -254,8 +257,8 @@ class Validator
     }
     if ($forbidden === true)
     {
-      array_push($constrains, new Constraints\Null());
-      $this->validateConstrains($constrains, $parameter);
+      array_push($constraints, new Constraints\Null());
+      $this->validateConstrains($constraints, $parameter);
     }
   }
 
@@ -285,7 +288,7 @@ class Validator
    */
   protected function validateType(Configuration $configuration)
   {
-    array_push($this->constrains, new Constraints\Type(array('type' => $configuration->getType())));
+    array_push($this->constraints, new Constraints\Type(array('type' => $configuration->getType())));
   }
 
 
@@ -304,7 +307,7 @@ class Validator
       );
 
       array_push(
-        $this->constrains,
+        $this->constraints,
         new Constraints\Choice($config)
       );
     }
@@ -321,14 +324,14 @@ class Validator
     if ($min !== null)
     {
       array_push(
-        $this->constrains,
+        $this->constraints,
         new Constraints\GreaterThanOrEqual(array('value' => $min))
       );
     }
     if ($max !== null)
     {
       array_push(
-        $this->constrains,
+        $this->constraints,
         new Constraints\LessThanOrEqual(array('value' => $max))
       );
     }
@@ -391,7 +394,7 @@ class Validator
   protected function validateDate(Configuration $configuration, Parameter $parameter)
   {
     array_push(
-      $this->constrains,
+      $this->constraints,
       new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
     );
 
@@ -488,19 +491,19 @@ class Validator
     {
       case StringValidationEnum::EMAIL:
         array_push(
-          $this->constrains,
+          $this->constraints,
           new Constraints\Email(array('checkMX' => true, 'checkHost' => true))
         );
         break;
       case StringValidationEnum::URL:
         array_push(
-          $this->constrains,
+          $this->constraints,
           new Constraints\Url(array('protocols' => array('http', 'https', 'ftp')))
         );
         break;
       case StringValidationEnum::IP:
         array_push(
-          $this->constrains,
+          $this->constraints,
           new Constraints\Ip(array('version' => 'all'))
         );
         break;
@@ -511,7 +514,7 @@ class Validator
     )
     {
       array_push(
-        $this->constrains,
+        $this->constraints,
         new Constraints\Length(array(
           'min' => $configuration->getOptions()->getStringOptions()->getMin(),
           'max' => $configuration->getOptions()->getStringOptions()->getMax(),
@@ -522,7 +525,7 @@ class Validator
     if ($configuration->getOptions()->getStringOptions()->getRegex() !== null)
     {
       array_push(
-        $this->constrains,
+        $this->constraints,
         new Constraints\Regex(array(
           'pattern' => $configuration->getOptions()->getStringOptions()->getRegex()
         ))

@@ -266,8 +266,14 @@ class Configurator
     $options = new FloatOptions();
     $options->setExpected($config['options']['expected']);
     $options->setDefaultValue($config['options']['defaultValue']);
-    $options->setMax($config['options']['max']);
-    $options->setMin($config['options']['min']);
+    if (!is_null($config['options']['min']))
+    {
+      $options->setMin($config['options']['min']);
+    }
+    if (!is_null($config['options']['max']))
+    {
+      $options->setMax($config['options']['max']);
+    }
     $this->configuration[$key]->getOptions()->setFloatOptions($options);
   }
 
@@ -282,8 +288,15 @@ class Configurator
     $options = new IntegerOptions();
     $options->setExpected($config['options']['expected']);
     $options->setDefaultValue($config['options']['defaultValue']);
-    $options->setMax($config['options']['max']);
-    $options->setMin($config['options']['min']);
+    if (!is_null($config['options']['min']))
+    {
+      $options->setMin($config['options']['min']);
+    }
+    if (!is_null($config['options']['max']))
+    {
+      $options->setMax($config['options']['max']);
+    }
+
     $this->configuration[$key]->getOptions()->setIntegerOptions($options);
   }
 
