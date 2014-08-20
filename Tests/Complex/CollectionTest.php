@@ -30,7 +30,7 @@ class CollectionTest extends BaseTest
         'type'     => 'collection',
         'options'  => array(
           'required'    => true,
-          'returnClass' => 'stdClass',
+          'returnClass' => '\stdClass',
         )
       )
     );
