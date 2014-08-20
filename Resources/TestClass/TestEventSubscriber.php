@@ -19,8 +19,7 @@ class TestEventSubscriber implements EventSubscriberInterface
     return array(
       TransformerEvents::BEFORE_CHILD_CONFIGURATION => 'testFunction',
       TransformerEvents::AFTER_CHILD_CONFIGURATION  => 'testFunction',
-      TransformerEvents::VALIDATE_INTEGER           => 'testConstraintFunction',
-      TransformerEvents::VALIDATE_FLOAT             => 'testConstraintFunction',
+      TransformerEvents::PREPARE_VALUE              => 'testConstraintFunction',
     );
   }
 
@@ -41,5 +40,7 @@ class TestEventSubscriber implements EventSubscriberInterface
 
   public function testConstraintFunction(TransformerEvent $event)
   {
+    echo $event->getParameter()->getKey() . "\n";
+    var_dump($event->getParameter()->getValue());
   }
 }

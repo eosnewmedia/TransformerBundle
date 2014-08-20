@@ -17,8 +17,9 @@ use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
 use ENM\TransformerBundle\DependencyInjection\ObjectConfiguration;
 use ENM\TransformerBundle\Event\ConfigurationEvent;
+use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
-use ENM\TransformerBundle\Exceptions\TransformerException;
+use ENM\TransformerBundle\Exceptions\TransformerConfigurationException;
 use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -38,17 +39,29 @@ class Configurator
 
 
 
-  public function __construct(EventDispatcherInterface $eventDispatcher)
+  public function __construct(array $config, EventDispatcherInterface $eventDispatcher)
   {
     $this->configuration = array();
     $this->dispatcher    = $eventDispatcher;
+    $this->runConfig($config);
   }
 
 
 
-  function __destruct()
+  public function __destruct()
   {
     unset($this->accessor);
+    unset($this->configuration);
+  }
+
+
+
+  /**
+   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
+   */
+  public function getConfig()
+  {
+    return $this->configuration;
   }
 
 
@@ -59,7 +72,7 @@ class Configurator
    * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function getConfig(array $config)
+  protected function runConfig(array $config)
   {
     try
     {
@@ -83,7 +96,8 @@ class Configurator
     }
     catch (\Exception $e)
     {
-      throw new TransformerException($e->getMessage() . ' --- ' . $e->getFile() . ': ' . $e->getLine());
+      $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
+      throw new TransformerConfigurationException($e->getMessage() . ' --- ' . $e->getFile() . ': ' . $e->getLine());
     }
   }
 
@@ -141,10 +155,9 @@ class Configurator
                          new ConfigurationEvent($this->configuration[$key])
       );
 
-      $configuration = new self($this->dispatcher);
-      $children      = $configuration->getConfig($this->configuration[$key]->getChildren());
+      $configuration = new self($this->configuration[$key]->getChildren(), $this->dispatcher);
 
-      $this->configuration[$key]->setChildren($children);
+      $this->configuration[$key]->setChildren($configuration->getConfig());
 
       if (!count($this->configuration[$key]->getChildren()) > 0)
       {

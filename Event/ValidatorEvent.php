@@ -9,6 +9,12 @@ use ENM\TransformerBundle\Helper\Validator;
 use ENM\TransformerBundle\Manager\ValidationManager;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Class ValidatorEvent
+ *
+ * @package ENM\TransformerBundle\Event
+ * @author  Philipp Marien <marien@eosnewmedia.de>
+ */
 class ValidatorEvent extends TransformerEvent
 {
 

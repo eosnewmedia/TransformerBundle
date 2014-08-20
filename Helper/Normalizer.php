@@ -117,7 +117,7 @@ class Normalizer
       }
       catch (\Exception $e)
       {
-        throw new InvalidTransformerParameterException($configuration->getKey().' is not a date string.');
+        throw new InvalidTransformerParameterException($configuration->getKey() . ' is not a date string.');
       }
     }
   }

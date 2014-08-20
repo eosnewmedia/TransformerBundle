@@ -6,6 +6,12 @@ namespace ENM\TransformerBundle\Event;
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 
+/**
+ * Class TransformerEvent
+ *
+ * @package ENM\TransformerBundle\Event
+ * @author  Philipp Marien <marien@eosnewmedia.de>
+ */
 class TransformerEvent extends ConfigurationEvent
 {
 

@@ -7,9 +7,15 @@ class TransformerEvents
 {
 
   /**
+   * Throws \ENM\TransformerBundle\Event\ExceptionEvent
+   */
+  const ON_EXCEPTION = 'transformer.event.on.exception';
+
+  /**
    * Throws \ENM\TransformerBundle\Event\ConfigurationEvent
    */
   const BEFORE_CHILD_CONFIGURATION = 'transformer.event.before.child_configuration';
+
 
   /**
    * Throws \ENM\TransformerBundle\Event\ConfigurationEvent

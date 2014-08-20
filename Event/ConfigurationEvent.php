@@ -6,6 +6,12 @@ namespace ENM\TransformerBundle\Event;
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Class ConfigurationEvent
+ *
+ * @package ENM\TransformerBundle\Event
+ * @author  Philipp Marien <marien@eosnewmedia.de>
+ */
 class ConfigurationEvent extends Event
 {
 

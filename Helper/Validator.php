@@ -7,6 +7,7 @@ use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\StringValidationEnum;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
+use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Event\ValidatorEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\TransformerEvents;
@@ -131,6 +132,7 @@ class Validator
     }
     catch (\Exception $e)
     {
+      $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
       $violationList = $this->handleException($e, $parameter);
     }
 

@@ -14,11 +14,11 @@ class ConfigurationTest extends BaseTest
 
   public function testConfiguration()
   {
-    $manager = new Configurator(new EventDispatcher());
+    $manager = new Configurator(TestConfiguration::getConfig(), new EventDispatcher());
 
     try
     {
-      $manager->getConfig(TestConfiguration::getConfig());
+      $manager->getConfig();
       $this->assertTrue(true);
     }
     catch (\Exception $e)

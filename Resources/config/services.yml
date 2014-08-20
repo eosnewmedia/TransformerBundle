@@ -3,5 +3,10 @@ services:
         class: ENM\TransformerBundle\Manager\TransformerManager
         arguments: [ @service_container ]
 
+    enm.transformer.listener.exception:
+        class: ENM\TransformerBundle\Listener\ExceptionListener
+
     enm.transformer.event_dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
+        calls:
+            - ["addListener", [transformer.event.on.exception, [@enm.transformer.listener.exception, onException]]]
