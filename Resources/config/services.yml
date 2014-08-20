@@ -3,6 +3,5 @@ services:
         class: ENM\TransformerBundle\Manager\TransformerManager
         arguments: [ @service_container ]
 
-    enm.transformer.configuration.manager:
-        class: ENM\TransformerBundle\Manager\ConfigurationManager
-        arguments: [ @event_dispatcher ]
+    enm.transformer.event_dispatcher:
+        class: Symfony\Component\EventDispatcher\EventDispatcher

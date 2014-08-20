@@ -41,7 +41,7 @@ class FullClassTest extends BaseTest
 
     try
     {
-      $transformer->transform(new UserTestClass(), $config, $params);
+      $transformer->transform(new UserTestClass(), $config, $params, 'test');
       $this->assertTrue(true);
     }
     catch (\Exception $e)

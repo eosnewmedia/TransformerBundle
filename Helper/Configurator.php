@@ -15,7 +15,7 @@ use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
 use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
+use ENM\TransformerBundle\DependencyInjection\ObjectConfiguration;
 use ENM\TransformerBundle\Event\ConfigurationEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\TransformerException;
@@ -46,6 +46,13 @@ class Configurator
 
 
 
+  function __destruct()
+  {
+    unset($this->accessor);
+  }
+
+
+
   /**
    * @param array $config
    *
@@ -62,8 +69,10 @@ class Configurator
         $this->configuration[$key] = new Configuration($key);
         $this->setBaseConfiguration($settings, $key);
         $this->setBaseOptions($settings, $key);
-        $this->{'set' . ucfirst($settings['type']) . 'Options'}($settings, $key);
-        $this->getChildren($settings, $key);
+        $this->{'set' . ucfirst($this->configuration[$key]->getType()) . 'Options'}($settings, $key);
+        $this->createChildren($settings, $key);
+        $this->setEventConfiguration($settings, $key);
+
         $this->dispatcher->dispatch(
                          TransformerEvents::AFTER_CONFIGURATION,
                            new ConfigurationEvent($this->configuration[$key])
@@ -89,7 +98,14 @@ class Configurator
   {
     $processor = new Processor();
 
-    return $processor->processConfiguration(new TransformerConfiguration(), array('config' => $config));
+    return $processor->processConfiguration(new ObjectConfiguration(), array('config' => $config));
+  }
+
+
+
+  protected function setEventConfiguration(array $config, $key)
+  {
+    $this->configuration[$key]->setEvents($config['options']['events']);
   }
 
 
@@ -100,7 +116,7 @@ class Configurator
    */
   protected function setBaseConfiguration(array $config, $key)
   {
-    $this->configuration[$key]->setType($config['type']);
+    $this->configuration[$key]->setType(strtolower($config['type']));
     $this->configuration[$key]->setRenameTo($config['renameTo']);
   }
 
@@ -112,9 +128,12 @@ class Configurator
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
-  protected function getChildren(array $config, $key)
+  protected function createChildren(array $config, $key)
   {
-    if (in_array($this->configuration[$key]->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE)))
+    if (
+      in_array($this->configuration[$key]->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE))
+      || ($this->configuration[$key]->getType() === TypeEnum::INDIVIDUAL_TYPE && count($config['children']) > 0)
+    )
     {
       $this->configuration[$key]->setChildren($config['children']);
       $this->dispatcher->dispatch(
@@ -279,6 +298,15 @@ class Configurator
     $options = new IndividualOptions();
     $options->setOptions($config['options']['individual']);
     $this->configuration[$key]->getOptions()->setIndividualOptions($options);
+
+    $this->setArrayOptions($config, $key);
+    $this->setObjectOptions($config, $key);
+    $this->setBoolOptions($config, $key);
+    $this->setCollectionOptions($config, $key);
+    $this->setDateOptions($config, $key);
+    $this->setFloatOptions($config, $key);
+    $this->setIntegerOptions($config, $key);
+    $this->setStringOptions($config, $key);
   }
 
 
@@ -305,7 +333,7 @@ class Configurator
   {
     $options = new StringOptions();
     $options->setRegex($config['options']['regex']);
-    $options->setValidation($config['options']['stringValidation']);
+    $options->setValidation(strtolower($config['options']['stringValidation']));
     $options->setExpected($config['options']['expected']);
     $options->setDefaultValue($config['options']['defaultValue']);
     $options->setMax($config['options']['length']['max']);

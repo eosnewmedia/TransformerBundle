@@ -13,19 +13,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ClassBuilder
 {
 
-  /**
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-
-
-  public function __construct(EventDispatcherInterface $dispatcher)
-  {
-    $this->dispatcher = $dispatcher;
-  }
-
-
 
   /**
    * @param string|object                                                 $returnClass
@@ -48,15 +35,7 @@ class ClassBuilder
       {
         throw new InvalidTransformerConfigurationException('Parameter "params" have to be an array of Parameter-Objects!');
       }
-      $this->dispatcher->dispatch(
-                       TransformerEvents::BEFORE_CLASS_SET_VALUE,
-                         new TransformerEvent($settings, $params[$key])
-      );
       $this->setValue($returnClass, $settings, $params[$key]);
-      $this->dispatcher->dispatch(
-                       TransformerEvents::AFTER_CLASS_SET_VALUE,
-                         new TransformerEvent($settings, $params[$key])
-      );
     }
 
     return $returnClass;
@@ -70,7 +49,7 @@ class ClassBuilder
    * @return object
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
-  protected function getClass($class)
+  public function getClass($class)
   {
     if (is_object($class))
     {

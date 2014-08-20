@@ -5,15 +5,9 @@ namespace ENM\TransformerBundle\Event;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use Symfony\Component\EventDispatcher\Event;
 
-class TransformerEvent extends Event
+class TransformerEvent extends ConfigurationEvent
 {
-
-  /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\Configuration
-   */
-  protected $configuration;
 
   /**
    * @var \ENM\TransformerBundle\ConfigurationStructure\Parameter
@@ -24,18 +18,8 @@ class TransformerEvent extends Event
 
   function __construct(Configuration $configuration, Parameter $parameter)
   {
-    $this->configuration = $configuration;
-    $this->parameter     = $parameter;
-  }
-
-
-
-  /**
-   * @return Configuration
-   */
-  public function getConfiguration()
-  {
-    return $this->configuration;
+    $this->parameter = $parameter;
+    parent::__construct($configuration);
   }
 
 

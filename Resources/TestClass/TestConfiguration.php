@@ -3,6 +3,8 @@
 
 namespace ENM\TransformerBundle\Resources\TestClass;
 
+use ENM\TransformerBundle\TransformerEvents;
+
 class TestConfiguration
 {
 
@@ -55,7 +57,16 @@ class TestConfiguration
         ],
         'options'  => [
           'required'    => true,
-          'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\AddressTestClass'
+          'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\AddressTestClass',
+          'events'      => [
+            'listeners' => [
+              'test' => [
+                'event'  => TransformerEvents::AFTER_VALIDATION,
+                'class'  => 'ENM\TransformerBundle\Resources\TestClass\TestEventListener',
+                'method' => 'testNotAlwaysListener'
+              ]
+            ]
+          ]
         ]
       ],
       'birthday' => [
@@ -70,26 +81,26 @@ class TestConfiguration
       'hobbys'   => [
         'type'     => 'collection',
         'children' => [
-            'abc' => [
-              'type' => 'string',
-              'renameTo' => 'test'
-            ],
-            'name'         => [
-              'type' => 'string'
-            ],
-            'years'        => [
-              'type'    => 'float',
-              'options' => [
-                'min' => 0
-              ]
-            ],
-            'days_in_week' => [
-              'type'    => 'integer',
-              'options' => [
-                'min' => 0,
-                'max' => 7
-              ]
+          'abc'          => [
+            'type'     => 'string',
+            'renameTo' => 'test'
+          ],
+          'name'         => [
+            'type' => 'string'
+          ],
+          'years'        => [
+            'type'    => 'float',
+            'options' => [
+              'min' => 0
             ]
+          ],
+          'days_in_week' => [
+            'type'    => 'integer',
+            'options' => [
+              'min' => 0,
+              'max' => 7
+            ]
+          ]
         ],
         'options'  => [
           'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\HobbyTestClass'

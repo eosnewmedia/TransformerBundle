@@ -3,25 +3,8 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
-use ENM\TransformerBundle\Interfaces\TransformerInterface;
-use Symfony\Component\DependencyInjection\Container;
-
-/**
- * Class TransformerManager
- *
- * @package ENM\TransformerBundle\Manager
- * @author  Philipp Marien <marien@eosnewmedia.de>
- */
-class TransformerManager extends BaseTransformerManager implements TransformerInterface
+class TransformerManager extends BaseTransformerManager
 {
-
-  public function __construct(Container $container)
-  {
-    parent::__construct($container);
-  }
-
-
 
   /**
    * Diese Methode transformiert ein Array, ein Objekt oder einen JSON-String in ein gewünschtes Objekt und validiert die Werte
@@ -30,11 +13,16 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @param array               $config
    * @param array|object|string $values
    *
+   * @return object
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function transform($returnClass, array $config, $values, $result_type = 'object')
+  public function transform($returnClass, array $config, $values, $global_config_key = null, $result_type = 'object')
   {
-    return $this->convertTo($this->createClass($returnClass, $config, $values), $result_type);
+    $value = $this->process($returnClass, $config, $values, $global_config_key);
+
+    $value = $this->converter->convertTo($value, $result_type);
+
+    return $value;
   }
 
 
@@ -51,7 +39,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    */
   public function reverseTransform($object, array $config, $result_type = 'object')
   {
-    return $this->convertTo($this->reverseClass($config, $object), $result_type);
+    // TODO: Implement reverseTransform() method.
   }
 
 
@@ -61,72 +49,13 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    *
    * @param object $returnClass
    * @param array  $config
-   * @param string $result_type
+   * @param string $type
    *
    * @return array|object|string
+   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function getEmptyObjectStructureFromConfig(array $config, $result_type = 'object')
   {
-    $return = $this->createEmptyObjectStructure($config);
-
-    return $this->convertTo($return, $result_type);
-  }
-
-
-
-  /**
-   * @param mixed $value
-   *
-   * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
-   */
-  public function toArray($value)
-  {
-    return parent::toArray($value);
-  }
-
-
-
-  /**
-   * @param object $object
-   * @param string $result_type
-   *
-   * @return array|string
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
-   */
-  protected function convertTo($object, $result_type)
-  {
-    return parent::convertTo($object, $result_type);
-  }
-
-
-
-  /**
-   * Diese Methode wandelt einen JSON-String in ein Array um.
-   *
-   * @param $value
-   *
-   * @return array
-   *
-   * @deprecated Use toArray instead
-   *
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
-   */
-  public function transformJsonToArray($value)
-  {
-    return $this->toArray($value);
-  }
-
-
-
-  /**
-   * @param array $config
-   *
-   * @return array|object|string
-   * @deprecated use getEmptyObjectStructureFromConfig() instead
-   */
-  public function getSampleArrayFromConfig(array $config)
-  {
-    return $this->getEmptyObjectStructureFromConfig($config, 'array');
+    // TODO: Implement getEmptyObjectStructureFromConfig() method.
   }
 }

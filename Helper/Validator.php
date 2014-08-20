@@ -91,7 +91,7 @@ class Validator
         $this->validateIndividual($configuration, $parameter);
         break;
     }
-    $this->validateConstrains($parameter);
+    $this->validateConstrains($this->constrains, $parameter);
     $this->dispatcher->dispatch(
                      TransformerEvents::AFTER_VALIDATION,
                        new ValidatorEvent($configuration, $parameter, $this)
@@ -116,13 +116,13 @@ class Validator
    *
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  protected function validateConstrains(Parameter $parameter)
+  public function validateConstrains(array $constrains, Parameter $parameter)
   {
     try
     {
       $violationList = $this->validator->validate(
                                        $parameter->getValue(),
-                                         $this->constrains,
+                                         $constrains,
                                          Constraint::PROPERTY_CONSTRAINT
       );
     }
@@ -134,6 +134,128 @@ class Validator
     if ($violationList->count() > 0)
     {
       throw new InvalidTransformerParameterException($violationList);
+    }
+  }
+
+
+
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   * @param array         $params
+   */
+  public function requireValue(Configuration $configuration, Parameter $parameter, array $params)
+  {
+    $not_null   = false;
+    $constrains = array();
+    if ($configuration->getOptions()->getRequired() === true)
+    {
+      $not_null = true;
+    }
+    else
+    {
+      $requiredIfAvailable    = $configuration->getOptions()->getRequiredIfAvailable();
+      $requiredIfNotAvailable = $configuration->getOptions()->getRequiredIfNotAvailable();
+
+      if ($not_null !== true)
+      {
+        foreach ($requiredIfAvailable->getOr() as $key)
+        {
+          if (in_array(strtolower($key), $params))
+          {
+            $not_null = true;
+            break;
+          }
+        }
+      }
+
+      if ($not_null !== true)
+      {
+        foreach ($requiredIfNotAvailable->getOr() as $key)
+        {
+          if (!in_array(strtolower($key), $params))
+          {
+            $not_null = true;
+            break;
+          }
+        }
+      }
+
+      if ($not_null !== true)
+      {
+        foreach ($requiredIfAvailable->getAnd() as $key)
+        {
+          $not_null = true;
+          if (!in_array(strtolower($key), $params))
+          {
+            $not_null = false;
+            break;
+          }
+        }
+      }
+
+      if ($not_null !== true)
+      {
+        foreach ($requiredIfNotAvailable->getAnd() as $key)
+        {
+          $not_null = true;
+          if (in_array(strtolower($key), $params))
+          {
+            $not_null = false;
+            break;
+          }
+        }
+      }
+    }
+    if ($not_null === true)
+    {
+      array_push($constrains, new Constraints\NotBlank());
+      $this->validateConstrains($constrains, $parameter);
+    }
+  }
+
+
+
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   * @param array         $params
+   */
+  public function forbidValue(Configuration $configuration, Parameter $parameter, array $params)
+  {
+    $constrains = array();
+
+    $forbidden = false;
+
+    $ifAvailable    = $configuration->getOptions()->getForbiddenIfAvailable();
+    $ifNotAvailable = $configuration->getOptions()->getForbiddenIfNotAvailable();
+
+    if ($forbidden !== true)
+    {
+      foreach ($ifAvailable as $key)
+      {
+        if (in_array(strtolower($key), $params))
+        {
+          $forbidden = true;
+          break;
+        }
+      }
+    }
+    if ($forbidden !== true)
+    {
+      foreach ($ifNotAvailable as $key)
+      {
+        if (!in_array(strtolower($key), $params))
+        {
+          $forbidden = true;
+          break;
+        }
+      }
+    }
+    if ($forbidden === true)
+    {
+      array_push($constrains, new Constraints\Null());
+      $this->validateConstrains($constrains, $parameter);
     }
   }
 

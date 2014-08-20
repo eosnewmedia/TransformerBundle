@@ -31,6 +31,11 @@ class Configuration
    */
   protected $options;
 
+  /**
+   * @var array
+   */
+  protected $events = array();
+
 
 
   public function __construct($key)
@@ -147,5 +152,27 @@ class Configuration
   public function getType()
   {
     return $this->type;
+  }
+
+
+
+  /**
+   * @param array $events
+   */
+  public function setEvents(array $events)
+  {
+    $this->events = $events;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return array
+   */
+  public function getEvents()
+  {
+    return $this->events;
   }
 }

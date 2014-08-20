@@ -14,22 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Normalizer
 {
 
-  /**
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-
-
-  /**
-   * @param EventDispatcherInterface $dispatcher
-   */
-  public function __construct(EventDispatcherInterface $dispatcher)
-  {
-    $this->dispatcher = $dispatcher;
-  }
-
-
 
   /**
    * @param Parameter     $parameter
@@ -37,10 +21,6 @@ class Normalizer
    */
   public function normalize(Parameter $parameter, Configuration $configuration)
   {
-    $this->dispatcher->dispatch(
-                     TransformerEvents::BEFORE_NORMALIZATION,
-                       new TransformerEvent($configuration, $parameter)
-    );
     switch ($configuration->getType())
     {
       case TypeEnum::ARRAY_TYPE:
@@ -59,10 +39,6 @@ class Normalizer
         $this->normalizeDate($parameter, $configuration);
         break;
     }
-    $this->dispatcher->dispatch(
-                     TransformerEvents::AFTER_NORMALIZATION,
-                       new TransformerEvent($configuration, $parameter)
-    );
   }
 
 

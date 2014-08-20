@@ -21,15 +21,6 @@ class TransformerEvents
    */
   const AFTER_CONFIGURATION = 'transformer.event.after.configuration';
 
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const BEFORE_CLASS_SET_VALUE = 'transformer.event.before.class_set_value';
-
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const AFTER_CLASS_SET_VALUE = 'transformer.event.before.class_set_value';
 
   /**
    * Throws \ENM\TransformerBundle\Event\ValidatorEvent
@@ -100,4 +91,39 @@ class TransformerEvents
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
    */
   const PREPARE_INDIVIDUAL = 'transformer.event.prepare.individual';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const BEFORE_RUN = 'transformer.event.before.run';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const AFTER_RUN = 'transformer.event.after.run';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_VALUE = 'transformer.event.prepare.value';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_DEFAULT = 'transformer.event.prepare.default';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_COLLECTION = 'transformer.event.prepare.collection';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_OBJECT = 'transformer.event.prepare.object';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_DATE = 'transformer.event.prepare.date';
 }
