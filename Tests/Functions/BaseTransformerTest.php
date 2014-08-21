@@ -27,10 +27,9 @@ class BaseTransformerTest extends BaseTest
     if (!$this->transformer instanceof BaseTransformerManager)
     {
       $dispatcher = new EventDispatcher();
-      $dispatcher->addListener(TransformerEvents::ON_EXCEPTION, array(new ExceptionListener(), 'onException'));
-      $validator = $this->container->get('validator');
-      $paramBag  = $this->container->get('assetic.parameter_bag');
-      $stopwatch = new Stopwatch();
+      $validator  = $this->container->get('validator');
+      $paramBag   = $this->container->get('assetic.parameter_bag');
+      $stopwatch  = new Stopwatch();
 
       $this->transformer = new BaseTransformerManager($dispatcher, $validator, $paramBag, $stopwatch);
     }
@@ -98,7 +97,7 @@ class BaseTransformerTest extends BaseTest
         'birthday' => '1990-01-01',
       );
       $method = $this->getMethod('process');
-      $result = $method->invokeArgs($this->getInstanz(), array('\stdClass', $config, $params, 'test'));
+      $result = $method->invokeArgs($this->getInstanz(), array('\stdClass', $config, $params));
       $this->assertEquals('testUser', $result->username);
       $this->assertEquals('1990-01-01', $result->birthday);
     }
@@ -166,7 +165,7 @@ class BaseTransformerTest extends BaseTest
     try
     {
       $method = $this->getMethod('destroy');
-      $method->invokeArgs($this->getInstanz(), array('test'));
+      $method->invoke($this->getInstanz());
       $this->assertTrue(true);
     }
     catch (TransformerException $e)

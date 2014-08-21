@@ -49,7 +49,7 @@ class CollectionTest extends BaseTest
       )
     );
 
-    $result = $manager->transform(new \stdClass(), $config, $params, 'test');
+    $result = $manager->transform(new \stdClass(), $config, $params);
 
     $this->assertArrayHasKey(0, $result->list);
     $this->assertArrayHasKey(1, $result->list);
