@@ -381,6 +381,10 @@ class Validator
    */
   protected function validateCollection(Configuration $configuration, Parameter $parameter)
   {
+    array_push(
+      $this->constraints,
+      new Constraints\Collection(array('fields' => array(), 'allowExtraFields' => true))
+    );
     $this->dispatcher->dispatch(
                      TransformerEvents::VALIDATE_COLLECTION,
                        new ValidatorEvent($configuration, $parameter, $this)

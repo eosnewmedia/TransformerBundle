@@ -1,7 +1,7 @@
 services:
     enm.transformer.service:
         class: ENM\TransformerBundle\Manager\TransformerManager
-        arguments: [ @service_container ]
+        arguments: [ @enm.transformer.event_dispatcher, @validator, @assetic.parameter_bag, @debug.stopwatch ]
 
     enm.transformer.listener.exception:
         class: ENM\TransformerBundle\Listener\ExceptionListener

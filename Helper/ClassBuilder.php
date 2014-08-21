@@ -25,17 +25,17 @@ class ClassBuilder
   public function build($returnClass, array $config, array $params)
   {
     $returnClass = $this->getClass($returnClass);
-    foreach ($config as $key => $settings)
+    foreach ($config as $configuration)
     {
-      if (!$settings instanceof Configuration)
+      if (!$configuration instanceof Configuration)
       {
         throw new InvalidTransformerConfigurationException('Parameter "config" have to be an array of Configuration-Objects!');
       }
-      if (!$params[$key] instanceof Parameter)
+      if (!$params[$configuration->getKey()] instanceof Parameter)
       {
         throw new InvalidTransformerConfigurationException('Parameter "params" have to be an array of Parameter-Objects!');
       }
-      $this->setValue($returnClass, $settings, $params[$key]);
+      $this->setValue($returnClass, $configuration, $params[$configuration->getKey()]);
     }
 
     return $returnClass;

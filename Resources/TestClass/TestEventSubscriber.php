@@ -17,9 +17,7 @@ class TestEventSubscriber implements EventSubscriberInterface
   public static function getSubscribedEvents()
   {
     return array(
-      TransformerEvents::PREPARE_VALUE  => 'testFunction',
-      TransformerEvents::PREPARE_OBJECT => 'testFunction',
-      TransformerEvents::BEFORE_RUN     => 'testFunction',
+      TransformerEvents::BEFORE_RUN => 'testFunction',
     );
   }
 
@@ -27,16 +25,11 @@ class TestEventSubscriber implements EventSubscriberInterface
 
   public function testFunction(TransformerEvent $event)
   {
-    if ($event->getParameter()->getKey() === 'user' && $event->getParameter()->getValue() === 'testUser')
-    {
-      echo $event->getParameter()->getKey() . "\n";
-      $event->getParameter()->setValue('TEST');
-    }
-
     if ($event->getParameter()->getKey() === 'user' && $event->getParameter()->getValue() !== 'testUser')
     {
-      echo $event->getParameter()->getKey() . "\n";
-      var_dump($event->getParameter()->getValue());
+      //echo $event->getParameter()->getKey() . "\n";
+      //var_dump($event->getParameter()->getValue());
+      //var_dump($event->getConfiguration());
     }
   }
 }
