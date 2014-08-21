@@ -124,21 +124,18 @@ The following array structure is needed for each parameter:
             'min' => (int),
             'max' => (int)
           ),
-          'methodClass' => (string) If 'type' is 'method', Description under "Own Validation Methods"
-          'methodClassParameter' => (array) If 'type' is 'method', Description under "Own Validation Methods"
-          'method' => (string) // If 'type' is 'method', Description under "Own Validation Methods"
           'returnClass' => '{NAMESPACE\CLASS_NAME}' // If 'type' is 'object' or 'collection', Description under "Child Objects" or "Collections"
         )
       )
 
 #### Key
-The key for each Parameter must be exactly called the same as the property of the object you want to get.
+The key for each Parameter must be exactly named the same as the property of the object you want to get.
 
 #### Child Objects
 If your object should contain sub-objects, you can write a configuration array for your sub-objects too.
 This array should be the value of your 'children'-key.
 
-You also have to set the 'type'-key of your configuration to 'object'
+You also have to set the 'type'-key of your configuration to 'object' or 'collection' (if an array of these objects is expected)
 
 If you are using a complex structure with children, you must define a return class.
 The return class is the class of the object, which is build from the children elements.
@@ -153,38 +150,7 @@ The return class is the class of the object, which is build from the children el
         'children' => array(
           'address' => $address_configuration,
         ),
-        'type' => 'object',
-        'options' => array(
-          'returnClass' => 'Own\Address' // Needed class including namespace
-          // your needed options for the main configuration of 'user_extra_data'
-        )
-      )
-    );
-
-
-    $user = $this->container->get('enm.array.transformer.service')->transform(new User(), $main_configuration, $params);
-
-### Collections
-If you want to get a Collection, you can write a configuration array for your expected object, that should be in your collection.
-This array you can set as the value of your 'children'-key. It needs the array-key 'dynamic', because the number of identical classes isn't limited.
-
-You also have to set the 'type'-key of your configuration to 'collection'
-
-If you are using a complex structure with children, you must define a return class.
-The return class is the class of the object, which is build from the children element.
-
-    $address_configuration = array(
-      // normal configuration array
-    );
-
-
-    $main_configuration = array(
-      'user_addresses' => array(
-        'children' => array(
-        // multiple addresses for one user
-          'dynamic' => $address_configuration,
-        ),
-        'type' => 'collection',
+        'type' => 'object', // or collection, if an array of these objects is expected
         'options' => array(
           'returnClass' => 'Own\Address' // Needed class including namespace
           // your needed options for the main configuration of 'user_extra_data'
@@ -196,47 +162,6 @@ The return class is the class of the object, which is build from the children el
     $user = $this->container->get('enm.array.transformer.service')->transform(new User(), $main_configuration, $params);
 
 
-#### Own Validation Methods
-If one property of your needed object is to complex for our validation or if it needs special validation,
-you can write your own validation method for it and give it to the configuration array.
-The method must return the value of the parameter which is validated.
-
-Your validation method must be in a class, which you have to give into the configuration array.
-
-'type'-Key must to be set to 'method'
-
-    namespace Own\Validation;
-
-    class UserValidation
-    {
-      /**
-      * @param mixed $value
-      *
-      * @return $value
-      */
-      public function yourMethod($value)
-      {
-        // do something
-      }
-    }
-
-
-    #########
-
-
-    $configuration = array(
-      'username' => array(
-        'type' => 'method',
-        'options' => array(
-          'methodClass' => 'Own\Validation\UserValidation', // Class name, including namespace
-          'methodClassParameter' => array(), // Parameters for the Constructor of the Method-Class
-          'method' => 'yourMethod', // Method to call
-        )
-      )
-    );
-
-
-    $user = $this->container->get('enm.array.transformer.service')->transform(new User(), $configuration, $params);
 
 
 #### Enumerations

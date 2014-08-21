@@ -356,7 +356,7 @@ class BaseTransformerManager
   protected function getParameterObject(Configuration $configuration, array $params)
   {
     $parameter = new Parameter($configuration->getKey(), $this->getValue($configuration, $params));
-    $this->prepareDefault($configuration, $parameter);
+    $this->setDefaultIfNull($configuration, $parameter);
     $this->normalizer->normalize($parameter, $configuration);
 
     return $parameter;
@@ -426,7 +426,7 @@ class BaseTransformerManager
    *
    * @return $this
    */
-  protected function prepareDefault(Configuration $configuration, Parameter $parameter)
+  protected function setDefaultIfNull(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
                      TransformerEvents::PREPARE_DEFAULT,
@@ -529,12 +529,16 @@ class BaseTransformerManager
         $returnClass = $configuration->getOptions()->getCollectionOptions()->getReturnClass();
         break;
     }
-    $value = $this->build(
-                  $returnClass,
-                    $configuration->getChildren(),
-                    $this->converter->convertTo($parameter->getValue(), 'array')
-    );
-    $parameter->setValue($value);
+
+    if ($parameter->getValue() !== null)
+    {
+      $value = $this->build(
+                    $returnClass,
+                      $configuration->getChildren(),
+                      $this->converter->convertTo($parameter->getValue(), 'array')
+      );
+      $parameter->setValue($value);
+    }
 
     return $this;
   }
