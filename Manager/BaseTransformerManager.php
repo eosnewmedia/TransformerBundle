@@ -7,8 +7,10 @@ use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\ConversionEnum;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
+use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
 use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Event\TransformerEvent;
+use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\TransformerException;
 use ENM\TransformerBundle\Helper\ClassBuilder;
 use ENM\TransformerBundle\Helper\Configurator;
@@ -17,6 +19,7 @@ use ENM\TransformerBundle\Helper\EventHandler;
 use ENM\TransformerBundle\Helper\Normalizer;
 use ENM\TransformerBundle\Helper\Validator;
 use ENM\TransformerBundle\TransformerEvents;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -58,9 +61,14 @@ class BaseTransformerManager
   protected $stopwatch;
 
   /**
-   * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBag
+   * @var array
    */
-  protected $globalParameterBag;
+  protected $global_configuration = array();
+
+  /**
+   * @var array
+   */
+  protected $local_configuration = array();
 
   /**
    * @var EventHandler
@@ -77,34 +85,29 @@ class BaseTransformerManager
   )
   {
     $stopwatch->start('constructor', 'transformer');
-    $this->stopwatch          = $stopwatch;
-    $this->dispatcher         = $eventDispatcher;
-    $this->globalParameterBag = $parameterBag;
-    $this->classBuilder       = new ClassBuilder();
-    $this->converter          = new Converter();
-    $this->normalizer         = new Normalizer();
-    $this->eventHandler       = new EventHandler($eventDispatcher, $this->classBuilder);
-    $this->validator          = new Validator($eventDispatcher, $validator);
+    $this->stopwatch            = $stopwatch;
+    $this->dispatcher           = $eventDispatcher;
+    $this->global_configuration = $parameterBag->get('transformer.config');
+    $this->classBuilder         = new ClassBuilder();
+    $this->converter            = new Converter();
+    $this->normalizer           = new Normalizer();
+    $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
+    $this->validator            = new Validator($eventDispatcher, $validator);
     $stopwatch->stop('constructor');
   }
 
 
 
   /**
-   * @param string $config_key
-   *
    * @return $this
    */
-  protected function init($config_key)
+  protected function init()
   {
     $this->stopwatch->start('init', 'transformer');
 
-    $global_config = $this->globalParameterBag->get('transformer.config');
-
-    if ($global_config !== false && array_key_exists($config_key, $global_config))
+    if (array_key_exists('events', $this->local_configuration))
     {
-      $global_config[$config_key]['events'] = $this->prepareEventConfig($global_config[$config_key]['events']);
-      $this->eventHandler->init($global_config[$config_key]['events']);
+      $this->eventHandler->init($this->local_configuration['events']);
     }
 
     $this->stopwatch->stop('init');
@@ -115,19 +118,17 @@ class BaseTransformerManager
 
 
   /**
-   * @param string $config_key
-   *
    * @return $this
    */
-  protected function destroy($config_key)
+  protected function destroy()
   {
     $this->stopwatch->start('destroy', 'transformer');
 
-    $global_config = $this->globalParameterBag->get('transformer.config');
-    if ($global_config !== false && array_key_exists($config_key, $global_config))
+    if (array_key_exists('events', $this->local_configuration))
     {
-      $this->eventHandler->destroy($global_config[$config_key]['events']);
+      $this->eventHandler->destroy($this->local_configuration['events']);
     }
+    $this->local_configuration = array();
 
     $this->stopwatch->stop('destroy');
 
@@ -140,16 +141,15 @@ class BaseTransformerManager
    * @param string|object $returnClass
    * @param mixed         $config
    * @param mixed         $params
-   * @param string        $config_key
    *
    * @return object
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function process($returnClass, $config, $params, $config_key = null)
+  public function process($returnClass, $config, $params)
   {
     try
     {
-      $this->init($config_key);
+      $this->init();
       $this->stopwatch->start('transform', 'transformer');
 
       $params       = $this->converter->convertTo($params, ConversionEnum::ARRAY_CONVERSION);
@@ -158,27 +158,27 @@ class BaseTransformerManager
       $returnClass  = $this->build($returnClass, $configurator->getConfig(), $params);
 
       $this->stopwatch->stop('transform');
-      $this->destroy($config_key);
+      $this->destroy();
 
       return $returnClass;
     }
     catch (\Exception $e)
     {
       $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
-      $this->destroy($config_key);
+      $this->destroy();
       throw new TransformerException($e->getMessage());
     }
   }
 
 
 
-  public function reverseProcess($config, $object, $config_key = null)
+  public function reverseProcess($config, $object)
   {
     try
     {
-      $object = $this->process('\stdClass', $config, $object, $config_key);
+      $object = $this->process('\stdClass', $config, $object);
 
-      $this->init($config, $config_key);
+      $this->init();
       $configurator = new Configurator($config, $this->dispatcher);
 
       $returnClass = $this->reverseBuild(
@@ -187,14 +187,14 @@ class BaseTransformerManager
                             $this->converter->convertTo($object, ConversionEnum::ARRAY_CONVERSION)
       );
 
-      $this->destroy($config, $config_key);
+      $this->destroy();
 
       return $returnClass;
     }
     catch (\Exception $e)
     {
       $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
-      throw new TransformerException($e->getMessage() . ' --- ' . $e->getFile() . ' - ' . $e->getLine());
+      throw new TransformerException($e->getMessage());
     }
   }
 
@@ -236,25 +236,51 @@ class BaseTransformerManager
    */
   protected function reverseBuild($returnClass, array $config_array, array $params)
   {
-    $returnClassProperties = array();
+    $return_properties    = array();
+    $return_configuration = array();
     foreach ($config_array as $configuration)
     {
       $parameter = $this->getParameterObject($configuration, $params);
       $this->initRun($configuration, $parameter);
 
-      if ($configuration->getRenameTo() !== null)
+      $modifiedConfiguration = clone $configuration;
+
+      $this->dispatcher->dispatch(
+                       TransformerEvents::REVERSE_TRANSFORM,
+                         new TransformerEvent($modifiedConfiguration, $parameter)
+      );
+
+      $this->modifyConfiguration($modifiedConfiguration);
+
+      switch ($modifiedConfiguration->getType())
       {
-        $rename = $configuration->getRenameTo();
-        $configuration->setRenameTo($configuration->getKey());
-        $configuration->setKey($rename);
+        case TypeEnum::COLLECTION_TYPE:
+          $this->prepareCollection($modifiedConfiguration, $parameter, true);
+          break;
+        case TypeEnum::OBJECT_TYPE:
+          $this->reverseObject($modifiedConfiguration, $parameter);
+          break;
       }
 
-      $returnClassProperties[$configuration->getKey()] = $parameter;
+      $return_properties[$modifiedConfiguration->getKey()]    = $parameter;
+      $return_configuration[$modifiedConfiguration->getKey()] = $modifiedConfiguration;
 
       $this->destroyRun($configuration, $parameter);
     }
 
-    return $this->classBuilder->build($returnClass, $config_array, $returnClassProperties);
+    return $this->classBuilder->build($returnClass, $return_configuration, $return_properties);
+  }
+
+
+
+  protected function modifyConfiguration(Configuration $configuration)
+  {
+    if ($configuration->getRenameTo() !== null)
+    {
+      $rename = $configuration->getRenameTo();
+      $configuration->setRenameTo($configuration->getKey());
+      $configuration->setKey($rename);
+    }
   }
 
 
@@ -265,7 +291,7 @@ class BaseTransformerManager
    */
   protected function initRun(Configuration $configuration, Parameter $parameter)
   {
-    $configuration->setEvents($this->prepareEventConfig($configuration->getEvents()));
+    $configuration->setEvents($this->setEventConfig($configuration->getEvents()));
     $this->eventHandler->init($configuration->getEvents());
 
     $this->stopwatch->start($configuration->getKey(), 'transformer');
@@ -361,22 +387,11 @@ class BaseTransformerManager
 
 
   /**
-   * @param array $config
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
    *
-   * @return mixed
+   * @return $this
    */
-  protected function prepareEventConfig(array $config)
-  {
-    foreach ($config['listeners'] as $key => $listener)
-    {
-      $config['listeners'][$key]['class'] = $this->classBuilder->getClass($listener['class']);
-    }
-
-    return $config;
-  }
-
-
-
   protected function prepareValue(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
@@ -405,6 +420,12 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
   protected function prepareDefault(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
@@ -430,12 +451,29 @@ class BaseTransformerManager
 
 
 
-  protected function prepareCollection(Configuration $configuration, Parameter $parameter)
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   * @param bool          $reverse
+   *
+   * @return $this
+   */
+  protected function prepareCollection(Configuration $configuration, Parameter $parameter, $reverse = false)
   {
-    $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_COLLECTION,
-                       new TransformerEvent($configuration, $parameter)
-    );
+    if ($reverse === false)
+    {
+      $this->dispatcher->dispatch(
+                       TransformerEvents::PREPARE_COLLECTION,
+                         new TransformerEvent($configuration, $parameter)
+      );
+    }
+    else
+    {
+      $this->dispatcher->dispatch(
+                       TransformerEvents::REVERSE_COLLECTION,
+                         new TransformerEvent($configuration, $parameter)
+      );
+    }
 
     $child_array = $parameter->getValue();
     if (is_object($child_array))
@@ -448,7 +486,15 @@ class BaseTransformerManager
       for ($i = 0; $i < count($child_array); $i++)
       {
         $param = new Parameter($i, $child_array[$i]);
-        $this->prepareObject($configuration, $param);
+        if ($reverse === false)
+        {
+          $this->prepareObject($configuration, $param);
+        }
+        else
+        {
+          $this->reverseObject($configuration, $param);
+        }
+
         array_push($result_array, $param->getValue());
       }
 
@@ -460,6 +506,12 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
   protected function prepareObject(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
@@ -477,7 +529,11 @@ class BaseTransformerManager
         $returnClass = $configuration->getOptions()->getCollectionOptions()->getReturnClass();
         break;
     }
-    $value = $this->build($returnClass, $configuration->getChildren(), $parameter->getValue());
+    $value = $this->build(
+                  $returnClass,
+                    $configuration->getChildren(),
+                    $this->converter->convertTo($parameter->getValue(), 'array')
+    );
     $parameter->setValue($value);
 
     return $this;
@@ -485,6 +541,38 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
+  protected function reverseObject(Configuration $configuration, Parameter $parameter)
+  {
+    $this->dispatcher->dispatch(
+                     TransformerEvents::REVERSE_OBJECT,
+                       new TransformerEvent($configuration, $parameter)
+    );
+
+    $returnClass = '\stdClass';
+    $value       = $this->reverseBuild(
+                        $returnClass,
+                          $configuration->getChildren(),
+                          $this->converter->convertTo($parameter->getValue(), 'array')
+    );
+    $parameter->setValue($value);
+
+    return $this;
+  }
+
+
+
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
   protected function prepareDate(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
@@ -515,6 +603,12 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
   protected function prepareIndividual(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
@@ -523,5 +617,137 @@ class BaseTransformerManager
     );
 
     return $this;
+  }
+
+
+
+  /**
+   * @param mixed $local_config
+   *
+   * @return $this
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   */
+  protected function setLocalConfig($local_config)
+  {
+    try
+    {
+      if (is_null($local_config))
+      {
+        $this->local_configuration = array();
+
+        return $this;
+      }
+      if ((is_string($local_config) && !json_decode($local_config) instanceof \stdClass))
+      {
+        if (!array_key_exists($local_config, $this->global_configuration))
+        {
+          throw new InvalidTransformerConfigurationException('Config Key "' . $local_config . '" does not exists!');
+        }
+        $this->local_configuration = $this->global_configuration[$local_config];
+
+        $this->local_configuration['events'] = $this->setEventConfig($this->local_configuration['events']);
+
+        return $this;
+      }
+
+      $config = $this->converter->convertTo($local_config, 'array');
+      $key    = md5(time());
+
+      $processor = new Processor();
+      $config    = $processor->processConfiguration(
+                             new TransformerConfiguration(),
+                               array('enm_transformer' => [$key => $config])
+      );
+
+      $this->local_configuration = $config[$key];
+
+      $this->local_configuration['events'] = $this->setEventConfig($this->local_configuration['events']);
+
+      return $this;
+    }
+    catch (\Exception $e)
+    {
+      $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
+      throw new TransformerException($e->getMessage());
+    }
+  }
+
+
+
+  /**
+   * @param array $event_config
+   *
+   * @return array
+   */
+  protected function setEventConfig(array $event_config)
+  {
+    foreach ($event_config['listeners'] as $key => $listener)
+    {
+      $event_config['listeners'][$key]['class'] = $this->classBuilder->getClass($listener['class']);
+    }
+
+    return $event_config;
+  }
+
+
+
+  /**
+   * @param $config
+   *
+   * @return object
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   */
+  protected function createEmptyObjectStructure($config)
+  {
+    try
+    {
+      $configurator = new Configurator($this->converter->convertTo($config, 'array'), $this->dispatcher);
+
+      return $this->createPartOfStructure($configurator->getConfig());
+    }
+    catch (\Exception $e)
+    {
+      $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
+      throw new TransformerException($e->getMessage());
+    }
+  }
+
+
+
+  /**
+   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config
+   *
+   * @return object
+   */
+  protected function createPartOfStructure(array $config)
+  {
+    $return_properties    = array();
+    $return_configuration = array();
+
+    foreach ($config as $configuration)
+    {
+      $value = null;
+      switch ($configuration->getType())
+      {
+        case TypeEnum::COLLECTION_TYPE:
+          $value = array($this->createPartOfStructure($configuration->getChildren()));
+          break;
+        case TypeEnum::OBJECT_TYPE:
+          $value = $this->createPartOfStructure($configuration->getChildren());
+          break;
+        case TypeEnum::ARRAY_TYPE:
+          $value = array();
+          break;
+        default:
+          break;
+      }
+      $this->modifyConfiguration($configuration);
+      $parameter = new Parameter($configuration->getKey(), $value);
+
+      $return_properties[$configuration->getKey()]    = $parameter;
+      $return_configuration[$configuration->getKey()] = $configuration;
+    }
+
+    return $this->classBuilder->build('\stdClass', $return_configuration, $return_properties);
   }
 }

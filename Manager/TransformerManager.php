@@ -9,16 +9,17 @@ class TransformerManager extends BaseTransformerManager
   /**
    * Diese Methode transformiert ein Array, ein Objekt oder einen JSON-String in ein gewünschtes Objekt und validiert die Werte
    *
-   * @param object|string       $returnClass
-   * @param array               $config
-   * @param array|object|string $values
+   * @param object|string            $returnClass
+   * @param array|object|string      $config
+   * @param array|object|string      $values
+   * @param null|array|string|object $global_config_key
+   * @param string                   $result_type
    *
-   * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @return array|object|string
    */
-  public function transform($returnClass, array $config, $values, $global_config_key = null, $result_type = 'object')
+  public function transform($returnClass, $config, $values, $local_config = null, $result_type = 'object')
   {
-    $value = $this->process($returnClass, $config, $values, $global_config_key);
+    $value = $this->setLocalConfig($local_config)->process($returnClass, $config, $values);
 
     $value = $this->converter->convertTo($value, $result_type);
 
@@ -37,9 +38,13 @@ class TransformerManager extends BaseTransformerManager
    * @return array|\stdClass|string
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  public function reverseTransform($object, array $config, $result_type = 'object')
+  public function reverseTransform($object, array $config, $local_config = null, $result_type = 'object')
   {
-    // TODO: Implement reverseTransform() method.
+    $value = $this->setLocalConfig($local_config)->reverseProcess($config, $object);
+
+    $value = $this->converter->convertTo($value, $result_type);
+
+    return $value;
   }
 
 
@@ -54,8 +59,11 @@ class TransformerManager extends BaseTransformerManager
    * @return array|object|string
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
-  public function getEmptyObjectStructureFromConfig(array $config, $result_type = 'object')
+  public function getEmptyObjectStructureFromConfig($config, $result_type = 'object')
   {
-    // TODO: Implement getEmptyObjectStructureFromConfig() method.
+    $value = $this->createEmptyObjectStructure($config);
+    $value = $this->converter->convertTo($value, $result_type);
+
+    return $value;
   }
 }

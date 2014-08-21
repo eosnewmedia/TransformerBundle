@@ -115,7 +115,7 @@ class BaseTransformerTest extends BaseTest
     try
     {
       $method = $this->getMethod('init');
-      $method->invokeArgs($this->getInstanz(), array('test'));
+      $method->invoke($this->getInstanz());
       $this->assertTrue(true);
     }
     catch (TransformerException $e)

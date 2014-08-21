@@ -27,6 +27,15 @@ class TransformerEvents
    */
   const AFTER_CONFIGURATION = 'transformer.event.after.configuration';
 
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const BEFORE_RUN = 'transformer.event.before.run';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const AFTER_RUN = 'transformer.event.after.run';
 
   /**
    * Throws \ENM\TransformerBundle\Event\ValidatorEvent
@@ -83,30 +92,12 @@ class TransformerEvents
    */
   const VALIDATE_OBJECT = 'transformer.event.validate.object';
 
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const BEFORE_NORMALIZATION = 'transformer.event.before.normalization';
-
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const AFTER_NORMALIZATION = 'transformer.event.after.normalization';
 
   /**
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
    */
   const PREPARE_INDIVIDUAL = 'transformer.event.prepare.individual';
 
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const BEFORE_RUN = 'transformer.event.before.run';
-
-  /**
-   * Throws \ENM\TransformerBundle\Event\TransformerEvent
-   */
-  const AFTER_RUN = 'transformer.event.after.run';
 
   /**
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
@@ -132,4 +123,19 @@ class TransformerEvents
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
    */
   const PREPARE_DATE = 'transformer.event.prepare.date';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const REVERSE_TRANSFORM = 'transformer.event.reverse.transform';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const REVERSE_COLLECTION = 'transformer.event.reverse.collection';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const REVERSE_OBJECT = 'transformer.event.reverse.object';
 }
