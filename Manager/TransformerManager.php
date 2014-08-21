@@ -3,7 +3,9 @@
 
 namespace ENM\TransformerBundle\Manager;
 
-class TransformerManager extends BaseTransformerManager
+use ENM\TransformerBundle\Interfaces\TransformerInterface;
+
+class TransformerManager extends BaseTransformerManager implements TransformerInterface
 {
 
   /**
@@ -12,7 +14,7 @@ class TransformerManager extends BaseTransformerManager
    * @param object|string            $returnClass
    * @param array|object|string      $config
    * @param array|object|string      $values
-   * @param null|array|string|object $global_config_key
+   * @param null|array|string|object $local_config
    * @param string                   $result_type
    *
    * @return array|object|string
@@ -31,9 +33,10 @@ class TransformerManager extends BaseTransformerManager
   /**
    * Diese Methode transformiert ein Objekt zurück in einen JSON-String, ein Array oder eine Standard-Klasse
    *
-   * @param object $object
-   * @param array  $config
-   * @param string $result_type
+   * @param object                   $object
+   * @param array                    $config
+   * @param null|array|string|object $local_config
+   * @param string                   $result_type
    *
    * @return array|\stdClass|string
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
@@ -52,12 +55,10 @@ class TransformerManager extends BaseTransformerManager
   /**
    * Creates the Structure of an Object with NULL-Values
    *
-   * @param object $returnClass
    * @param array  $config
-   * @param string $type
+   * @param string $result_type
    *
    * @return array|object|string
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function getEmptyObjectStructureFromConfig($config, $result_type = 'object')
   {
@@ -65,5 +66,18 @@ class TransformerManager extends BaseTransformerManager
     $value = $this->converter->convertTo($value, $result_type);
 
     return $value;
+  }
+
+
+
+  /**
+   * @param mixed  $value
+   * @param string $to
+   *
+   * @return array|object|string
+   */
+  public function convert($value, $to)
+  {
+    return $this->converter->convertTo($value, $to);
   }
 }
