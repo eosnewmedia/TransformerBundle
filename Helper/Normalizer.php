@@ -38,6 +38,9 @@ class Normalizer
       case TypeEnum::DATE_TYPE:
         $this->normalizeDate($parameter, $configuration);
         break;
+      case TypeEnum::COLLECTION_TYPE:
+        $this->normalizeCollection($parameter, $configuration);
+        break;
     }
   }
 
@@ -120,6 +123,20 @@ class Normalizer
       {
         throw new InvalidTransformerParameterException('"' . $configuration->getKey() . '" is not a date string.');
       }
+    }
+  }
+
+
+
+  /**
+   * @param Parameter     $parameter
+   * @param Configuration $configuration
+   */
+  protected function normalizeCollection(Parameter $parameter, Configuration $configuration)
+  {
+    if (is_array($parameter->getValue()) && count($parameter->getValue()) === 0)
+    {
+      $parameter->setValue(null);
     }
   }
 } 

@@ -319,13 +319,16 @@ class BaseTransformerManager
     $this->validator->forbidValue($configuration, $parameter, $params);
     $this->stopwatch->stop($configuration->getKey() . '.forbid');
 
-    $this->stopwatch->start($configuration->getKey() . '.validate', 'transformer');
-    $this->validator->validate($configuration, $parameter);
-    $this->stopwatch->stop($configuration->getKey() . '.validate');
+    if (!is_null($parameter->getValue()))
+    {
+      $this->stopwatch->start($configuration->getKey() . '.validate', 'transformer');
+      $this->validator->validate($configuration, $parameter);
+      $this->stopwatch->stop($configuration->getKey() . '.validate');
 
-    $this->stopwatch->start($configuration->getKey() . '.prepare', 'transformer');
-    $this->prepareValue($configuration, $parameter);
-    $this->stopwatch->stop($configuration->getKey() . '.prepare');
+      $this->stopwatch->start($configuration->getKey() . '.prepare', 'transformer');
+      $this->prepareValue($configuration, $parameter);
+      $this->stopwatch->stop($configuration->getKey() . '.prepare');
+    }
   }
 
 
@@ -530,15 +533,12 @@ class BaseTransformerManager
         break;
     }
 
-    if ($parameter->getValue() !== null)
-    {
-      $value = $this->build(
-                    $returnClass,
-                      $configuration->getChildren(),
-                      $this->converter->convertTo($parameter->getValue(), 'array')
-      );
-      $parameter->setValue($value);
-    }
+    $value = $this->build(
+                  $returnClass,
+                    $configuration->getChildren(),
+                    $this->converter->convertTo($parameter->getValue(), 'array')
+    );
+    $parameter->setValue($value);
 
     return $this;
   }
