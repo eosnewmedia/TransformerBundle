@@ -5,6 +5,7 @@ namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
+use ENM\TransformerBundle\Event\ClassBuilderEvent;
 use ENM\TransformerBundle\Event\TransformerEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\TransformerEvents;
@@ -12,6 +13,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ClassBuilder
 {
+
+  /**
+   * @var EventDispatcherInterface
+   */
+  protected $dispatcher;
+
+
+
+  public function __construct(EventDispatcherInterface $dispatcher)
+  {
+    $this->dispatcher = $dispatcher;
+  }
+
 
 
   /**
@@ -24,7 +38,7 @@ class ClassBuilder
    */
   public function build($returnClass, array $config, array $params)
   {
-    $returnClass = $this->getClass($returnClass);
+    $returnClass = $this->getObjectInstance($returnClass);
     foreach ($config as $configuration)
     {
       if (!$configuration instanceof Configuration)
@@ -49,18 +63,35 @@ class ClassBuilder
    * @return object
    * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
-  public function getClass($class)
+  public function getObjectInstance($class)
   {
-    if (is_object($class))
+    // Eventbasierte Objekt-Erzeugung
+    $event = new ClassBuilderEvent($class);
+
+    // $class enthält bereits ein Objekt
+    if ($event->isObject() === true)
     {
-      return $class;
+      // Vor der Rückgabe an die EventListener/EventSubscriber geben...
+      $this->dispatcher->dispatch(TransformerEvents::OBJECT_RETURN_INSTANCE, $event);
+
+      return $event->getObject();
     }
 
-    if (class_exists($class))
+    // $class enthält noch kein Objekt
+    if (class_exists($event->getObject()))
     {
-      $reflection = new \ReflectionClass($class);
+      $this->dispatcher->dispatch(TransformerEvents::OBJECT_CREATE_INSTANCE, $event);
 
-      return $reflection->newInstanceWithoutConstructor();
+      // Wenn in keinem EventListener/EventSubscriber die Instanz erzeugt wurde...
+      if ($event->isObject() === false)
+      {
+        $reflection = new \ReflectionClass($class);
+
+        return $reflection->newInstanceWithoutConstructor();
+      }
+
+      // Wenn in einem EventListener/EventSubscriber die Instanz erzeugt wurde...
+      return $event->getObject();
     }
     throw new InvalidTransformerConfigurationException(sprintf('Class %s does not exist.', $class));
   }

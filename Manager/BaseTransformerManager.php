@@ -88,7 +88,7 @@ class BaseTransformerManager
     $this->stopwatch            = $stopwatch;
     $this->dispatcher           = $eventDispatcher;
     $this->global_configuration = $parameterBag->get('transformer.config');
-    $this->classBuilder         = new ClassBuilder();
+    $this->classBuilder         = new ClassBuilder($eventDispatcher);
     $this->converter            = new Converter();
     $this->normalizer           = new Normalizer($this->converter);
     $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
@@ -681,7 +681,7 @@ class BaseTransformerManager
   {
     foreach ($event_config['listeners'] as $key => $listener)
     {
-      $event_config['listeners'][$key]['class'] = $this->classBuilder->getClass($listener['class']);
+      $event_config['listeners'][$key]['class'] = $this->classBuilder->getObjectInstance($listener['class']);
     }
 
     return $event_config;

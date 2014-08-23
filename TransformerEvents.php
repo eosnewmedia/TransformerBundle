@@ -138,4 +138,14 @@ class TransformerEvents
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
    */
   const REVERSE_OBJECT = 'transformer.event.reverse.object';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\ClassBuilderEvent
+   */
+  const OBJECT_CREATE_INSTANCE = 'transformer.event.object.create_instance';
+
+  /**
+   * Throws \ENM\TransformerBundle\Event\ClassBuilderEvent
+   */
+  const OBJECT_RETURN_INSTANCE = 'transformer.event.object.return_instance';
 }

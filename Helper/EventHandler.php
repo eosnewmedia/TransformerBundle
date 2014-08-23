@@ -121,7 +121,7 @@ class EventHandler
     {
       foreach ($subscribers as $subscriber)
       {
-        $this->dispatcher->addSubscriber($this->classBuilder->getClass($subscriber));
+        $this->dispatcher->addSubscriber($this->classBuilder->getObjectInstance($subscriber));
       }
     }
     catch (\Exception $e)
@@ -177,7 +177,7 @@ class EventHandler
     {
       foreach ($subscribers as $subscriber)
       {
-        $this->dispatcher->removeSubscriber($this->classBuilder->getClass($subscriber));
+        $this->dispatcher->removeSubscriber($this->classBuilder->getObjectInstance($subscriber));
       }
     }
     catch (\Exception $e)
