@@ -90,7 +90,7 @@ class BaseTransformerManager
     $this->global_configuration = $parameterBag->get('transformer.config');
     $this->classBuilder         = new ClassBuilder();
     $this->converter            = new Converter();
-    $this->normalizer           = new Normalizer();
+    $this->normalizer           = new Normalizer($this->converter);
     $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
     $this->validator            = new Validator($eventDispatcher, $validator);
     $stopwatch->stop('constructor');
@@ -479,30 +479,24 @@ class BaseTransformerManager
     }
 
     $child_array = $parameter->getValue();
-    if (is_object($child_array))
-    {
-      $child_array = $this->converter->convertTo($child_array, 'array');
-    }
-    if (is_array($child_array))
-    {
-      $result_array = array();
-      for ($i = 0; $i < count($child_array); $i++)
-      {
-        $param = new Parameter($i, $child_array[$i]);
-        if ($reverse === false)
-        {
-          $this->prepareObject($configuration, $param);
-        }
-        else
-        {
-          $this->reverseObject($configuration, $param);
-        }
 
-        array_push($result_array, $param->getValue());
+    $result_array = array();
+    for ($i = 0; $i < count($child_array); $i++)
+    {
+      $param = new Parameter($i, $child_array[$i]);
+      if ($reverse === false)
+      {
+        $this->prepareObject($configuration, $param);
+      }
+      else
+      {
+        $this->reverseObject($configuration, $param);
       }
 
-      $parameter->setValue($result_array);
+      array_push($result_array, $param->getValue());
     }
+
+    $parameter->setValue($result_array);
 
     return $this;
   }

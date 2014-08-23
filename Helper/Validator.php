@@ -12,6 +12,8 @@ use ENM\TransformerBundle\Event\ValidatorEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\TransformerEvents;
 use ENM\TransformerBundle\Validator\Constraint\Date;
+use ENM\TransformerBundle\Validator\Constraint\EmptyArrayOrNull;
+use ENM\TransformerBundle\Validator\Constraint\NotEmptyArray;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
@@ -215,6 +217,10 @@ class Validator
     if ($not_null === true)
     {
       array_push($constraints, new Constraints\NotBlank());
+      if (in_array($configuration->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE)))
+      {
+        array_push($constraints, new NotEmptyArray());
+      }
       $this->validateConstrains($constraints, $parameter);
     }
   }
@@ -259,7 +265,14 @@ class Validator
     }
     if ($forbidden === true)
     {
-      array_push($constraints, new Constraints\Null());
+      if (in_array($configuration->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE)))
+      {
+        array_push($constraints, new EmptyArrayOrNull());
+      }
+      else
+      {
+        array_push($constraints, new Constraints\Null());
+      }
       $this->validateConstrains($constraints, $parameter);
     }
   }

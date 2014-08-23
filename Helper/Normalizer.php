@@ -14,6 +14,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Normalizer
 {
 
+  /**
+   * @var Converter
+   */
+  protected $converter;
+
+
+
+  public function __construct(Converter $converter)
+  {
+    $this->converter = $converter;
+  }
+
+
 
   /**
    * @param Parameter     $parameter
@@ -40,6 +53,9 @@ class Normalizer
         break;
       case TypeEnum::COLLECTION_TYPE:
         $this->normalizeCollection($parameter, $configuration);
+        break;
+      case TypeEnum::OBJECT_TYPE:
+        $this->normalizeObject($parameter, $configuration);
         break;
     }
   }
@@ -134,9 +150,31 @@ class Normalizer
    */
   protected function normalizeCollection(Parameter $parameter, Configuration $configuration)
   {
-    if (is_array($parameter->getValue()) && count($parameter->getValue()) === 0)
+    if (is_object($parameter->getValue()))
     {
-      $parameter->setValue(null);
+      $parameter->setValue($this->converter->convertTo($parameter->getValue(), 'array'));
+    }
+    if (!is_array($parameter->getValue()) && !is_null($parameter->getValue()))
+    {
+      $parameter->setValue(array());
+    }
+  }
+
+
+
+  /**
+   * @param Parameter     $parameter
+   * @param Configuration $configuration
+   */
+  protected function normalizeObject(Parameter $parameter, Configuration $configuration)
+  {
+    if (is_object($parameter->getValue()))
+    {
+      $parameter->setValue($this->converter->convertTo($parameter->getValue(), 'array'));
+    }
+    if (!is_array($parameter->getValue()) && !is_null($parameter->getValue()))
+    {
+      $parameter->setValue(array());
     }
   }
 } 
