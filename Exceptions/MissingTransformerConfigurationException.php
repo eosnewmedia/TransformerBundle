@@ -3,7 +3,7 @@
 
 namespace ENM\TransformerBundle\Exceptions;
 
-class MissingTransformerConfigurationException extends TransformerException
+class MissingTransformerConfigurationException extends TransformerConfigurationException
 {
 
 } 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ssc\ApiBundle\Tests\Complex;
+namespace ENM\TransformerBundle\Tests\Complex;
 
 use ENM\TransformerBundle\Resources\TestClass\TestConfiguration;
 use ENM\TransformerBundle\Resources\TestClass\UserTestClass;
@@ -43,10 +43,10 @@ class ReverseTransformTest extends BaseTest
     try
     {
       $object = $transformer->transform(new UserTestClass(), $config, $params);
-      $this->assertArrayHasKey('user', $transformer->reverseTransform($object, $config, 'array'));
-      $this->assertObjectHasAttribute('user', $transformer->reverseTransform($object, $config, 'object'));
-      $this->assertJson($transformer->reverseTransform($object, $config, 'string'));
-      $this->assertJson($transformer->reverseTransform($object, $config, 'json'));
+      $this->assertArrayHasKey('user', $transformer->reverseTransform($object, $config, null, 'array'));
+      $this->assertObjectHasAttribute('user', $transformer->reverseTransform($object, $config, null, 'object'));
+      $this->assertJson($transformer->reverseTransform($object, $config, null, 'string'));
+      $this->assertJson($transformer->reverseTransform($object, $config, null, 'json'));
 
       $this->assertTrue(true);
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ssc\ApiBundle\Tests\Complex;
+namespace ENM\TransformerBundle\Tests\Complex;
 
 use ENM\TransformerBundle\Tests\BaseTest;
 use ENM\TransformerBundle\Resources\TestClass\TestConfiguration;

@@ -20,7 +20,27 @@ class ENMTransformerExtension extends Extension
    */
   public function load(array $configs, ContainerBuilder $container)
   {
+    $configuration = new TransformerConfiguration();
+    $config        = $this->processConfiguration($configuration, $configs);
+
     $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
     $loader->load('services.yml');
+
+    $this->setGlobalConfig($config, $container);
+  }
+
+
+
+  protected function setGlobalConfig($config, ContainerBuilder $container)
+  {
+    $config_array = array();
+    if (is_array($config))
+    {
+      foreach ($config as $key => $settings)
+      {
+        $config_array[$key] = $settings;
+      }
+    }
+    $container->setParameter('transformer.config', $config_array);
   }
 }

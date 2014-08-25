@@ -1,10 +1,8 @@
 <?php
 
 
-namespace Ssc\ApiBundle\Tests\Complex;
+namespace ENM\TransformerBundle\Tests\Complex;
 
-use ENM\TransformerBundle\Resources\TestClass\TestConfiguration;
-use ENM\TransformerBundle\Resources\TestClass\UserTestClass;
 use ENM\TransformerBundle\Tests\BaseTest;
 
 class JsonTest extends BaseTest
@@ -12,37 +10,169 @@ class JsonTest extends BaseTest
 
   public function testJson()
   {
-    $config = TestConfiguration::getConfig();
-    $params = json_encode(
-      array(
-        'user' => 'testUser',
-        'address'  => [
-          'street'  => 'Test Straße 3a',
-          'plz'     => '21031',
-          'place'   => 'Test Place',
-          'country' => 'Germany'
-        ],
-        'birthday' => '1990-01-01',
-        'hobbys'   => [
-          [
-            'name'       => 'Musik',
-            'years'      => 4,
-            'days_in_week' => 1
+    $transformer = $this->container->get('enm.transformer.service');
+
+    $json = '{"initialInput":{"geoRestriction":{"circle":{"center":{"longitude":9.179940819740295,"latitude":48.78247982110398},"radius":539}}},"Restrictions":{"Type":["stop","poi"]}}';
+
+    $json_config = [
+      'InitialInput' => [
+        'type'     => 'object',
+        'children' => [
+          'LocationName'   => [
+            'type' => 'string',
           ],
-          [
-            'name'       => 'Fitness',
-            'years'      => 1.4,
-            'days_in_week' => 3
+          'GeoPosition'    => [
+            'type'     => 'object',
+            'children' => [
+              'Longitude' => [
+                'type'    => 'float',
+                'options' => [
+                  'required' => true,
+                ],
+              ],
+              'Latitude'  => [
+                'type'    => 'float',
+                'options' => [
+                  'required' => true,
+                ],
+              ],
+              'Altitude'  => [
+                'type' => 'float',
+              ],
+            ],
+            'options'  => [
+              'returnClass' => '\stdClass',
+            ],
+          ],
+          'GeoRestriction' => [
+            'type'     => 'object',
+            'children' => [
+              'Circle'    => [
+                'type'     => 'object',
+                'children' => [
+                  'Center' => [
+                    'type'     => 'object',
+                    'children' => [
+                      'Longitude' => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Latitude'  => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Altitude'  => [
+                        'type' => 'float',
+                      ],
+                    ],
+                    'options'  => [
+                      'returnClass' => '\stdClass',
+                    ],
+                  ],
+                  'Radius' => [
+                    'type'    => 'integer',
+                    'options' => [
+                      'min' => 0,
+                    ],
+                  ],
+                ],
+                'options'  => [
+                  'returnClass' => '\stdClass',
+                ],
+              ],
+              'Rectangle' => [
+                'type'     => 'object',
+                'children' => [
+                  'UpperLeft'  => [
+                    'type'     => 'object',
+                    'children' => [
+                      'Longitude' => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Latitude'  => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Altitude'  => [
+                        'type' => 'float',
+                      ],
+                    ],
+                    'options'  => [
+                      'returnClass' => '\stdClass',
+                    ],
+                  ],
+                  'LowerRight' => [
+                    'type'     => 'object',
+                    'children' => [
+                      'Longitude' => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Latitude'  => [
+                        'type'    => 'float',
+                        'options' => [
+                          'required' => true,
+                        ],
+                      ],
+                      'Altitude'  => [
+                        'type' => 'float',
+                      ],
+                    ],
+                    'options'  => [
+                      'returnClass' => '\stdClass',
+                    ],
+                  ],
+                ],
+                'options'  => [
+                  'returnClass' => '\stdClass',
+                ],
+              ],
+            ],
+            'options'  => [
+              'returnClass' => '\stdClass',
+            ],
+          ],
+        ],
+        'options'  => [
+          'returnClass'            => '\stdClass',
+          'requiredIfNotAvailable' => [
+            'or' => array('LocationRef')
           ]
         ]
-      )
-    );
-
-    $transformer = $this->container->get('enm.transformer.service');
+      ],
+      'LocationRef'  => [
+        'type'     => 'individual',
+        'children' => [],
+        'options'  => [
+          'returnClass'            => '\stdClass',
+          'requiredIfNotAvailable' => [
+            'or' => array('InitialInput')
+          ]
+        ]
+      ],
+      'Restrictions' => [
+        'type'     => 'individual',
+        'children' => [],
+        'options'  => [
+          'returnClass' => '\stdClass'
+        ]
+      ]
+    ];
 
     try
     {
-      $transformer->transform(new UserTestClass(), $config, $params);
+      $transformer->transform(new \stdClass(), $json_config, $json);
       $this->assertTrue(true);
     }
     catch (\Exception $e)
