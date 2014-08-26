@@ -22,7 +22,6 @@ use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BaseTransformerManager
@@ -55,10 +54,6 @@ class BaseTransformerManager
    */
   protected $dispatcher;
 
-  /**
-   * @var Stopwatch
-   */
-  protected $stopwatch;
 
   /**
    * @var array
@@ -80,12 +75,9 @@ class BaseTransformerManager
   public function __construct(
     EventDispatcherInterface $eventDispatcher,
     ValidatorInterface $validator,
-    ParameterBag $parameterBag,
-    Stopwatch $stopwatch
+    ParameterBag $parameterBag
   )
   {
-    $stopwatch->start('constructor', 'transformer');
-    $this->stopwatch            = $stopwatch;
     $this->dispatcher           = $eventDispatcher;
     $this->global_configuration = $parameterBag->get('transformer.config');
     $this->classBuilder         = new ClassBuilder($eventDispatcher);
@@ -93,7 +85,6 @@ class BaseTransformerManager
     $this->normalizer           = new Normalizer($this->converter);
     $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
     $this->validator            = new Validator($eventDispatcher, $validator);
-    $stopwatch->stop('constructor');
   }
 
 
@@ -103,14 +94,10 @@ class BaseTransformerManager
    */
   protected function init()
   {
-    $this->stopwatch->start('init', 'transformer');
-
     if (array_key_exists('events', $this->local_configuration))
     {
       $this->eventHandler->init($this->local_configuration['events']);
     }
-
-    $this->stopwatch->stop('init');
 
     return $this;
   }
@@ -122,15 +109,11 @@ class BaseTransformerManager
    */
   protected function destroy()
   {
-    $this->stopwatch->start('destroy', 'transformer');
-
     if (array_key_exists('events', $this->local_configuration))
     {
       $this->eventHandler->destroy($this->local_configuration['events']);
     }
     $this->local_configuration = array();
-
-    $this->stopwatch->stop('destroy');
 
     return $this;
   }
@@ -150,14 +133,12 @@ class BaseTransformerManager
     try
     {
       $this->init();
-      $this->stopwatch->start('transform', 'transformer');
 
       $params       = $this->converter->convertTo($params, ConversionEnum::ARRAY_CONVERSION);
       $config       = $this->converter->convertTo($config, ConversionEnum::ARRAY_CONVERSION);
       $configurator = new Configurator($config, $this->dispatcher);
       $returnClass  = $this->build($returnClass, $configurator->getConfig(), $params);
 
-      $this->stopwatch->stop('transform');
       $this->destroy();
 
       return $returnClass;
@@ -294,8 +275,6 @@ class BaseTransformerManager
     $configuration->setEvents($this->setEventConfig($configuration->getEvents()));
     $this->eventHandler->init($configuration->getEvents());
 
-    $this->stopwatch->start($configuration->getKey(), 'transformer');
-
     $this->dispatcher->dispatch(
                      TransformerEvents::BEFORE_RUN,
                        new TransformerEvent($configuration, $parameter)
@@ -311,23 +290,15 @@ class BaseTransformerManager
    */
   protected function doRun(Configuration $configuration, Parameter $parameter, array $params)
   {
-    $this->stopwatch->start($configuration->getKey() . '.require', 'transformer');
     $this->validator->requireValue($configuration, $parameter, $params);
-    $this->stopwatch->stop($configuration->getKey() . '.require');
 
-    $this->stopwatch->start($configuration->getKey() . '.forbid', 'transformer');
     $this->validator->forbidValue($configuration, $parameter, $params);
-    $this->stopwatch->stop($configuration->getKey() . '.forbid');
 
     if (!is_null($parameter->getValue()))
     {
-      $this->stopwatch->start($configuration->getKey() . '.validate', 'transformer');
       $this->validator->validate($configuration, $parameter);
-      $this->stopwatch->stop($configuration->getKey() . '.validate');
 
-      $this->stopwatch->start($configuration->getKey() . '.prepare', 'transformer');
       $this->prepareValue($configuration, $parameter);
-      $this->stopwatch->stop($configuration->getKey() . '.prepare');
     }
   }
 
@@ -344,7 +315,6 @@ class BaseTransformerManager
                        new TransformerEvent($configuration, $parameter)
     );
 
-    $this->stopwatch->stop($configuration->getKey());
     $this->eventHandler->destroy($configuration->getEvents());
   }
 

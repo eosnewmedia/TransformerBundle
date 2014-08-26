@@ -1,7 +1,7 @@
 services:
     enm.transformer.service:
         class: ENM\TransformerBundle\Manager\TransformerManager
-        arguments: [ @enm.transformer.event_dispatcher, @validator, @assetic.parameter_bag, @debug.stopwatch ]
+        arguments: [ @enm.transformer.event_dispatcher, @validator, @assetic.parameter_bag ]
 
     enm.transformer.event_dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
