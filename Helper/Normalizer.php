@@ -150,6 +150,10 @@ class Normalizer
    */
   protected function normalizeCollection(Parameter $parameter, Configuration $configuration)
   {
+    if (is_array($parameter->getValue()))
+    {
+      $parameter->setValue(array_values($parameter->getValue()));
+    }
     if (is_object($parameter->getValue()))
     {
       $parameter->setValue($this->converter->convertTo($parameter->getValue(), 'array'));
