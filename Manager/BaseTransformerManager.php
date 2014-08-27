@@ -217,8 +217,11 @@ class BaseTransformerManager
    */
   protected function reverseBuild($returnClass, array $config_array, array $params)
   {
+    $params = array_change_key_case($params, CASE_LOWER);
+
     $return_properties    = array();
     $return_configuration = array();
+
     foreach ($config_array as $configuration)
     {
       $parameter = $this->getParameterObject($configuration, $params);
