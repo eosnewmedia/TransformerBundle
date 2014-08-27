@@ -233,14 +233,17 @@ class BaseTransformerManager
 
       $this->modifyConfiguration($modifiedConfiguration);
 
-      switch ($modifiedConfiguration->getType())
+      if ($parameter->getValue() !== null)
       {
-        case TypeEnum::COLLECTION_TYPE:
-          $this->prepareCollection($modifiedConfiguration, $parameter, true);
-          break;
-        case TypeEnum::OBJECT_TYPE:
-          $this->reverseObject($modifiedConfiguration, $parameter);
-          break;
+        switch ($modifiedConfiguration->getType())
+        {
+          case TypeEnum::COLLECTION_TYPE:
+            $this->prepareCollection($modifiedConfiguration, $parameter, true);
+            break;
+          case TypeEnum::OBJECT_TYPE:
+            $this->reverseObject($modifiedConfiguration, $parameter);
+            break;
+        }
       }
 
       $return_properties[$modifiedConfiguration->getKey()]    = $parameter;
