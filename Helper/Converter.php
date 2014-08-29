@@ -41,7 +41,7 @@ class Converter
       case ConversionEnum::ARRAY_CONVERSION:
         return json_decode(json_encode($value));
       case ConversionEnum::OBJECT_CONVERSION:
-        return $value;
+        return $this->arrayToObject($value);
       case ConversionEnum::STRING_CONVERSION:
         return json_decode(json_encode($this->jsonToArray($value)));
     }
@@ -88,6 +88,30 @@ class Converter
     {
       throw new InvalidTransformerParameterException("The given Value isn't a valid JSON-String.");
     }
+  }
+
+
+
+  /**
+   * @param $input
+   *
+   * @return \stdClass
+   */
+  protected function arrayToObject($input)
+  {
+    $array = $this->objectToArray($input);
+
+    $return = new \stdClass();
+    foreach ($array as $key => $value)
+    {
+      if (is_array($value) || is_object($value))
+      {
+        $value = $this->arrayToObject($array);
+      }
+      $return->$key = $value;
+    }
+
+    return $return;
   }
 
 
