@@ -39,9 +39,11 @@ class Converter
     switch (gettype($value))
     {
       case ConversionEnum::ARRAY_CONVERSION:
-        return $this->arrayToObject($value);
+        return json_decode(json_encode($value));
+//        return $this->arrayToObject($value);
       case ConversionEnum::OBJECT_CONVERSION:
-        return $this->arrayToObject($value);
+//        return $this->arrayToObject($value);
+        return $value;
       case ConversionEnum::STRING_CONVERSION:
         return json_decode(json_encode($this->jsonToArray($value)));
     }
@@ -93,34 +95,32 @@ class Converter
 
 
 
-  /**
-   * @param $input
-   *
-   * @return \stdClass
-   */
-  protected function arrayToObject($input)
-  {
-    if (!$input instanceof \stdClass)
-    {
-      $array = $this->objectToArray($input);
-
-      $return = new \stdClass();
-      foreach ($array as $key => $value)
-      {
-        if (is_array($value) || is_object($value))
-        {
-          $value = $this->arrayToObject($array);
-        }
-        $return->$key = $value;
-      }
-
-      return $return;
-    }
-
-    return $input;
-  }
-
-
+  //  /**
+  //   * @param $input
+  //   *
+  //   * @return \stdClass
+  //   */
+  //  protected function arrayToObject($input)
+  //  {
+  //    if (!$input instanceof \stdClass)
+  //    {
+  //      $array = $this->objectToArray($input);
+  //
+  //      $return = new \stdClass();
+  //      foreach ($array as $key => $value)
+  //      {
+  //        if (is_array($value) || is_object($value))
+  //        {
+  //          $value = $this->arrayToObject($array);
+  //        }
+  //        $return->$key = $value;
+  //      }
+  //
+  //      return $return;
+  //    }
+  //
+  //    return $input;
+  //  }
 
   /**
    * Converts an Object to an Array
