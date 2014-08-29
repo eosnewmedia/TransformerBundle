@@ -59,6 +59,7 @@ class Converter
     {
       case ConversionEnum::ARRAY_CONVERSION:
       case ConversionEnum::OBJECT_CONVERSION:
+        return json_encode($this->toObject($value));
       case ConversionEnum::STRING_CONVERSION:
         return json_encode($value);
     }
