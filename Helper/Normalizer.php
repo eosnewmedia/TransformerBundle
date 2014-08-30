@@ -6,10 +6,7 @@ namespace ENM\TransformerBundle\Helper;
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\Event\TransformerEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
-use ENM\TransformerBundle\TransformerEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Normalizer
 {
@@ -110,6 +107,7 @@ class Normalizer
    */
   protected function normalizeArray(Parameter $parameter, Configuration $configuration)
   {
+    $parameter->setValue($this->converter->convertTo($parameter->getValue(), 'array'));
     if ($configuration->getOptions()->getArrayOptions()->getIsAssociative() === false)
     {
       $parameter->setValue(array_values($parameter->getValue()));

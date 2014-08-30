@@ -195,9 +195,11 @@ class BaseTransformerManager
     foreach ($config_array as $configuration)
     {
       $parameter = $this->getParameterObject($configuration, $params);
+
       $this->initRun($configuration, $parameter);
 
       $this->doRun($configuration, $parameter, $params);
+
       $returnClassProperties[$configuration->getKey()] = $parameter;
 
       $this->destroyRun($configuration, $parameter);

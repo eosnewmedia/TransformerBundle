@@ -40,10 +40,8 @@ class Converter
     {
       case ConversionEnum::ARRAY_CONVERSION:
         return json_decode(json_encode($value));
-//        return $this->arrayToObject($value);
       case ConversionEnum::OBJECT_CONVERSION:
-//        return $this->arrayToObject($value);
-        return $value;
+        return $this->objectToPublicObject($value);
       case ConversionEnum::STRING_CONVERSION:
         return json_decode(json_encode($this->jsonToArray($value)));
     }
@@ -95,32 +93,104 @@ class Converter
 
 
 
-  //  /**
-  //   * @param $input
-  //   *
-  //   * @return \stdClass
-  //   */
-  //  protected function arrayToObject($input)
-  //  {
-  //    if (!$input instanceof \stdClass)
-  //    {
-  //      $array = $this->objectToArray($input);
-  //
-  //      $return = new \stdClass();
-  //      foreach ($array as $key => $value)
-  //      {
-  //        if (is_array($value) || is_object($value))
-  //        {
-  //          $value = $this->arrayToObject($array);
-  //        }
-  //        $return->$key = $value;
-  //      }
-  //
-  //      return $return;
-  //    }
-  //
-  //    return $input;
-  //  }
+  /**
+   * @param $object
+   *
+   * @return \stdClass|\DateTime
+   */
+  protected function objectToPublicObject($object)
+  {
+    $returnClass = new \stdClass();
+
+    $reflectionObject  = new \ReflectionObject($object);
+    $object_properties = $this->objectToArray($object);
+    if ($this->shouldBeDateTime($object_properties) === true)
+    {
+      return new \DateTime($object_properties['date']);
+    }
+
+    foreach ($object_properties as $key => $value)
+    {
+      $property = $reflectionObject->getProperty($key);
+      $property->setAccessible(true);
+      $value = $property->getValue($object);
+      if (is_object($value))
+      {
+        $value             = $this->objectToPublicObject($value);
+        $returnClass->$key = $value;
+      }
+      elseif (is_array($value))
+      {
+        $this->prepareArrayForObject($returnClass, $key, $value);
+      }
+      else
+      {
+        $returnClass->$key = $value;
+      }
+    }
+
+    return $returnClass;
+  }
+
+
+
+  /**
+   * @param \stdClass $stdClass
+   * @param string    $key
+   * @param array     $value
+   */
+  protected function prepareArrayForObject(\stdClass $stdClass, $key, array $value)
+  {
+    $array_keys   = array_keys($value);
+    $array_values = array_values($value);
+    $assoc        = false;
+    foreach ($array_keys as $array_key)
+    {
+      if (!is_numeric($array_key))
+      {
+        $assoc = true;
+        break;
+      }
+    }
+    if ($assoc === true || count($array_values) === 0 || !is_array($array_values[0]))
+    {
+      $stdClass->$key = $value;
+    }
+    else
+    {
+      $collection_array = array();
+      foreach ($value as $sub_value)
+      {
+        array_push($collection_array, $this->objectToPublicObject($sub_value));
+      }
+      $stdClass->$key = $collection_array;
+    }
+  }
+
+
+
+  /**
+   * @param array $value
+   *
+   * @return bool
+   */
+  protected function shouldBeDateTime(array $value)
+  {
+    if (array_key_exists('date', $value))
+    {
+      if (array_key_exists('timezone_type', $value))
+      {
+        if (array_key_exists('timezone', $value))
+        {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+
 
   /**
    * Converts an Object to an Array

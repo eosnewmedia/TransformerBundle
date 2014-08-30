@@ -6,7 +6,6 @@ namespace ENM\TransformerBundle\Helper;
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\Event\ClassBuilderEvent;
-use ENM\TransformerBundle\Event\TransformerEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -105,7 +104,7 @@ class ClassBuilder
    */
   protected function setValue($returnClass, Configuration $configuration, Parameter $parameter)
   {
-
+    // todo Class Default, wenn Value Null
     $key = $configuration->getRenameTo() !== null ? $configuration->getRenameTo() : $configuration->getKey();
 
     $setter = $this->getSetter($key);
@@ -118,6 +117,7 @@ class ClassBuilder
     }
     else
     {
+      // @todo Reflection
       // setzt den Property Wert
       $returnClass->$key = $parameter->getValue();
     }
@@ -127,18 +127,32 @@ class ClassBuilder
 
   protected function getSetter($key)
   {
+    return 'set' . $this->getMethodName($key);
+  }
+
+
+
+  protected function getGetter($key)
+  {
+    return 'get' . $this->getMethodName($key);
+  }
+
+
+
+  protected function getMethodName($key)
+  {
     $pieces = explode('_', $key);
-    $setter = 'set';
     if (count($pieces) > 0)
     {
+      $method = '';
       foreach ($pieces as $piece)
       {
-        $setter .= ucfirst($piece);
+        $method .= ucfirst($piece);
       }
 
-      return $setter;
+      return $method;
     }
 
-    return $setter . ucfirst($key);
+    return ucfirst($key);
   }
 } 
