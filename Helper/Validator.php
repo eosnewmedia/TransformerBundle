@@ -511,7 +511,10 @@ class Validator
       case StringValidationEnum::EMAIL:
         array_push(
           $this->constraints,
-          new Constraints\Email(array('checkMX' => true, 'checkHost' => true))
+          new Constraints\Email(array('checkMX'   => true,
+                                      'checkHost' => $configuration->getOptions()->getStringOptions()
+                                                                   ->getStrongValidation()
+          ))
         );
         break;
       case StringValidationEnum::URL:

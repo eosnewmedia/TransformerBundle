@@ -360,6 +360,7 @@ class Configurator
     $options = new StringOptions();
     $options->setRegex($config['options']['regex']);
     $options->setValidation(strtolower($config['options']['stringValidation']));
+    $options->setStrongValidation($config['options']['strongValidation']);
     $options->setExpected($config['options']['expected']);
     $options->setDefaultValue($config['options']['defaultValue']);
     $options->setMax($config['options']['length']['max']);

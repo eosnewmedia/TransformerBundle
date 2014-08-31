@@ -39,6 +39,7 @@ class ObjectConfiguration implements ConfigurationInterface
                 ->booleanNode('assoc')->defaultValue(true)->end()
                 ->arrayNode('expected')->prototype('scalar')->end()->end()
                 ->enumNode('stringValidation')->values(array_merge(StringValidationEnum::toArray(), array_map('strtoupper', StringValidationEnum::toArray())))->defaultValue(null)->end()
+                ->booleanNode('strongValidation')->defaultValue(false)->end()
                 ->floatNode('min')->defaultValue(null)->end()
                 ->floatNode('max')->defaultValue(null)->end()
                 ->scalarNode('returnClass')->defaultValue(null)->end()

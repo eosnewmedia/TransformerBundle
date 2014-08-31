@@ -58,10 +58,10 @@ class Converter
     switch (gettype($value))
     {
       case ConversionEnum::ARRAY_CONVERSION:
-      case ConversionEnum::OBJECT_CONVERSION:
-        return json_encode($this->toObject($value));
       case ConversionEnum::STRING_CONVERSION:
         return json_encode($value);
+      case ConversionEnum::OBJECT_CONVERSION:
+        return json_encode($this->toObject($value));
     }
     throw new InvalidTransformerParameterException(sprintf(
       'Value of type %s can not be converted to JSON by this method.',

@@ -24,6 +24,11 @@ class StringOptions implements NonComplexInterface
   protected $validation = null;
 
   /**
+   * @var bool
+   */
+  protected $strongValidation = false;
+
+  /**
    * @var string|null
    */
   protected $regex = null;
@@ -42,6 +47,8 @@ class StringOptions implements NonComplexInterface
 
   /**
    * @param mixed $default_value
+   *
+   * @return $this
    */
   public function setDefaultValue($default_value)
   {
@@ -64,6 +71,8 @@ class StringOptions implements NonComplexInterface
 
   /**
    * @param array $expected
+   *
+   * @return $this
    */
   public function setExpected(array $expected)
   {
@@ -85,7 +94,33 @@ class StringOptions implements NonComplexInterface
 
 
   /**
-   * @param float|int|null $max
+   * @param $strongValidation
+   *
+   * @return $this
+   */
+  public function setStrongValidation($strongValidation)
+  {
+    $this->strongValidation = $strongValidation;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return boolean
+   */
+  public function getStrongValidation()
+  {
+    return $this->strongValidation;
+  }
+
+
+
+  /**
+   * @param $max
+   *
+   * @return $this
    */
   public function setMax($max)
   {
@@ -107,7 +142,9 @@ class StringOptions implements NonComplexInterface
 
 
   /**
-   * @param float|int|null $min
+   * @param $min
+   *
+   * @return $this
    */
   public function setMin($min)
   {
@@ -129,7 +166,9 @@ class StringOptions implements NonComplexInterface
 
 
   /**
-   * @param null|string $regex
+   * @param $regex
+   *
+   * @return $this
    */
   public function setRegex($regex)
   {
@@ -151,7 +190,9 @@ class StringOptions implements NonComplexInterface
 
 
   /**
-   * @param null|string $validation
+   * @param $validation
+   *
+   * @return $this
    */
   public function setValidation($validation)
   {
