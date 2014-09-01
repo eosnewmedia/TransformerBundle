@@ -41,7 +41,7 @@ class Converter
       case ConversionEnum::ARRAY_CONVERSION:
         return json_decode(json_encode($value));
       case ConversionEnum::OBJECT_CONVERSION:
-        return $this->objectToPublicObject($value);
+        return $value;
       case ConversionEnum::STRING_CONVERSION:
         return json_decode(json_encode($this->jsonToArray($value)));
     }
@@ -61,7 +61,7 @@ class Converter
       case ConversionEnum::STRING_CONVERSION:
         return json_encode($value);
       case ConversionEnum::OBJECT_CONVERSION:
-        return json_encode($this->toObject($value));
+        return json_encode($this->objectToPublicObject($value));
     }
     throw new InvalidTransformerParameterException(sprintf(
       'Value of type %s can not be converted to JSON by this method.',
