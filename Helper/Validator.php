@@ -140,7 +140,9 @@ class Validator
 
     if ($violationList->count() > 0)
     {
-      throw new InvalidTransformerParameterException($parameter->getKey() . ': ' . implode(', ', $violationList));
+      throw new InvalidTransformerParameterException('Key: ' . $parameter->getKey() . ' - ' . 'Value: '
+                                                     . $violationList->get(0)->getInvalidValue() . ' - Error: '
+                                                     . $violationList->get(0)->getMessage());
     }
   }
 
