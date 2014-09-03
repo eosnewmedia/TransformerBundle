@@ -140,7 +140,7 @@ class Validator
 
     if ($violationList->count() > 0)
     {
-      throw new InvalidTransformerParameterException($violationList);
+      throw new InvalidTransformerParameterException($parameter->getKey() . ': ' . implode(', ', $violationList));
     }
   }
 
@@ -511,9 +511,10 @@ class Validator
       case StringValidationEnum::EMAIL:
         array_push(
           $this->constraints,
-          new Constraints\Email(array('checkMX'   => true,
-                                      'checkHost' => $configuration->getOptions()->getStringOptions()
-                                                                   ->getStrongValidation()
+          new Constraints\Email(array(
+            'checkMX'   => true,
+            'checkHost' => $configuration->getOptions()->getStringOptions()
+                                         ->getStrongValidation()
           ))
         );
         break;
