@@ -53,6 +53,31 @@ class Converter
 
 
 
+  protected function toString($value)
+  {
+    switch (gettype($value))
+    {
+      case ConversionEnum::ARRAY_CONVERSION:
+        return implode(', ', $value);
+      case ConversionEnum::STRING_CONVERSION:
+        return $value;
+      case ConversionEnum::OBJECT_CONVERSION:
+        $rc = new \ReflectionClass(get_class($value));
+        if ($rc->hasMethod('__toString'))
+        {
+          return print_r($value);
+        }
+
+        return json_encode($this->objectToPublicObject($value));
+    }
+    throw new InvalidTransformerParameterException(sprintf(
+      'Value of type %s can not be converted to JSON by this method.',
+      gettype($value)
+    ));
+  }
+
+
+
   protected function toJson($value)
   {
     switch (gettype($value))
@@ -260,6 +285,7 @@ class Converter
       case ConversionEnum::ARRAY_CONVERSION:
         return $this->toArray($value);
       case ConversionEnum::STRING_CONVERSION:
+        return $this->toString($value);
       case ConversionEnum::JSON_CONVERSION:
         return $this->toJson($value);
       case ConversionEnum::OBJECT_CONVERSION:
