@@ -104,27 +104,91 @@ class ClassBuilder
    */
   protected function setValue($returnClass, Configuration $configuration, Parameter $parameter)
   {
-    // todo Class Default, wenn Value Null
     $key = $configuration->getRenameTo() !== null ? $configuration->getRenameTo() : $configuration->getKey();
+    $this->getDefaultValueIfNull($parameter, $returnClass, $key);
+    $this->setPropertyValue($returnClass, $key, $parameter->getValue());
+  }
 
-    $setter = $this->getSetter($key);
 
-    // Überprüfen, ob der Setter vorhanden ist
-    if (method_exists($returnClass, $setter))
+
+  /**
+   * @param object $returnClass
+   * @param string $key
+   *
+   * @return \ReflectionProperty
+   */
+  protected function getPublicProperty($returnClass, $key)
+  {
+    $reflection = new \ReflectionObject($returnClass);
+
+    $property = $reflection->getProperty($key);
+    $property->setAccessible(true);
+
+    return $property;
+  }
+
+
+
+  /**
+   * @param Parameter $parameter
+   * @param object    $returnClass
+   * @param string    $key
+   */
+  protected function getDefaultValueIfNull(Parameter $parameter, $returnClass, $key)
+  {
+    if ($parameter->getValue() === null && (!$returnClass instanceof \stdClass || $returnClass instanceof \DateTime))
     {
-      // Ruft den Setter der ReturnClass auf
-      $returnClass->{$setter}($parameter->getValue());
-    }
-    else
-    {
-      // @todo Reflection
-      // setzt den Property Wert
-      $returnClass->$key = $parameter->getValue();
+      $getter = $this->getGetter($key);
+
+      $value = null;
+      if (method_exists($returnClass, $getter))
+      {
+        $value = $returnClass->{$getter}();
+      }
+      else
+      {
+        $property = $this->getPublicProperty($returnClass, $key);
+        $value    = $property->getValue($returnClass);
+      }
+      $parameter->setValue($value);
     }
   }
 
 
 
+  /**
+   * @param $returnClass
+   * @param $key
+   * @param $value
+   */
+  protected function setPropertyValue($returnClass, $key, $value)
+  {
+    $setter = $this->getSetter($key);
+    if (method_exists($returnClass, $setter))
+    {
+      $returnClass->{$setter}($value);
+
+      return true;
+    }
+    elseif (!$returnClass instanceof \stdClass || $returnClass instanceof \DateTime)
+    {
+      $property = $this->getPublicProperty($returnClass, $key);
+      $property->setValue($returnClass, $value);
+
+      return true;
+    }
+    $returnClass->$key = $value;
+
+    return true;
+  }
+
+
+
+  /**
+   * @param $key
+   *
+   * @return string
+   */
   protected function getSetter($key)
   {
     return 'set' . $this->getMethodName($key);
@@ -132,6 +196,11 @@ class ClassBuilder
 
 
 
+  /**
+   * @param $key
+   *
+   * @return string
+   */
   protected function getGetter($key)
   {
     return 'get' . $this->getMethodName($key);
@@ -139,6 +208,11 @@ class ClassBuilder
 
 
 
+  /**
+   * @param $key
+   *
+   * @return string
+   */
   protected function getMethodName($key)
   {
     $pieces = explode('_', $key);
