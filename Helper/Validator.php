@@ -218,7 +218,7 @@ class Validator
     }
     if ($not_null === true)
     {
-      array_push($constraints, new Constraints\NotBlank());
+      array_push($constraints, new Constraints\NotNull());
       if (in_array($configuration->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE)))
       {
         array_push($constraints, new NotEmptyArray());
