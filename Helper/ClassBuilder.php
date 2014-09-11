@@ -172,10 +172,13 @@ class ClassBuilder
     }
     elseif (!$returnClass instanceof \stdClass || $returnClass instanceof \DateTime)
     {
-      $property = $this->getPublicProperty($returnClass, $key);
-      $property->setValue($returnClass, $value);
+      if (property_exists($returnClass, $key))
+      {
+        $property = $this->getPublicProperty($returnClass, $key);
+        $property->setValue($returnClass, $value);
 
-      return true;
+        return true;
+      }
     }
     $returnClass->$key = $value;
 
