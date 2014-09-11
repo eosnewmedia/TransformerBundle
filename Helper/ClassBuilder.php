@@ -147,8 +147,11 @@ class ClassBuilder
       }
       else
       {
-        $property = $this->getPublicProperty($returnClass, $key);
-        $value    = $property->getValue($returnClass);
+        if (property_exists($returnClass, $key))
+        {
+          $property = $this->getPublicProperty($returnClass, $key);
+          $value    = $property->getValue($returnClass);
+        }
       }
       $parameter->setValue($value);
     }
