@@ -6,7 +6,7 @@ namespace ENM\TransformerBundle\Validator\Constraint;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class NotEmptyArrayOrNullValidator extends ConstraintValidator
+class EmptyArrayOrNullValidator extends ConstraintValidator
 {
 
   /**
