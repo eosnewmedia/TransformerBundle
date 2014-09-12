@@ -27,6 +27,8 @@ class TransformerEvents
    */
   const AFTER_CONFIGURATION = 'transformer.event.after.configuration';
 
+  const AFTER_GLOBAL_VALUES = 'transformer.event.after.global.values';
+
   /**
    * Throws \ENM\TransformerBundle\Event\TransformerEvent
    */

@@ -26,9 +26,19 @@ class GlobalTransformerValues
   protected $param_array;
 
   /**
+   * @var bool
+   */
+  protected $param_edited = false;
+
+  /**
    * @var array
    */
   protected $config_array;
+
+  /**
+   * @var bool
+   */
+  protected $config_edited = false;
 
 
 
@@ -85,17 +95,25 @@ class GlobalTransformerValues
 
 
   /**
-   * @param array $full_array
+   * @param array $array
+   * @param bool  $edit
    *
    * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
    */
-  public function setConfig(array $full_array)
+  public function setConfig(array $array, $edit = false)
   {
     if (is_array($this->config_array))
     {
-      throw new TransformerConfigurationException('Config-Array already defined!');
+      if ($edit === false)
+      {
+        throw new TransformerConfigurationException('Config-Array already defined!');
+      }
+      else
+      {
+        $this->config_edited = true;
+      }
     }
-    $this->config_array = $full_array;
+    $this->config_array = $array;
   }
 
 
@@ -117,16 +135,44 @@ class GlobalTransformerValues
 
 
   /**
-   * @param array $full_array
+   * @param array $array
+   * @param bool  $edit
    *
    * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
    */
-  public function setParams(array $full_array)
+  public function setParams(array $array, $edit = false)
   {
     if (is_array($this->param_array))
     {
-      throw new TransformerConfigurationException('Param-Array already defined!');
+      if ($edit === false)
+      {
+        throw new TransformerConfigurationException('Param-Array already defined!');
+      }
+      else
+      {
+        $this->param_edited = true;
+      }
     }
-    $this->param_array = $full_array;
+    $this->param_array = $array;
+  }
+
+
+
+  /**
+   * @return boolean
+   */
+  public function isConfigEdited()
+  {
+    return $this->config_edited;
+  }
+
+
+
+  /**
+   * @return boolean
+   */
+  public function isParamEdited()
+  {
+    return $this->param_edited;
   }
 }

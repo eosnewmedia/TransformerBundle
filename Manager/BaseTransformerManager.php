@@ -116,6 +116,8 @@ class BaseTransformerManager
     $global = GlobalTransformerValues::getInstance();
     $global->setConfig($config);
     $global->setParams($params);
+
+    $this->dispatcher->dispatch(TransformerEvents::AFTER_GLOBAL_VALUES);
   }
 
 
