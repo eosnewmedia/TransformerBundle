@@ -27,6 +27,11 @@ class Configuration
   protected $children = array();
 
   /**
+   * @var null|Configuration
+   */
+  protected $parent = null;
+
+  /**
    * @var \ENM\TransformerBundle\ConfigurationStructure\ConfigurationOptions
    */
   protected $options;
@@ -174,5 +179,27 @@ class Configuration
   public function getEvents()
   {
     return $this->events;
+  }
+
+
+
+  /**
+   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration $parent
+   */
+  public function setParent(Configuration $parent = null)
+  {
+    $this->parent = $parent;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration|null
+   */
+  public function getParent()
+  {
+    return $this->parent;
   }
 }

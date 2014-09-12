@@ -39,11 +39,11 @@ class Configurator
 
 
 
-  public function __construct(array $config, EventDispatcherInterface $eventDispatcher)
+  public function __construct(array $config, EventDispatcherInterface $eventDispatcher, Configuration $parent = null)
   {
     $this->configuration = array();
     $this->dispatcher    = $eventDispatcher;
-    $this->runConfig($config);
+    $this->runConfig($config, $parent);
   }
 
 
@@ -72,7 +72,7 @@ class Configurator
    * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
    * @throws \ENM\TransformerBundle\Exceptions\TransformerException
    */
-  protected function runConfig(array $config)
+  protected function runConfig(array $config, Configuration $parent = null)
   {
     try
     {
@@ -80,6 +80,7 @@ class Configurator
       foreach ($config as $key => $settings)
       {
         $this->configuration[$key] = new Configuration($key);
+        $this->configuration[$key]->setParent($parent);
         $this->setBaseConfiguration($settings, $key);
         $this->setBaseOptions($settings, $key);
         $this->{'set' . ucfirst($this->configuration[$key]->getType()) . 'Options'}($settings, $key);
@@ -155,7 +156,11 @@ class Configurator
                          new ConfigurationEvent($this->configuration[$key])
       );
 
-      $configuration = new self($this->configuration[$key]->getChildren(), $this->dispatcher);
+      $configuration = new self(
+        $this->configuration[$key]->getChildren(),
+        $this->dispatcher,
+        $this->configuration[$key]
+      );
 
       $this->configuration[$key]->setChildren($configuration->getConfig());
 

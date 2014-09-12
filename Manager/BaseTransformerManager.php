@@ -5,6 +5,7 @@ namespace ENM\TransformerBundle\Manager;
 
 use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\ConversionEnum;
+use ENM\TransformerBundle\ConfigurationStructure\GlobalTransformerValues;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
 use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
@@ -99,7 +100,22 @@ class BaseTransformerManager
       $this->eventHandler->init($this->local_configuration['events']);
     }
 
+    GlobalTransformerValues::createNewInstance();
+
     return $this;
+  }
+
+
+
+  /**
+   * @param array $config
+   * @param array $params
+   */
+  protected function setGlobalValues(array $config, array $params)
+  {
+    $global = GlobalTransformerValues::getInstance();
+    $global->setConfig($config);
+    $global->setParams($params);
   }
 
 
@@ -137,7 +153,10 @@ class BaseTransformerManager
       $params       = $this->converter->convertTo($params, ConversionEnum::ARRAY_CONVERSION);
       $config       = $this->converter->convertTo($config, ConversionEnum::ARRAY_CONVERSION);
       $configurator = new Configurator($config, $this->dispatcher);
-      $returnClass  = $this->build($returnClass, $configurator->getConfig(), $params);
+
+      $this->setGlobalValues($configurator->getConfig(), $params);
+
+      $returnClass = $this->build($returnClass, $configurator->getConfig(), $params);
 
       $this->destroy();
 
