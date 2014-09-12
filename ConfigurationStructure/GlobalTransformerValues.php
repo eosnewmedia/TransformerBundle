@@ -31,7 +31,7 @@ class GlobalTransformerValues
   protected $param_edited = false;
 
   /**
-   * @var array
+   * @var Configuration[]
    */
   protected $config_array;
 
@@ -79,7 +79,7 @@ class GlobalTransformerValues
 
 
   /**
-   * @return array
+   * @return Configuration[]
    * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function getConfig()
@@ -95,8 +95,8 @@ class GlobalTransformerValues
 
 
   /**
-   * @param array $array
-   * @param bool  $edit
+   * @param Configuration[] $array
+   * @param bool            $edit
    *
    * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
    */
