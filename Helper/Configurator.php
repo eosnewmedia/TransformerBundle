@@ -219,6 +219,7 @@ class Configurator
     $options->setDefaultValue($config['options']['defaultValue']);
     $options->setExpected($config['options']['expected']);
     $options->setIsAssociative($config['options']['assoc']);
+    $options->setRegex($config['options']['regex']);
     $this->configuration[$key]->getOptions()->setArrayOptions($options);
   }
 

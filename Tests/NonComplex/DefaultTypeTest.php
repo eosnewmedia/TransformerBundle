@@ -12,7 +12,7 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'type'    => 'bool',
+        'type' => 'bool',
       ]
     );
 
@@ -35,7 +35,7 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'type'    => 'string',
+        'type' => 'string',
       ]
     );
 
@@ -103,11 +103,37 @@ class DefaultTypeTest extends BaseTest
 
 
 
+  public function testArrayWithRegex()
+  {
+    $config = array(
+      'test' => [
+        'type'    => 'array',
+        'options' => [
+          'assoc' => true,
+          'regex' => '/([A-Za-z])+/'
+        ]
+      ]
+    );
+
+    $this->expectSuccess($config, 'test', array('Hallo' => 'Welt'));
+
+    $this->exceptionWithBooleanTest($config, 'test');
+    $this->exceptionWithStringTest($config, 'test');
+    $this->exceptionWithNegativeIntegerTest($config, 'test');
+    $this->exceptionWithPositiveIntegerTest($config, 'test');
+    $this->exceptionWithObjectTest($config, 'test');
+    $this->exceptionWithZeroTest($config, 'test');
+    $this->exceptionWithNegativeFloatTest($config, 'test');
+    $this->exceptionWithPositiveFloatTest($config, 'test');
+  }
+
+
+
   public function testInteger()
   {
     $config = array(
       'test' => [
-        'type'    => 'integer',
+        'type' => 'integer',
       ]
     );
 
@@ -129,7 +155,7 @@ class DefaultTypeTest extends BaseTest
   {
     $config = array(
       'test' => [
-        'type'    => 'float',
+        'type' => 'float',
       ]
     );
 

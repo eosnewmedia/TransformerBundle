@@ -21,6 +21,8 @@ class ArrayOptions
    */
   protected $default_value = null;
 
+  protected $regex = null;
+
 
 
   /**
@@ -85,5 +87,27 @@ class ArrayOptions
   public function getIsAssociative()
   {
     return $this->is_associative;
+  }
+
+
+
+  /**
+   * @param null $regex
+   */
+  public function setRegex($regex)
+  {
+    $this->regex = $regex;
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return null
+   */
+  public function getRegex()
+  {
+    return $this->regex;
   }
 }

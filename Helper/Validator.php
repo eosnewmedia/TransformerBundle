@@ -11,6 +11,7 @@ use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Event\ValidatorEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\TransformerEvents;
+use ENM\TransformerBundle\Validator\Constraint\ArrayRegex;
 use ENM\TransformerBundle\Validator\Constraint\Date;
 use ENM\TransformerBundle\Validator\Constraint\EmptyArrayOrNull;
 use ENM\TransformerBundle\Validator\Constraint\NotEmptyArray;
@@ -377,6 +378,18 @@ class Validator
   {
     $this->validateType($configuration);
     $this->validateExpected($configuration->getOptions()->getArrayOptions()->getExpected(), true);
+
+    // RegEx
+    if ($configuration->getOptions()->getArrayOptions()->getRegex() !== null)
+    {
+      $this->addConstraint(
+           new ArrayRegex(
+             array(
+               'pattern' => $configuration->getOptions()->getArrayOptions()->getRegex()
+             )
+           )
+      );
+    }
 
     $this->dispatcher->dispatch(
                      TransformerEvents::VALIDATE_ARRAY,
