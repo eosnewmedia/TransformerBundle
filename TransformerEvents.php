@@ -100,6 +100,11 @@ class TransformerEvents
    */
   const PREPARE_INDIVIDUAL = 'transformer.event.prepare.individual';
 
+  /**
+   * Throws \ENM\TransformerBundle\Event\TransformerEvent
+   */
+  const PREPARE_ARRAY = 'transformer.event.prepare.array';
+
 
   /**
    * Throws \ENM\TransformerBundle\Event\TransformerEvent

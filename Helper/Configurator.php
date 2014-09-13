@@ -148,6 +148,7 @@ class Configurator
     if (
       in_array($this->configuration[$key]->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE))
       || ($this->configuration[$key]->getType() === TypeEnum::INDIVIDUAL_TYPE && count($config['children']) > 0)
+      || ($this->configuration[$key]->getType() === TypeEnum::ARRAY_TYPE && count($config['children']) > 0)
     )
     {
       $this->configuration[$key]->setChildren($config['children']);

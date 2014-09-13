@@ -13,6 +13,7 @@ use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Event\TransformerEvent;
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\TransformerException;
+use ENM\TransformerBundle\Helper\ArrayBuilder;
 use ENM\TransformerBundle\Helper\ClassBuilder;
 use ENM\TransformerBundle\Helper\Configurator;
 use ENM\TransformerBundle\Helper\Converter;
@@ -28,11 +29,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class BaseTransformerManager
 {
 
+  const BUILD_ARRAY = 'array';
+
   /**
    * @var \ENM\TransformerBundle\Helper\ClassBuilder
    */
   protected $classBuilder;
 
+  /**
+   * @var \ENM\TransformerBundle\Helper\ArrayBuilder
+   */
+  protected $arrayBuilder;
 
   /**
    * @var \ENM\TransformerBundle\Helper\Validator
@@ -82,6 +89,7 @@ class BaseTransformerManager
     $this->dispatcher           = $eventDispatcher;
     $this->global_configuration = $parameterBag->get('transformer.config');
     $this->classBuilder         = new ClassBuilder($eventDispatcher);
+    $this->arrayBuilder         = new ArrayBuilder();
     $this->converter            = new Converter();
     $this->normalizer           = new Normalizer($this->converter);
     $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
@@ -207,7 +215,7 @@ class BaseTransformerManager
    * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config_array
    * @param array                                                         $params
    *
-   * @return object
+   * @return object|array
    */
   protected function build($returnClass, array $config_array, array $params)
   {
@@ -224,6 +232,11 @@ class BaseTransformerManager
       $returnClassProperties[$configuration->getKey()] = $parameter;
 
       $this->destroyRun($configuration, $parameter);
+    }
+
+    if ($returnClass === self::BUILD_ARRAY)
+    {
+      return $this->arrayBuilder->build($config_array, $returnClassProperties);
     }
 
     return $this->classBuilder->build($returnClass, $config_array, $returnClassProperties);
@@ -415,6 +428,9 @@ class BaseTransformerManager
       case TypeEnum::INDIVIDUAL_TYPE:
         $this->prepareIndividual($configuration, $parameter);
         break;
+      case TypeEnum::ARRAY_TYPE:
+        $this->prepareArray($configuration, $parameter);
+        break;
     }
 
     return $this;
@@ -532,6 +548,38 @@ class BaseTransformerManager
                     $this->converter->convertTo($parameter->getValue(), 'array')
     );
     $parameter->setValue($value);
+
+    return $this;
+  }
+
+
+
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   *
+   * @return $this
+   */
+  protected function prepareArray(Configuration $configuration, Parameter $parameter)
+  {
+    $this->dispatcher->dispatch(
+                     TransformerEvents::PREPARE_ARRAY,
+                       new TransformerEvent($configuration, $parameter)
+    );
+
+    $return = self::BUILD_ARRAY;
+
+    if (count($configuration->getChildren()) > 0
+        && $configuration->getOptions()->getArrayOptions()->getIsAssociative() === true
+    )
+    {
+      $value = $this->build(
+                    $return,
+                      $configuration->getChildren(),
+                      $this->converter->convertTo($parameter->getValue(), 'array')
+      );
+      $parameter->setValue($value);
+    }
 
     return $this;
   }
