@@ -32,7 +32,7 @@ class Validator
   /**
    * @var array
    */
-  protected $constraints = array();
+  protected $constraints;
 
   /**
    * @var \Symfony\Component\Validator\Validator\ValidatorInterface
@@ -59,7 +59,6 @@ class Validator
    */
   public function validate(Configuration $configuration, Parameter $parameter)
   {
-    $this->constraints = array();
     $this->dispatcher->dispatch(
                      TransformerEvents::BEFORE_VALIDATION,
                        new ValidatorEvent($configuration, $parameter, $this)
@@ -94,7 +93,8 @@ class Validator
         $this->validateIndividual($configuration, $parameter);
         break;
     }
-    $this->validateConstrains($this->constraints, $parameter);
+    $this->validateConstrains($this->getConstraints(), $parameter);
+    $this->clearConstraints();
     $this->dispatcher->dispatch(
                      TransformerEvents::AFTER_VALIDATION,
                        new ValidatorEvent($configuration, $parameter, $this)
@@ -103,16 +103,38 @@ class Validator
 
 
 
+  /**
+   * @param Constraint $constraint
+   */
   public function addConstraint(Constraint $constraint)
   {
+    if (!is_array($this->constraints))
+    {
+      $this->constraints = array();
+    }
     array_push($this->constraints, $constraint);
   }
 
 
 
+  /**
+   * @return array
+   */
   public function getConstraints()
   {
+    if (!is_array($this->constraints))
+    {
+      $this->constraints = array();
+    }
+
     return $this->constraints;
+  }
+
+
+
+  public function clearConstraints()
+  {
+    $this->constraints = array();
   }
 
 
@@ -305,7 +327,7 @@ class Validator
    */
   protected function validateType(Configuration $configuration)
   {
-    array_push($this->constraints, new Constraints\Type(array('type' => $configuration->getType())));
+    $this->addConstraint(new Constraints\Type(array('type' => $configuration->getType())));
   }
 
 
@@ -323,10 +345,7 @@ class Validator
         'multiple' => $multiple
       );
 
-      array_push(
-        $this->constraints,
-        new Constraints\Choice($config)
-      );
+      $this->addConstraint(new Constraints\Choice($config));
     }
   }
 
@@ -340,17 +359,11 @@ class Validator
   {
     if ($min !== null)
     {
-      array_push(
-        $this->constraints,
-        new Constraints\GreaterThanOrEqual(array('value' => $min))
-      );
+      $this->addConstraint(new Constraints\GreaterThanOrEqual(array('value' => $min)));
     }
     if ($max !== null)
     {
-      array_push(
-        $this->constraints,
-        new Constraints\LessThanOrEqual(array('value' => $max))
-      );
+      $this->addConstraint(new Constraints\LessThanOrEqual(array('value' => $max)));
     }
   }
 
@@ -396,9 +409,8 @@ class Validator
    */
   protected function validateCollection(Configuration $configuration, Parameter $parameter)
   {
-    array_push(
-      $this->constraints,
-      new Constraints\Collection(array('fields' => array(), 'allowExtraFields' => true))
+    $this->addConstraint(
+         new Constraints\Collection(array('fields' => array(), 'allowExtraFields' => true))
     );
     $this->dispatcher->dispatch(
                      TransformerEvents::VALIDATE_COLLECTION,
@@ -414,9 +426,8 @@ class Validator
    */
   protected function validateDate(Configuration $configuration, Parameter $parameter)
   {
-    array_push(
-      $this->constraints,
-      new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
+    $this->addConstraint(
+         new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
     );
 
     $this->dispatcher->dispatch(
@@ -507,58 +518,66 @@ class Validator
   {
     $this->validateType($configuration);
     $this->validateExpected($configuration->getOptions()->getStringOptions()->getExpected());
-    // Special Validation
-    switch ($configuration->getOptions()->getStringOptions()->getValidation())
-    {
-      case StringValidationEnum::EMAIL:
-        array_push(
-          $this->constraints,
-          new Constraints\Email(array(
-            'checkMX'   => true,
-            'checkHost' => $configuration->getOptions()->getStringOptions()
-                                         ->getStrongValidation()
-          ))
-        );
-        break;
-      case StringValidationEnum::URL:
-        array_push(
-          $this->constraints,
-          new Constraints\Url(array('protocols' => array('http', 'https', 'ftp')))
-        );
-        break;
-      case StringValidationEnum::IP:
-        array_push(
-          $this->constraints,
-          new Constraints\Ip(array('version' => 'all'))
-        );
-        break;
-    }
     // String-Length
     if ($configuration->getOptions()->getStringOptions()->getMin() !== null
         && $configuration->getOptions()->getStringOptions()->getMax() !== null
     )
     {
-      array_push(
-        $this->constraints,
-        new Constraints\Length(array(
-          'min' => $configuration->getOptions()->getStringOptions()->getMin(),
-          'max' => $configuration->getOptions()->getStringOptions()->getMax(),
-        ))
+      $this->addConstraint(
+           new Constraints\Length(
+             array(
+               'min' => $configuration->getOptions()->getStringOptions()->getMin(),
+               'max' => $configuration->getOptions()->getStringOptions()->getMax(),
+             )
+           )
       );
     }
-    // RegEx
-    if ($configuration->getOptions()->getStringOptions()->getRegex() !== null)
-    {
-      array_push(
-        $this->constraints,
-        new Constraints\Regex(array(
-          'pattern' => $configuration->getOptions()->getStringOptions()->getRegex()
-        ))
-      );
-    }
+
+    $this->specialValidation($configuration);
+
     $this->dispatcher->dispatch(
                      TransformerEvents::VALIDATE_STRING,
                        new ValidatorEvent($configuration, $parameter, $this)
     );
+  }
+
+
+
+  /**
+   * @param Configuration $configuration
+   * @param Parameter     $parameter
+   */
+  protected function specialValidation(Configuration $configuration)
+  {
+    // RegEx
+    if ($configuration->getOptions()->getStringOptions()->getRegex() !== null)
+    {
+      $this->addConstraint(
+           new Constraints\Regex(
+             array(
+               'pattern' => $configuration->getOptions()->getStringOptions()->getRegex()
+             )
+           )
+      );
+    }
+    // Special Validation
+    switch ($configuration->getOptions()->getStringOptions()->getValidation())
+    {
+      case StringValidationEnum::EMAIL:
+        $this->addConstraint(
+             new Constraints\Email(array(
+               'checkMX'   => true,
+               'checkHost' => $configuration->getOptions()->getStringOptions()
+                                            ->getStrongValidation()
+             ))
+        );
+        break;
+      case StringValidationEnum::URL:
+        $this->addConstraint(new Constraints\Url(array('protocols' => array('http', 'https', 'ftp'))));
+        break;
+      case StringValidationEnum::IP:
+        $this->addConstraint(new Constraints\Ip(array('version' => 'all')));
+        break;
+    }
   }
 } 
