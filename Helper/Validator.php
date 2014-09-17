@@ -7,51 +7,16 @@ use ENM\TransformerBundle\ConfigurationStructure\Configuration;
 use ENM\TransformerBundle\ConfigurationStructure\Parameter;
 use ENM\TransformerBundle\ConfigurationStructure\StringValidationEnum;
 use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\Event\ExceptionEvent;
 use ENM\TransformerBundle\Event\ValidatorEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 use ENM\TransformerBundle\TransformerEvents;
 use ENM\TransformerBundle\Validator\Constraint\ArrayRegex;
 use ENM\TransformerBundle\Validator\Constraint\Date;
 use ENM\TransformerBundle\Validator\Constraint\EmptyArrayOrNull;
 use ENM\TransformerBundle\Validator\Constraint\NotEmptyArray;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class Validator
+class Validator extends BaseValidator
 {
-
-  /**
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-  /**
-   * @var array
-   */
-  protected $constraints;
-
-  /**
-   * @var \Symfony\Component\Validator\Validator\ValidatorInterface
-   */
-  protected $validator;
-
-
-
-  /**
-   * @param EventDispatcherInterface $dispatcher
-   * @param ValidatorInterface       $validatorInterface
-   */
-  public function __construct(EventDispatcherInterface $dispatcher, ValidatorInterface $validatorInterface)
-  {
-    $this->dispatcher = $dispatcher;
-    $this->validator  = $validatorInterface;
-  }
-
 
 
   /**
@@ -105,73 +70,6 @@ class Validator
 
 
   /**
-   * @param Constraint $constraint
-   */
-  public function addConstraint(Constraint $constraint)
-  {
-    if (!is_array($this->constraints))
-    {
-      $this->constraints = array();
-    }
-    array_push($this->constraints, $constraint);
-  }
-
-
-
-  /**
-   * @return array
-   */
-  public function getConstraints()
-  {
-    if (!is_array($this->constraints))
-    {
-      $this->constraints = array();
-    }
-
-    return $this->constraints;
-  }
-
-
-
-  public function clearConstraints()
-  {
-    $this->constraints = array();
-  }
-
-
-
-  /**
-   * @param Parameter $parameter
-   *
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
-   */
-  public function validateConstrains(array $constraints, Parameter $parameter)
-  {
-    try
-    {
-      $violationList = $this->validator->validate(
-                                       $parameter->getValue(),
-                                         $constraints,
-                                         array(Constraint::PROPERTY_CONSTRAINT, Constraint::DEFAULT_GROUP)
-      );
-    }
-    catch (\Exception $e)
-    {
-      $this->dispatcher->dispatch(TransformerEvents::ON_EXCEPTION, new ExceptionEvent($e));
-      $violationList = $this->handleException($e, $parameter);
-    }
-
-    if ($violationList->count() > 0)
-    {
-      throw new InvalidTransformerParameterException('Key: ' . $parameter->getKey() . ' - ' . 'Value: '
-                                                     . $violationList->get(0)->getInvalidValue() . ' - Error: '
-                                                     . $violationList->get(0)->getMessage());
-    }
-  }
-
-
-
-  /**
    * @param Configuration $configuration
    * @param Parameter     $parameter
    * @param array         $params
@@ -180,65 +78,27 @@ class Validator
   {
     $not_null    = false;
     $constraints = array();
+
     if ($configuration->getOptions()->getRequired() === true)
     {
       $not_null = true;
     }
-    else
+
+    $methods = array(
+      'requireIfAvailableAnd',
+      'requireIfAvailableOR',
+      'requireIfNotAvailableAnd',
+      'requireIfNotAvailableOr'
+    );
+
+    $i = 1;
+
+    while ($not_null = false && $i < count($methods))
     {
-      $requiredIfAvailable    = $configuration->getOptions()->getRequiredIfAvailable();
-      $requiredIfNotAvailable = $configuration->getOptions()->getRequiredIfNotAvailable();
-
-      if ($not_null !== true)
-      {
-        foreach ($requiredIfAvailable->getOr() as $key)
-        {
-          if (array_key_exists(strtolower($key), $params))
-          {
-            $not_null = true;
-            break;
-          }
-        }
-      }
-
-      if ($not_null !== true)
-      {
-        foreach ($requiredIfNotAvailable->getOr() as $key)
-        {
-          if (!array_key_exists(strtolower($key), $params))
-          {
-            $not_null = true;
-            break;
-          }
-        }
-      }
-
-      if ($not_null !== true)
-      {
-        foreach ($requiredIfAvailable->getAnd() as $key)
-        {
-          $not_null = true;
-          if (!array_key_exists(strtolower($key), $params))
-          {
-            $not_null = false;
-            break;
-          }
-        }
-      }
-
-      if ($not_null !== true)
-      {
-        foreach ($requiredIfNotAvailable->getAnd() as $key)
-        {
-          $not_null = true;
-          if (array_key_exists(strtolower($key), $params))
-          {
-            $not_null = false;
-            break;
-          }
-        }
-      }
+      $not_null = $this->{$methods[$i - 1]}($configuration, $params);
+      $i++;
     }
+
     if ($not_null === true)
     {
       array_push($constraints, new Constraints\NotNull());
@@ -300,25 +160,6 @@ class Validator
       }
       $this->validateConstrains($constraints, $parameter);
     }
-  }
-
-
-
-  /**
-   * @param \Exception $e
-   * @param Parameter  $parameter
-   *
-   * @return ConstraintViolationList
-   */
-  protected function handleException(\Exception $e, Parameter $parameter)
-  {
-    $violation = new ConstraintViolation($e->getMessage(), $e->getMessage(), array(
-      $e->getCode(),
-      $e->getFile(),
-      $e->getLine()
-    ), $parameter->getValue(), null, $parameter->getValue());
-
-    return $violationList = new ConstraintViolationList(array($violation));
   }
 
 

@@ -43,6 +43,8 @@ class ArrayBuilder
    * @param array         $return
    * @param Configuration $configuration
    * @param Parameter     $parameter
+   *
+   * @return array
    */
   protected function setValue(array $return, Configuration $configuration, Parameter $parameter)
   {

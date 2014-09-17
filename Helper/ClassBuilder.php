@@ -163,6 +163,8 @@ class ClassBuilder
    * @param $returnClass
    * @param $key
    * @param $value
+   *
+   * @return bool
    */
   protected function setPropertyValue($returnClass, $key, $value)
   {

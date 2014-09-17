@@ -5,7 +5,6 @@ namespace ENM\TransformerBundle\Helper;
 
 use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 use ENM\TransformerBundle\Exceptions\TransformerException;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventHandler

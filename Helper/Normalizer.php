@@ -49,10 +49,10 @@ class Normalizer
         $this->normalizeDate($parameter, $configuration);
         break;
       case TypeEnum::COLLECTION_TYPE:
-        $this->normalizeCollection($parameter, $configuration);
+        $this->normalizeCollection($parameter);
         break;
       case TypeEnum::OBJECT_TYPE:
-        $this->normalizeObject($parameter, $configuration);
+        $this->normalizeObject($parameter);
         break;
     }
   }
@@ -143,10 +143,9 @@ class Normalizer
 
 
   /**
-   * @param Parameter     $parameter
-   * @param Configuration $configuration
+   * @param Parameter $parameter
    */
-  protected function normalizeCollection(Parameter $parameter, Configuration $configuration)
+  protected function normalizeCollection(Parameter $parameter)
   {
     if (is_array($parameter->getValue()))
     {
@@ -165,10 +164,9 @@ class Normalizer
 
 
   /**
-   * @param Parameter     $parameter
-   * @param Configuration $configuration
+   * @param Parameter $parameter
    */
-  protected function normalizeObject(Parameter $parameter, Configuration $configuration)
+  protected function normalizeObject(Parameter $parameter)
   {
     if (is_object($parameter->getValue()))
     {

@@ -67,10 +67,11 @@ class Configurator
 
 
   /**
-   * @param array $config
+   * @param array         $config
+   * @param Configuration $parent
    *
-   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @return array|\ENM\TransformerBundle\ConfigurationStructure\Configuration[]
+   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   protected function runConfig(array $config, Configuration $parent = null)
   {
