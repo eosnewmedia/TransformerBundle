@@ -300,6 +300,17 @@ class Validator extends BaseValidator
   {
     $this->validateType($configuration);
 
+    if ($configuration->getOptions()->getFloatOptions()->getRound() !== null)
+    {
+      $parameter->setValue(
+                round(
+                  $parameter->getValue(),
+                  $configuration->getOptions()->getFloatOptions()->getRound(),
+                  PHP_ROUND_HALF_DOWN
+                )
+      );
+    }
+
     $this->validateMinMax(
          $configuration->getOptions()->getFloatOptions()->getMin(),
            $configuration->getOptions()->getFloatOptions()->getMax()

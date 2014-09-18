@@ -156,8 +156,13 @@ class DefaultTypeTest extends BaseTest
     $config = array(
       'test' => [
         'type' => 'float',
+        'options' => [
+          'round' => 5
+        ]
       ]
     );
+
+    var_dump($this->container->get('enm.transformer.service')->transform('array', $config, array('test' => 2.444545)));
 
     $this->expectSuccess($config, 'test', 2.4);
     $this->expectSuccess($config, 'test', -2.4);

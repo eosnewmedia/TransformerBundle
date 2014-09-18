@@ -287,6 +287,7 @@ class Configurator
     $options = new FloatOptions();
     $options->setExpected($config['options']['expected']);
     $options->setDefaultValue($config['options']['defaultValue']);
+    $options->setRound($config['options']['round']);
     if (!is_null($config['options']['min']))
     {
       $options->setMin($config['options']['min']);

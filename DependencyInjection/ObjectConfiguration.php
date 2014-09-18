@@ -42,6 +42,7 @@ class ObjectConfiguration implements ConfigurationInterface
                 ->booleanNode('strongValidation')->defaultValue(false)->end()
                 ->floatNode('min')->defaultValue(null)->end()
                 ->floatNode('max')->defaultValue(null)->end()
+                ->floatNode('round')->defaultValue(null)->end()
                 ->scalarNode('returnClass')->defaultValue(null)->end()
                 ->variableNode('defaultValue')->defaultValue(null)->end()
                 ->scalarNode('regex')->defaultValue(null)->end()

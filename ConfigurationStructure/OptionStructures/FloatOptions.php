@@ -19,6 +19,11 @@ class FloatOptions implements NumberInterface
   protected $max = null;
 
   /**
+   * @var null|int
+   */
+  protected $round = null;
+
+  /**
    * @var array
    */
   protected $expected = array();
@@ -114,5 +119,30 @@ class FloatOptions implements NumberInterface
   public function getMin()
   {
     return $this->min;
+  }
+
+
+
+  /**
+   * @param int|null $round
+   */
+  public function setRound($round)
+  {
+    if (!is_null($round))
+    {
+      $this->round = intval($round);
+    }
+
+    return $this;
+  }
+
+
+
+  /**
+   * @return int|null
+   */
+  public function getRound()
+  {
+    return $this->round;
   }
 }
