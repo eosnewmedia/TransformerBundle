@@ -88,12 +88,40 @@ class BaseTransformerManager
   {
     $this->dispatcher           = $eventDispatcher;
     $this->global_configuration = $parameterBag->get('transformer.config');
-    $this->classBuilder         = new ClassBuilder($eventDispatcher);
-    $this->arrayBuilder         = new ArrayBuilder();
     $this->converter            = new Converter();
     $this->normalizer           = new Normalizer($this->converter);
-    $this->eventHandler         = new EventHandler($eventDispatcher, $this->classBuilder);
+    $this->eventHandler         = new EventHandler($eventDispatcher, $this->getClassBuilder());
     $this->validator            = new Validator($eventDispatcher, $validator);
+  }
+
+
+
+  /**
+   * @return ArrayBuilder
+   */
+  public function getArrayBuilder()
+  {
+    if (!$this->arrayBuilder instanceof ArrayBuilder)
+    {
+      $this->arrayBuilder = new ArrayBuilder();
+    }
+
+    return $this->arrayBuilder;
+  }
+
+
+
+  /**
+   * @return ClassBuilder
+   */
+  public function getClassBuilder()
+  {
+    if (!$this->classBuilder instanceof ClassBuilder)
+    {
+      $this->classBuilder = new ClassBuilder($this->dispatcher);
+    }
+
+    return $this->classBuilder;
   }
 
 
@@ -192,9 +220,9 @@ class BaseTransformerManager
       $configurator = new Configurator($config, $this->dispatcher);
 
       $returnClass = $this->reverseBuild(
-                          '\stdClass',
-                            $configurator->getConfig(),
-                            $this->converter->convertTo($object, ConversionEnum::ARRAY_CONVERSION)
+        '\stdClass',
+        $configurator->getConfig(),
+        $this->converter->convertTo($object, ConversionEnum::ARRAY_CONVERSION)
       );
 
       $this->destroy();
@@ -236,10 +264,10 @@ class BaseTransformerManager
 
     if ($returnClass === self::BUILD_ARRAY)
     {
-      return $this->arrayBuilder->build($config_array, $returnClassProperties);
+      return $this->getArrayBuilder()->build($config_array, $returnClassProperties);
     }
 
-    return $this->classBuilder->build($returnClass, $config_array, $returnClassProperties);
+    return $this->getClassBuilder()->build($returnClass, $config_array, $returnClassProperties);
   }
 
 
@@ -266,8 +294,8 @@ class BaseTransformerManager
       $modifiedConfiguration = clone $configuration;
 
       $this->dispatcher->dispatch(
-                       TransformerEvents::REVERSE_TRANSFORM,
-                         new TransformerEvent($modifiedConfiguration, $parameter)
+        TransformerEvents::REVERSE_TRANSFORM,
+        new TransformerEvent($modifiedConfiguration, $parameter)
       );
 
       $this->modifyConfiguration($modifiedConfiguration);
@@ -318,8 +346,8 @@ class BaseTransformerManager
     $this->eventHandler->init($configuration->getEvents());
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::BEFORE_RUN,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::BEFORE_RUN,
+      new TransformerEvent($configuration, $parameter)
     );
   }
 
@@ -353,8 +381,8 @@ class BaseTransformerManager
   protected function destroyRun(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::AFTER_RUN,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::AFTER_RUN,
+      new TransformerEvent($configuration, $parameter)
     );
 
     $this->eventHandler->destroy($configuration->getEvents());
@@ -410,8 +438,8 @@ class BaseTransformerManager
   protected function prepareValue(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_VALUE,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_VALUE,
+      new TransformerEvent($configuration, $parameter)
     );
 
     switch ($configuration->getType())
@@ -447,8 +475,8 @@ class BaseTransformerManager
   protected function setDefaultIfNull(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_DEFAULT,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_DEFAULT,
+      new TransformerEvent($configuration, $parameter)
     );
 
     if ($parameter->getValue() === null)
@@ -481,22 +509,22 @@ class BaseTransformerManager
     if ($reverse === false)
     {
       $this->dispatcher->dispatch(
-                       TransformerEvents::PREPARE_COLLECTION,
-                         new TransformerEvent($configuration, $parameter)
+        TransformerEvents::PREPARE_COLLECTION,
+        new TransformerEvent($configuration, $parameter)
       );
     }
     else
     {
       $this->dispatcher->dispatch(
-                       TransformerEvents::REVERSE_COLLECTION,
-                         new TransformerEvent($configuration, $parameter)
+        TransformerEvents::REVERSE_COLLECTION,
+        new TransformerEvent($configuration, $parameter)
       );
     }
 
     $child_array = $parameter->getValue();
 
     $result_array = array();
-    for ($i = 0; $i < count($child_array); $i++)
+    for ($i = 0; $i < count($child_array); ++$i)
     {
       $param = new Parameter($i, $child_array[$i]);
       if ($reverse === false)
@@ -527,8 +555,8 @@ class BaseTransformerManager
   protected function prepareObject(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_OBJECT,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_OBJECT,
+      new TransformerEvent($configuration, $parameter)
     );
 
     $returnClass = '';
@@ -543,9 +571,9 @@ class BaseTransformerManager
     }
 
     $value = $this->build(
-                  $returnClass,
-                    $configuration->getChildren(),
-                    $this->converter->convertTo($parameter->getValue(), 'array')
+      $returnClass,
+      $configuration->getChildren(),
+      $this->converter->convertTo($parameter->getValue(), 'array')
     );
     $parameter->setValue($value);
 
@@ -563,8 +591,8 @@ class BaseTransformerManager
   protected function prepareArray(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_ARRAY,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_ARRAY,
+      new TransformerEvent($configuration, $parameter)
     );
 
     $return = self::BUILD_ARRAY;
@@ -574,9 +602,9 @@ class BaseTransformerManager
     )
     {
       $value = $this->build(
-                    $return,
-                      $configuration->getChildren(),
-                      $this->converter->convertTo($parameter->getValue(), 'array')
+        $return,
+        $configuration->getChildren(),
+        $this->converter->convertTo($parameter->getValue(), 'array')
       );
       $parameter->setValue($value);
     }
@@ -595,15 +623,15 @@ class BaseTransformerManager
   protected function reverseObject(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::REVERSE_OBJECT,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::REVERSE_OBJECT,
+      new TransformerEvent($configuration, $parameter)
     );
 
     $returnClass = '\stdClass';
     $value       = $this->reverseBuild(
-                        $returnClass,
-                          $configuration->getChildren(),
-                          $this->converter->convertTo($parameter->getValue(), 'array')
+      $returnClass,
+      $configuration->getChildren(),
+      $this->converter->convertTo($parameter->getValue(), 'array')
     );
     $parameter->setValue($value);
 
@@ -621,8 +649,8 @@ class BaseTransformerManager
   protected function prepareDate(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_DATE,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_DATE,
+      new TransformerEvent($configuration, $parameter)
     );
 
     $date = new \DateTime();
@@ -657,8 +685,8 @@ class BaseTransformerManager
   protected function prepareIndividual(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::PREPARE_INDIVIDUAL,
-                       new TransformerEvent($configuration, $parameter)
+      TransformerEvents::PREPARE_INDIVIDUAL,
+      new TransformerEvent($configuration, $parameter)
     );
 
     return $this;
@@ -700,8 +728,8 @@ class BaseTransformerManager
 
       $processor = new Processor();
       $config    = $processor->processConfiguration(
-                             new TransformerConfiguration(),
-                               array('enm_transformer' => [$key => $config])
+        new TransformerConfiguration(),
+        array('enm_transformer' => [$key => $config])
       );
 
       $this->local_configuration = $config[$key];

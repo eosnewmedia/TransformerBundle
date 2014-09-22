@@ -96,7 +96,7 @@ class Validator extends BaseValidator
     while ($not_null = false && $i < count($methods))
     {
       $not_null = $this->{$methods[$i - 1]}($configuration, $params);
-      $i++;
+      ++$i;
     }
 
     if ($not_null === true)
