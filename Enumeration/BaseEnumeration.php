@@ -6,9 +6,9 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace ENM\TransformerBundle\Enumeration;
+namespace Enm\TransformerBundle\Enumeration;
 
-use ENM\TransformerBundle\Interfaces\EnumInterface;
+use Enm\TransformerBundle\Interfaces\EnumInterface;
 
 abstract class BaseEnumeration implements EnumInterface
 {

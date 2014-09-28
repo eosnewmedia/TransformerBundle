@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Interfaces;
+namespace Enm\TransformerBundle\Interfaces;
 
 interface TransformerInterface
 {
@@ -30,7 +30,7 @@ interface TransformerInterface
    * @param string                   $result_type
    *
    * @return array|\stdClass|string
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   public function reverseTransform($object, array $config, $local_config = null, $result_type = 'object');
 

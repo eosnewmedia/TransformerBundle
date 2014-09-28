@@ -1,26 +1,26 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace Enm\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\ConversionEnum;
-use ENM\TransformerBundle\ConfigurationStructure\GlobalTransformerValues;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\DependencyInjection\TransformerConfiguration;
-use ENM\TransformerBundle\Event\ExceptionEvent;
-use ENM\TransformerBundle\Event\TransformerEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
-use ENM\TransformerBundle\Exceptions\TransformerException;
-use ENM\TransformerBundle\Helper\ArrayBuilder;
-use ENM\TransformerBundle\Helper\ClassBuilder;
-use ENM\TransformerBundle\Helper\Configurator;
-use ENM\TransformerBundle\Helper\Converter;
-use ENM\TransformerBundle\Helper\EventHandler;
-use ENM\TransformerBundle\Helper\Normalizer;
-use ENM\TransformerBundle\Helper\Validator;
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\ConversionEnum;
+use Enm\TransformerBundle\ConfigurationStructure\GlobalTransformerValues;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
+use Enm\TransformerBundle\DependencyInjection\TransformerConfiguration;
+use Enm\TransformerBundle\Event\ExceptionEvent;
+use Enm\TransformerBundle\Event\TransformerEvent;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use Enm\TransformerBundle\Exceptions\TransformerException;
+use Enm\TransformerBundle\Helper\ArrayBuilder;
+use Enm\TransformerBundle\Helper\ClassBuilder;
+use Enm\TransformerBundle\Helper\Configurator;
+use Enm\TransformerBundle\Helper\Converter;
+use Enm\TransformerBundle\Helper\EventHandler;
+use Enm\TransformerBundle\Helper\Normalizer;
+use Enm\TransformerBundle\Helper\Validator;
+use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -32,27 +32,27 @@ class BaseTransformerManager
   const BUILD_ARRAY = 'array';
 
   /**
-   * @var \ENM\TransformerBundle\Helper\ClassBuilder
+   * @var \Enm\TransformerBundle\Helper\ClassBuilder
    */
   protected $classBuilder;
 
   /**
-   * @var \ENM\TransformerBundle\Helper\ArrayBuilder
+   * @var \Enm\TransformerBundle\Helper\ArrayBuilder
    */
   protected $arrayBuilder;
 
   /**
-   * @var \ENM\TransformerBundle\Helper\Validator
+   * @var \Enm\TransformerBundle\Helper\Validator
    */
   protected $validator;
 
   /**
-   * @var \ENM\TransformerBundle\Helper\Normalizer
+   * @var \Enm\TransformerBundle\Helper\Normalizer
    */
   protected $normalizer;
 
   /**
-   * @var \ENM\TransformerBundle\Helper\Converter
+   * @var \Enm\TransformerBundle\Helper\Converter
    */
   protected $converter;
 
@@ -180,7 +180,7 @@ class BaseTransformerManager
    * @param mixed         $params
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   public function process($returnClass, $config, $params)
   {
@@ -240,7 +240,7 @@ class BaseTransformerManager
 
   /**
    * @param string|object                                                 $returnClass
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config_array
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[] $config_array
    * @param array                                                         $params
    *
    * @return object|array
@@ -274,7 +274,7 @@ class BaseTransformerManager
 
   /**
    * @param string|object                                                 $returnClass
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config_array
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[] $config_array
    * @param array                                                         $params
    *
    * @return object
@@ -698,7 +698,7 @@ class BaseTransformerManager
    * @param mixed $local_config
    *
    * @return $this
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   protected function setLocalConfig($local_config)
   {
@@ -768,7 +768,7 @@ class BaseTransformerManager
    * @param $config
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   protected function createEmptyObjectStructure($config)
   {
@@ -788,7 +788,7 @@ class BaseTransformerManager
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[] $config
    *
    * @return object
    */

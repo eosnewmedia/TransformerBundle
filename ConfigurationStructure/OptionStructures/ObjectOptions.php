@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure\OptionStructures;
+namespace Enm\TransformerBundle\ConfigurationStructure\OptionStructures;
 
-use ENM\TransformerBundle\ConfigurationStructure\OptionInterfaces\ComplexInterface;
+use Enm\TransformerBundle\ConfigurationStructure\OptionInterfaces\ComplexInterface;
 
 class ObjectOptions implements ComplexInterface
 {

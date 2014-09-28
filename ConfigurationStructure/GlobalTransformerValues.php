@@ -1,15 +1,15 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure;
+namespace Enm\TransformerBundle\ConfigurationStructure;
 
-use ENM\TransformerBundle\Exceptions\TransformerConfigurationException;
+use Enm\TransformerBundle\Exceptions\TransformerConfigurationException;
 
 /**
  * Class GlobalTransformerValues
  * Singleton-Pattern
  *
- * @package ENM\TransformerBundle\ConfigurationStructure
+ * @package Enm\TransformerBundle\ConfigurationStructure
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class GlobalTransformerValues
@@ -80,7 +80,7 @@ class GlobalTransformerValues
 
   /**
    * @return Configuration[]
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function getConfig()
   {
@@ -98,7 +98,7 @@ class GlobalTransformerValues
    * @param Configuration[] $array
    * @param bool            $edit
    *
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function setConfig(array $array, $edit = false)
   {
@@ -120,7 +120,7 @@ class GlobalTransformerValues
 
   /**
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function getParams()
   {
@@ -138,7 +138,7 @@ class GlobalTransformerValues
    * @param array $array
    * @param bool  $edit
    *
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function setParams(array $array, $edit = false)
   {

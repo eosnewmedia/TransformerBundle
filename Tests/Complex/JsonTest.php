@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests\Complex;
+namespace Enm\TransformerBundle\Tests\Complex;
 
-use ENM\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTest;
 
 class JsonTest extends BaseTest
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure\OptionInterfaces;
+namespace Enm\TransformerBundle\ConfigurationStructure\OptionInterfaces;
 
 interface NumberInterface extends NonComplexInterface
 {

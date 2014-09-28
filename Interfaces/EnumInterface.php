@@ -6,7 +6,7 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace ENM\TransformerBundle\Interfaces;
+namespace Enm\TransformerBundle\Interfaces;
 
 interface EnumInterface
 {

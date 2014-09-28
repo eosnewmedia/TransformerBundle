@@ -1,19 +1,19 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure;
+namespace Enm\TransformerBundle\ConfigurationStructure;
 
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
 
 class ConfigurationOptions
 {
@@ -21,12 +21,12 @@ class ConfigurationOptions
   protected $required = false;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
    */
   protected $requiredIfNotAvailable;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
    */
   protected $requiredIfAvailable;
 
@@ -41,42 +41,42 @@ class ConfigurationOptions
   protected $forbiddenIfAvailable = array();
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions
    */
   protected $stringOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions
    */
   protected $integerOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions
    */
   protected $floatOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions
    */
   protected $boolOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions
    */
   protected $dateOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions
    */
   protected $objectOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions
    */
   protected $collectionOptions;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions
    */
   protected $arrayOptions;
 
@@ -171,7 +171,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfAvailable
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfAvailable
    */
   public function setRequiredIfAvailable(RequiredIfStructure $requiredIfAvailable)
   {
@@ -183,7 +183,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
    */
   public function getRequiredIfAvailable()
   {
@@ -193,7 +193,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfNotAvailable
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfNotAvailable
    */
   public function setRequiredIfNotAvailable(RequiredIfStructure $requiredIfNotAvailable)
   {
@@ -205,7 +205,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
    */
   public function getRequiredIfNotAvailable()
   {
@@ -215,7 +215,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions $arrayOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions $arrayOptions
    */
   public function setArrayOptions(ArrayOptions $arrayOptions)
   {
@@ -227,7 +227,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions
    */
   public function getArrayOptions()
   {
@@ -237,7 +237,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions $boolOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions $boolOptions
    */
   public function setBoolOptions(BoolOptions $boolOptions)
   {
@@ -249,7 +249,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions
    */
   public function getBoolOptions()
   {
@@ -259,7 +259,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions $collectionOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions $collectionOptions
    */
   public function setCollectionOptions(CollectionOptions $collectionOptions)
   {
@@ -271,7 +271,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions
    */
   public function getCollectionOptions()
   {
@@ -281,7 +281,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions $dateOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions $dateOptions
    */
   public function setDateOptions(DateOptions $dateOptions)
   {
@@ -293,7 +293,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions
    */
   public function getDateOptions()
   {
@@ -303,7 +303,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions $floatOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions $floatOptions
    */
   public function setFloatOptions(FloatOptions $floatOptions)
   {
@@ -315,7 +315,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions
    */
   public function getFloatOptions()
   {
@@ -325,7 +325,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions $integerOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions $integerOptions
    */
   public function setIntegerOptions(IntegerOptions $integerOptions)
   {
@@ -337,7 +337,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions
    */
   public function getIntegerOptions()
   {
@@ -347,7 +347,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions $individualOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions $individualOptions
    */
   public function setIndividualOptions(IndividualOptions $individualOptions)
   {
@@ -359,7 +359,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions
    */
   public function getIndividualOptions()
   {
@@ -369,7 +369,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions $objectOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions $objectOptions
    */
   public function setObjectOptions(ObjectOptions $objectOptions)
   {
@@ -381,7 +381,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions
    */
   public function getObjectOptions()
   {
@@ -391,7 +391,7 @@ class ConfigurationOptions
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions $stringOptions
+   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions $stringOptions
    */
   public function setStringOptions(StringOptions $stringOptions)
   {
@@ -403,7 +403,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions
    */
   public function getStringOptions()
   {

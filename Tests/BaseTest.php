@@ -1,8 +1,8 @@
 <?php
 
-namespace ENM\TransformerBundle\Tests;
+namespace Enm\TransformerBundle\Tests;
 
-use ENM\TransformerBundle\Manager\ArrayTransformerManager;
+use Enm\TransformerBundle\Manager\ArrayTransformerManager;
 
 abstract class BaseTest extends KernelAwareTest
 {

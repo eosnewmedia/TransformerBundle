@@ -1,10 +1,10 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests\Complex;
+namespace Enm\TransformerBundle\Tests\Complex;
 
-use ENM\TransformerBundle\Resources\TestClass\TestConfiguration;
-use ENM\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
+use Enm\TransformerBundle\Tests\BaseTest;
 
 class ArrayFromConfigTest extends BaseTest
 {

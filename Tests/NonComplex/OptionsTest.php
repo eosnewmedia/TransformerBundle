@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests\NonComplex;
+namespace Enm\TransformerBundle\Tests\NonComplex;
 
-use ENM\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTest;
 
 class OptionsTest extends BaseTest
 {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure\OptionStructures;
+namespace Enm\TransformerBundle\ConfigurationStructure\OptionStructures;
 
-use ENM\TransformerBundle\ConfigurationStructure\OptionInterfaces\NonComplexInterface;
+use Enm\TransformerBundle\ConfigurationStructure\OptionInterfaces\NonComplexInterface;
 
 class BoolOptions implements NonComplexInterface
 {

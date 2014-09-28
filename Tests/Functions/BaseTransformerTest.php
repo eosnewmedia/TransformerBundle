@@ -1,17 +1,17 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests\Functions;
+namespace Enm\TransformerBundle\Tests\Functions;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\ConfigurationOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\Exceptions\TransformerException;
-use ENM\TransformerBundle\Listener\ExceptionListener;
-use ENM\TransformerBundle\Manager\BaseTransformerManager;
-use ENM\TransformerBundle\Tests\BaseTest;
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\Exceptions\TransformerException;
+use Enm\TransformerBundle\Listener\ExceptionListener;
+use Enm\TransformerBundle\Manager\BaseTransformerManager;
+use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -41,7 +41,7 @@ class BaseTransformerTest extends BaseTest
 
   protected function getMethod($name)
   {
-    $class  = new \ReflectionClass('ENM\TransformerBundle\Manager\BaseTransformerManager');
+    $class  = new \ReflectionClass('Enm\TransformerBundle\Manager\BaseTransformerManager');
     $method = $class->getMethod($name);
     $method->setAccessible(true);
 

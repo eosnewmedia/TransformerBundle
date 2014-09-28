@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure;
+namespace Enm\TransformerBundle\ConfigurationStructure;
 
 class Parameter
 {

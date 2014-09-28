@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure;
+namespace Enm\TransformerBundle\ConfigurationStructure;
 
 class Configuration
 {
@@ -22,7 +22,7 @@ class Configuration
   protected $renameTo = null;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
+   * @var \Enm\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   protected $children = array();
 
@@ -32,7 +32,7 @@ class Configuration
   protected $parent = null;
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\ConfigurationOptions
+   * @var \Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions
    */
   protected $options;
 
@@ -74,7 +74,7 @@ class Configuration
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   public function setChildren(array $children)
   {
@@ -86,7 +86,7 @@ class Configuration
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]|array
+   * @return \Enm\TransformerBundle\ConfigurationStructure\Configuration[]|array
    */
   public function getChildren()
   {
@@ -96,7 +96,7 @@ class Configuration
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\ConfigurationOptions $options
+   * @param \Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions $options
    */
   public function setOptions(ConfigurationOptions $options)
   {
@@ -108,7 +108,7 @@ class Configuration
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\ConfigurationOptions
+   * @return \Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions
    */
   public function getOptions()
   {
@@ -184,7 +184,7 @@ class Configuration
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration $parent
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration $parent
    */
   public function setParent(Configuration $parent = null)
   {
@@ -196,7 +196,7 @@ class Configuration
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration|null
+   * @return \Enm\TransformerBundle\ConfigurationStructure\Configuration|null
    */
   public function getParent()
   {

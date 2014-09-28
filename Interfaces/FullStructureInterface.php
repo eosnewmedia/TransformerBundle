@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Interfaces;
+namespace Enm\TransformerBundle\Interfaces;
 
 interface FullStructureInterface
 {
@@ -20,7 +20,7 @@ interface FullStructureInterface
 
   /**
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function getArray();
 
@@ -29,7 +29,7 @@ interface FullStructureInterface
   /**
    * @param array $full_array
    *
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   public function setArray(array $full_array);
 } 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
 class SpecialMethodTestClass
 {

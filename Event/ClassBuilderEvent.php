@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Event;
+namespace Enm\TransformerBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 

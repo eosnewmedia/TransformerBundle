@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\TransformerEvents;
 
 class TestConfiguration
 {
@@ -57,12 +57,12 @@ class TestConfiguration
         ],
         'options'  => [
           'required'    => true,
-          'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\AddressTestClass',
+          'returnClass' => 'Enm\TransformerBundle\Resources\TestClass\AddressTestClass',
           'events'      => [
             'listeners' => [
               'test' => [
                 'event'  => TransformerEvents::AFTER_VALIDATION,
-                'class'  => 'ENM\TransformerBundle\Resources\TestClass\TestEventListener',
+                'class'  => 'Enm\TransformerBundle\Resources\TestClass\TestEventListener',
                 'method' => 'testNotAlwaysListener'
               ]
             ]
@@ -103,7 +103,7 @@ class TestConfiguration
           ]
         ],
         'options'  => [
-          'returnClass' => 'ENM\TransformerBundle\Resources\TestClass\HobbyTestClass'
+          'returnClass' => 'Enm\TransformerBundle\Resources\TestClass\HobbyTestClass'
         ]
       ]
     );

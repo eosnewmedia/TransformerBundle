@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Exceptions;
+namespace Enm\TransformerBundle\Exceptions;
 
 class TransformerException extends \Exception
 {

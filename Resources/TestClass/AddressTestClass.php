@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
 class AddressTestClass
 {
@@ -29,7 +29,7 @@ class AddressTestClass
 
 
   /**
-   * @param \ENM\TransformerBundle\Resources\TestClass\CountryEnum $country
+   * @param \Enm\TransformerBundle\Resources\TestClass\CountryEnum $country
    */
   public function setCountry($country)
   {
@@ -41,7 +41,7 @@ class AddressTestClass
 
 
   /**
-   * @return \ENM\TransformerBundle\Resources\TestClass\CountryEnum
+   * @return \Enm\TransformerBundle\Resources\TestClass\CountryEnum
    */
   public function getCountry()
   {

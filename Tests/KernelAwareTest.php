@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Tests;
+namespace Enm\TransformerBundle\Tests;
 
 require_once dirname(__DIR__) . '/../../../app/AppKernel.php';
 

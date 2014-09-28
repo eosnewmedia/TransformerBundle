@@ -1,22 +1,22 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Event;
+namespace Enm\TransformerBundle\Event;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
 
 /**
  * Class TransformerEvent
  *
- * @package ENM\TransformerBundle\Event
+ * @package Enm\TransformerBundle\Event
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class TransformerEvent extends ConfigurationEvent
 {
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\Parameter
+   * @var \Enm\TransformerBundle\ConfigurationStructure\Parameter
    */
   protected $parameter;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
 class UserTestClass
 {
@@ -29,7 +29,7 @@ class UserTestClass
 
 
   /**
-   * @param \ENM\TransformerBundle\Resources\TestClass\AddressTestClass $address
+   * @param \Enm\TransformerBundle\Resources\TestClass\AddressTestClass $address
    */
   public function setAddress($address)
   {
@@ -41,7 +41,7 @@ class UserTestClass
 
 
   /**
-   * @return \ENM\TransformerBundle\Resources\TestClass\AddressTestClass
+   * @return \Enm\TransformerBundle\Resources\TestClass\AddressTestClass
    */
   public function getAddress()
   {

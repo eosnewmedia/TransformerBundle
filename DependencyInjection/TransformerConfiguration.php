@@ -6,10 +6,10 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace ENM\TransformerBundle\DependencyInjection;
+namespace Enm\TransformerBundle\DependencyInjection;
 
-use ENM\TransformerBundle\ConfigurationStructure\StringValidationEnum;
-use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
+use Enm\TransformerBundle\ConfigurationStructure\StringValidationEnum;
+use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

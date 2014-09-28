@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure;
+namespace Enm\TransformerBundle\ConfigurationStructure;
 
-use ENM\TransformerBundle\Enumeration\BaseEnumeration;
+use Enm\TransformerBundle\Enumeration\BaseEnumeration;
 
 class TypeEnum extends BaseEnumeration
 {

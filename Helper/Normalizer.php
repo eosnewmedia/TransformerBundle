@@ -1,12 +1,12 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 
 class Normalizer
 {
@@ -120,7 +120,7 @@ class Normalizer
    * @param Parameter     $parameter
    * @param Configuration $configuration
    *
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function normalizeDate(Parameter $parameter, Configuration $configuration)
   {

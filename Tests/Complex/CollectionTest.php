@@ -6,9 +6,9 @@
  * @author Philipp Marien <marien@eosnewmedia.de>
  */
 
-namespace ENM\TransformerBundle\Tests\Complex;
+namespace Enm\TransformerBundle\Tests\Complex;
 
-use ENM\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTest;
 
 class CollectionTest extends BaseTest
 {

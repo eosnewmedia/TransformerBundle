@@ -1,26 +1,26 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
-use ENM\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
-use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\DependencyInjection\ObjectConfiguration;
-use ENM\TransformerBundle\Event\ConfigurationEvent;
-use ENM\TransformerBundle\Event\ExceptionEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
-use ENM\TransformerBundle\Exceptions\TransformerConfigurationException;
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
+use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
+use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
+use Enm\TransformerBundle\DependencyInjection\ObjectConfiguration;
+use Enm\TransformerBundle\Event\ConfigurationEvent;
+use Enm\TransformerBundle\Event\ExceptionEvent;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use Enm\TransformerBundle\Exceptions\TransformerConfigurationException;
+use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -28,7 +28,7 @@ class Configurator
 {
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
+   * @var \Enm\TransformerBundle\ConfigurationStructure\Configuration[]
    */
   protected $configuration;
 
@@ -57,7 +57,7 @@ class Configurator
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration[]
+   * @return \Enm\TransformerBundle\ConfigurationStructure\Configuration[]
    */
   public function getConfig()
   {
@@ -70,8 +70,8 @@ class Configurator
    * @param array         $config
    * @param Configuration $parent
    *
-   * @return array|\ENM\TransformerBundle\ConfigurationStructure\Configuration[]
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerConfigurationException
+   * @return array|\Enm\TransformerBundle\ConfigurationStructure\Configuration[]
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerConfigurationException
    */
   protected function runConfig(array $config, Configuration $parent = null)
   {
@@ -142,7 +142,7 @@ class Configurator
    * @param array  $config
    * @param string $key
    *
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function createChildren(array $config, $key)
   {

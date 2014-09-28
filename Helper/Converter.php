@@ -1,10 +1,10 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\ConversionEnum;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
+use Enm\TransformerBundle\ConfigurationStructure\ConversionEnum;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException;
 
 class Converter
 {
@@ -13,7 +13,7 @@ class Converter
    * @param mixed $value
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   protected function toArray($value)
   {
@@ -102,7 +102,7 @@ class Converter
    * @param string $value
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function jsonToArray($value)
   {
@@ -223,7 +223,7 @@ class Converter
    * @param object|array $input
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   protected function objectToArray($input)
   {
@@ -276,7 +276,7 @@ class Converter
    * @param string $result_type
    *
    * @return array|string|object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function convertTo($value, $result_type)
   {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Validator\Constraint;
+namespace Enm\TransformerBundle\Validator\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 /**
  * Class Date
  *
- * @package ENM\TransformerBundle\Validator\Constraint
+ * @package Enm\TransformerBundle\Validator\Constraint
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class NotEmptyArray extends Constraint

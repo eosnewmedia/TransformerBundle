@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
-use ENM\TransformerBundle\Enumeration\BaseEnumeration;
+use Enm\TransformerBundle\Enumeration\BaseEnumeration;
 
 class CountryEnum extends BaseEnumeration
 {

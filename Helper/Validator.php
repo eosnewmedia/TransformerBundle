@@ -1,18 +1,18 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\ConfigurationStructure\StringValidationEnum;
-use ENM\TransformerBundle\ConfigurationStructure\TypeEnum;
-use ENM\TransformerBundle\Event\ValidatorEvent;
-use ENM\TransformerBundle\TransformerEvents;
-use ENM\TransformerBundle\Validator\Constraint\ArrayRegex;
-use ENM\TransformerBundle\Validator\Constraint\Date;
-use ENM\TransformerBundle\Validator\Constraint\EmptyArrayOrNull;
-use ENM\TransformerBundle\Validator\Constraint\NotEmptyArray;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\ConfigurationStructure\StringValidationEnum;
+use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
+use Enm\TransformerBundle\Event\ValidatorEvent;
+use Enm\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\Validator\Constraint\ArrayRegex;
+use Enm\TransformerBundle\Validator\Constraint\Date;
+use Enm\TransformerBundle\Validator\Constraint\EmptyArrayOrNull;
+use Enm\TransformerBundle\Validator\Constraint\NotEmptyArray;
 use Symfony\Component\Validator\Constraints;
 
 class Validator extends BaseValidator

@@ -1,13 +1,13 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\Event\ExceptionEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException;
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\Event\ExceptionEvent;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException;
+use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -85,7 +85,7 @@ class BaseValidator
   /**
    * @param Parameter $parameter
    *
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
    */
   public function validateConstrains(array $constraints, Parameter $parameter)
   {

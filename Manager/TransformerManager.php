@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Manager;
+namespace Enm\TransformerBundle\Manager;
 
-use ENM\TransformerBundle\Interfaces\TransformerInterface;
+use Enm\TransformerBundle\Interfaces\TransformerInterface;
 
 class TransformerManager extends BaseTransformerManager implements TransformerInterface
 {
@@ -39,7 +39,7 @@ class TransformerManager extends BaseTransformerManager implements TransformerIn
    * @param string                   $result_type
    *
    * @return array|\stdClass|string
-   * @throws \ENM\TransformerBundle\Exceptions\TransformerException
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   public function reverseTransform($object, array $config, $local_config = null, $result_type = 'object')
   {

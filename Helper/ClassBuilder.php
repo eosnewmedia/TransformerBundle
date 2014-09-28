@@ -1,13 +1,13 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\Event\ClassBuilderEvent;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
-use ENM\TransformerBundle\TransformerEvents;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\Event\ClassBuilderEvent;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ClassBuilder
@@ -29,11 +29,11 @@ class ClassBuilder
 
   /**
    * @param string|object                                                 $returnClass
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Parameter[]     $params
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[] $config
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Parameter[]     $params
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   public function build($returnClass, array $config, array $params)
   {
@@ -60,7 +60,7 @@ class ClassBuilder
    * @param string|object $class
    *
    * @return object
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   public function getObjectInstance($class)
   {

@@ -1,15 +1,15 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Event;
+namespace Enm\TransformerBundle\Event;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class ConfigurationEvent
  *
- * @package ENM\TransformerBundle\Event
+ * @package Enm\TransformerBundle\Event
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class ConfigurationEvent extends Event
@@ -17,7 +17,7 @@ class ConfigurationEvent extends Event
 
 
   /**
-   * @var \ENM\TransformerBundle\ConfigurationStructure\Configuration
+   * @var \Enm\TransformerBundle\ConfigurationStructure\Configuration
    */
   protected $configuration;
 
@@ -34,7 +34,7 @@ class ConfigurationEvent extends Event
 
 
   /**
-   * @return \ENM\TransformerBundle\ConfigurationStructure\Configuration
+   * @return \Enm\TransformerBundle\ConfigurationStructure\Configuration
    */
   public function getConfiguration()
   {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Resources\TestClass;
+namespace Enm\TransformerBundle\Resources\TestClass;
 
-use ENM\TransformerBundle\Event\TransformerEvent;
+use Enm\TransformerBundle\Event\TransformerEvent;
 
 class TestEventListener
 {

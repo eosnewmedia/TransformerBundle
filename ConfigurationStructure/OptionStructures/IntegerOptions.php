@@ -1,9 +1,9 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure\OptionStructures;
+namespace Enm\TransformerBundle\ConfigurationStructure\OptionStructures;
 
-use ENM\TransformerBundle\ConfigurationStructure\OptionInterfaces\NumberInterface;
+use Enm\TransformerBundle\ConfigurationStructure\OptionInterfaces\NumberInterface;
 
 class IntegerOptions implements NumberInterface
 {

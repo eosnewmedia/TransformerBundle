@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\ConfigurationStructure\OptionStructures;
+namespace Enm\TransformerBundle\ConfigurationStructure\OptionStructures;
 
 class IndividualOptions
 {

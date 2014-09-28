@@ -1,4 +1,4 @@
-# ENM\TransformerBundle
+# Enm\TransformerBundle
 
 ## What is it for?
 This Bundle is used to transform an array, an object or a json string, which is following a defined structure, to a needed object.
@@ -15,7 +15,7 @@ the method to call is
 
     transform(NEEDED_OBJECT, CONFIGURATION, VALUES)
 
-you can validate that the transformer is an instance of "ENM\TransformerBundle\TransformerInterface"
+you can validate that the transformer is an instance of "Enm\TransformerBundle\TransformerInterface"
 
 ### NEEDED_OBJECT
 has to be an instance of the object or a string containing the class name of the object you want to get.
@@ -177,13 +177,13 @@ If you want to allow only special values for a parameter, you can give an array 
       )
     );
 
-An other possibility is to use an enumeration class which should extend 'ENM\Enumeration\BaseEnumeration'.
+An other possibility is to use an enumeration class which should extend 'Enm\Enumeration\BaseEnumeration'.
 
 For each value you want to allow, you need a public static function which contains the value.
 
 Values can be of the types 'string', 'integer', 'float' and 'bool'
 
-    OwnEnumeration extends ENM\Enumeration\BaseEnumeration
+    OwnEnumeration extends Enm\Enumeration\BaseEnumeration
     {
       const TEST = 'test';
       const TESTUSER = 'testuser';

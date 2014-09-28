@@ -1,10 +1,10 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
-use ENM\TransformerBundle\Exceptions\TransformerException;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use Enm\TransformerBundle\Exceptions\TransformerException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventHandler
@@ -80,7 +80,7 @@ class EventHandler
    * @param array $listeners
    *
    * @return $this
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function addEventListeners(array $listeners)
   {
@@ -112,7 +112,7 @@ class EventHandler
    * @param array $subscribers
    *
    * @return $this
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function addEventSubscribers(array $subscribers)
   {
@@ -137,7 +137,7 @@ class EventHandler
    * @param array $listeners
    *
    * @return $this
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function removeEventListeners(array $listeners)
   {
@@ -168,7 +168,7 @@ class EventHandler
    * @param array $subscribers
    *
    * @return $this
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   protected function removeEventSubscribers(array $subscribers)
   {

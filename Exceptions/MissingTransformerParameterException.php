@@ -1,7 +1,7 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Exceptions;
+namespace Enm\TransformerBundle\Exceptions;
 
 class MissingTransformerParameterException extends TransformerException
 {

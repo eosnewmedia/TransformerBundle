@@ -1,14 +1,14 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Event;
+namespace Enm\TransformerBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class ExceptionEvent
  *
- * @package ENM\TransformerBundle\Event
+ * @package Enm\TransformerBundle\Event
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class ExceptionEvent extends Event

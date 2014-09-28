@@ -1,22 +1,22 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Helper;
+namespace Enm\TransformerBundle\Helper;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException;
 
 class ArrayBuilder
 {
 
 
   /**
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Configuration[] $config
-   * @param \ENM\TransformerBundle\ConfigurationStructure\Parameter[]     $params
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Configuration[] $config
+   * @param \Enm\TransformerBundle\ConfigurationStructure\Parameter[]     $params
    *
    * @return array
-   * @throws \ENM\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
+   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerConfigurationException
    */
   public function build(array $config, array $params)
   {

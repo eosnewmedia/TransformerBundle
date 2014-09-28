@@ -1,18 +1,18 @@
 <?php
 
 
-namespace ENM\TransformerBundle\Event;
+namespace Enm\TransformerBundle\Event;
 
-use ENM\TransformerBundle\ConfigurationStructure\Configuration;
-use ENM\TransformerBundle\ConfigurationStructure\Parameter;
-use ENM\TransformerBundle\Helper\Validator;
-use ENM\TransformerBundle\Manager\ValidationManager;
+use Enm\TransformerBundle\ConfigurationStructure\Configuration;
+use Enm\TransformerBundle\ConfigurationStructure\Parameter;
+use Enm\TransformerBundle\Helper\Validator;
+use Enm\TransformerBundle\Manager\ValidationManager;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Class ValidatorEvent
  *
- * @package ENM\TransformerBundle\Event
+ * @package Enm\TransformerBundle\Event
  * @author  Philipp Marien <marien@eosnewmedia.de>
  */
 class ValidatorEvent extends TransformerEvent
@@ -20,7 +20,7 @@ class ValidatorEvent extends TransformerEvent
 
 
   /**
-   * @var \ENM\TransformerBundle\Helper\Validator
+   * @var \Enm\TransformerBundle\Helper\Validator
    */
   protected $validator;
 
