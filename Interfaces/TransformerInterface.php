@@ -24,15 +24,15 @@ interface TransformerInterface
   /**
    * Diese Methode transformiert ein Objekt zurück in einen JSON-String, ein Array oder eine Standard-Klasse
    *
-   * @param object                   $object
-   * @param array                    $config
+   * @param object|object|string     $object
+   * @param array|object|string      $config
    * @param null|array|string|object $local_config
    * @param string                   $result_type
    *
    * @return array|\stdClass|string
    * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
-  public function reverseTransform($object, array $config, $local_config = null, $result_type = 'object');
+  public function reverseTransform($object, $config, $local_config = null, $result_type = 'object');
 
 
 
