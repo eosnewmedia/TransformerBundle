@@ -88,3 +88,121 @@ Result:
   - object or array or json
 
 ## Validation
+For validation you can use a configuration array, which have to be given to the transform or reverseTransform method.
+
+The config array has some parameters for all types of validation and some special type validation parameters.
+
+Some of the parameters are required, some are optional.
+
+The base configuration looks like:
+
+    $config = array(
+      'type' => '', // required
+      'renameTo' => '', // optional
+      'children' => array(), // only in use with types "object", "collection" and (if you want it) "individual"
+      'options' => array() // optional
+    )
+
+#### type
+This option is the only always required option.
+
+With this option you have to give the data type for validation to the transformer.
+
+Possible Values:
+
+  - string
+  - integer
+  - float
+  - bool
+  - array
+  - object
+  - collection // array of equal objects
+  - date
+  - individual // can be any type. validation will not be performed by default, but you can add own validation (see later)
+
+#### renameTo
+This option is optional, but if it is used, it needs a string given.
+
+This option can be used for renaming the key to a different property name.
+
+#### children
+This option is only possible if type is object, collection or individual.
+If type is object or collection, this option is required.
+
+This option needs a complete configuration array for child elements (see object and collection validation)
+
+### Default Options
+possible for all types and always optional:
+
+    $config['options'] => array(
+      'required' => true,
+      'requiredIfAvailable' => array(
+        'and' => array(), 
+        'or' => array()
+      ),
+      'requiredIfNotAvailable' => array(
+        'and' => array(),
+        'or' => array()
+      ),
+      'forbiddenIfAvailable' => array(),
+      'forbiddenIfNotAvailable' => array()
+    )
+
+#### required
+This option needs true or false. Default value is false.
+
+If set to true, this option requires the transformer to validate that the current value is not NULL
+
+#### requiredIfAvailable
+This option have to be an array, which requires a sub configuration if set.
+
+Generally this option tells the transformer to set a current value required.
+
+Sub Configuration:
+
+    array(
+      'and' => array(),
+      'or' => array()
+    )
+
+  - and: all keys given here have to be available to set the current value required
+  - or: one of the keys given here has to be available to set the current value required
+ 
+#### requiredIfNotAvailable
+This option have to be an array, which requires a sub configuration if set.
+
+Generally this option tells the transformer to set a current value required.
+
+Sub Configuration:
+
+    array(
+      'and' => array(),
+      'or' => array()
+    )
+
+  - and: all keys given here must not be available to set the current value required
+  - or: one of the keys given here must not be available to set the current value required
+ 
+#### forbiddenIfAvailable
+This option needs an array of config key names.
+
+It requires the transformer to validate that the current key will not have a value or a value equal to NULL if one of the given keys has a value.
+
+#### forbiddenIfNotAvailable
+This option needs an array of config key names.
+
+It requires the transformer to validate that the current key will not have a value or a value equal to NULL if one of the given keys does not have a value.
+
+### String Validation
+Base configuration:
+
+    $config = array(
+      'type' => 'string',
+    )
+ 
+Possible options, all optional:
+
+    $config['options'] = array(
+      
+    )
+    
