@@ -26,8 +26,8 @@ class Validator extends BaseValidator
   public function validate(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::BEFORE_VALIDATION,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::BEFORE_VALIDATION,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
     switch ($configuration->getType())
     {
@@ -62,8 +62,8 @@ class Validator extends BaseValidator
     $this->validateConstrains($this->getConstraints(), $parameter);
     $this->clearConstraints();
     $this->dispatcher->dispatch(
-                     TransformerEvents::AFTER_VALIDATION,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::AFTER_VALIDATION,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -93,7 +93,7 @@ class Validator extends BaseValidator
 
     $i = 1;
 
-    while ($not_null = false && $i < count($methods))
+    while ($not_null === false && $i < count($methods))
     {
       $not_null = $this->{$methods[$i - 1]}($configuration, $params);
       ++$i;
@@ -224,17 +224,17 @@ class Validator extends BaseValidator
     if ($configuration->getOptions()->getArrayOptions()->getRegex() !== null)
     {
       $this->addConstraint(
-           new ArrayRegex(
-             array(
-               'pattern' => $configuration->getOptions()->getArrayOptions()->getRegex()
-             )
-           )
+        new ArrayRegex(
+          array(
+            'pattern' => $configuration->getOptions()->getArrayOptions()->getRegex()
+          )
+        )
       );
     }
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_ARRAY,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_ARRAY,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -250,8 +250,8 @@ class Validator extends BaseValidator
     $this->validateExpected($configuration->getOptions()->getBoolOptions()->getExpected());
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_BOOL,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_BOOL,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -264,11 +264,11 @@ class Validator extends BaseValidator
   protected function validateCollection(Configuration $configuration, Parameter $parameter)
   {
     $this->addConstraint(
-         new Constraints\Collection(array('fields' => array(), 'allowExtraFields' => true))
+      new Constraints\Collection(array('fields' => array(), 'allowExtraFields' => true))
     );
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_COLLECTION,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_COLLECTION,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -281,12 +281,12 @@ class Validator extends BaseValidator
   protected function validateDate(Configuration $configuration, Parameter $parameter)
   {
     $this->addConstraint(
-         new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
+      new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
     );
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_DATE,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_DATE,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -303,23 +303,23 @@ class Validator extends BaseValidator
     if ($configuration->getOptions()->getFloatOptions()->getRound() !== null)
     {
       $parameter->setValue(
-                round(
-                  $parameter->getValue(),
-                  $configuration->getOptions()->getFloatOptions()->getRound(),
-                  PHP_ROUND_HALF_DOWN
-                )
+        round(
+          $parameter->getValue(),
+          $configuration->getOptions()->getFloatOptions()->getRound(),
+          PHP_ROUND_HALF_DOWN
+        )
       );
     }
 
     $this->validateMinMax(
-         $configuration->getOptions()->getFloatOptions()->getMin(),
-           $configuration->getOptions()->getFloatOptions()->getMax()
+      $configuration->getOptions()->getFloatOptions()->getMin(),
+      $configuration->getOptions()->getFloatOptions()->getMax()
     );
     $this->validateExpected($configuration->getOptions()->getFloatOptions()->getExpected());
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_FLOAT,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_FLOAT,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -334,14 +334,14 @@ class Validator extends BaseValidator
     $this->validateType($configuration);
 
     $this->validateMinMax(
-         $configuration->getOptions()->getIntegerOptions()->getMin(),
-           $configuration->getOptions()->getIntegerOptions()->getMax()
+      $configuration->getOptions()->getIntegerOptions()->getMin(),
+      $configuration->getOptions()->getIntegerOptions()->getMax()
     );
     $this->validateExpected($configuration->getOptions()->getIntegerOptions()->getExpected());
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_INTEGER,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_INTEGER,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -354,8 +354,8 @@ class Validator extends BaseValidator
   protected function validateIndividual(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_INDIVIDUAL,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_INDIVIDUAL,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -368,8 +368,8 @@ class Validator extends BaseValidator
   protected function validateObject(Configuration $configuration, Parameter $parameter)
   {
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_OBJECT,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_OBJECT,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -389,20 +389,20 @@ class Validator extends BaseValidator
     )
     {
       $this->addConstraint(
-           new Constraints\Length(
-             array(
-               'min' => $configuration->getOptions()->getStringOptions()->getMin(),
-               'max' => $configuration->getOptions()->getStringOptions()->getMax(),
-             )
-           )
+        new Constraints\Length(
+          array(
+            'min' => $configuration->getOptions()->getStringOptions()->getMin(),
+            'max' => $configuration->getOptions()->getStringOptions()->getMax(),
+          )
+        )
       );
     }
 
     $this->specialValidation($configuration);
 
     $this->dispatcher->dispatch(
-                     TransformerEvents::VALIDATE_STRING,
-                       new ValidatorEvent($configuration, $parameter, $this)
+      TransformerEvents::VALIDATE_STRING,
+      new ValidatorEvent($configuration, $parameter, $this)
     );
   }
 
@@ -418,11 +418,11 @@ class Validator extends BaseValidator
     if ($configuration->getOptions()->getStringOptions()->getRegex() !== null)
     {
       $this->addConstraint(
-           new Constraints\Regex(
-             array(
-               'pattern' => $configuration->getOptions()->getStringOptions()->getRegex()
-             )
-           )
+        new Constraints\Regex(
+          array(
+            'pattern' => $configuration->getOptions()->getStringOptions()->getRegex()
+          )
+        )
       );
     }
     // Special Validation
@@ -430,11 +430,13 @@ class Validator extends BaseValidator
     {
       case StringValidationEnum::EMAIL:
         $this->addConstraint(
-             new Constraints\Email(array(
-               'checkMX'   => true,
-               'checkHost' => $configuration->getOptions()->getStringOptions()
-                                            ->getStrongValidation()
-             ))
+          new Constraints\Email(
+            array(
+              'checkMX'   => true,
+              'checkHost' => $configuration->getOptions()->getStringOptions()
+                                           ->getStrongValidation()
+            )
+          )
         );
         break;
       case StringValidationEnum::URL:
