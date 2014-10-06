@@ -1,5 +1,5 @@
 services:
-    enm.transformer.service:
+    enm.transformer:
         class: Enm\TransformerBundle\Manager\TransformerManager
         arguments: [ @enm.transformer.event_dispatcher, @validator, @assetic.parameter_bag ]
 

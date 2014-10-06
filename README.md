@@ -7,7 +7,7 @@ This will be useful for example with a REST-API. You could give a JSON string in
 ## Basic Usage
 The Transformer is reachable through a symfony service.
     
-    enm.transformer.service
+    enm.transformer
     
 For the auto-complete the "TransformerInterface" can be used for typification:
 
