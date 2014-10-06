@@ -92,9 +92,9 @@ class BaseValidator
     try
     {
       $violationList = $this->validator->validate(
-                                       $parameter->getValue(),
-                                         $constraints,
-                                         array(Constraint::PROPERTY_CONSTRAINT, Constraint::DEFAULT_GROUP)
+        $parameter->getValue(),
+        $constraints,
+        array(Constraint::PROPERTY_CONSTRAINT, Constraint::DEFAULT_GROUP)
       );
     }
     catch (\Exception $e)
@@ -105,9 +105,11 @@ class BaseValidator
 
     if ($violationList->count() > 0)
     {
-      throw new InvalidTransformerParameterException('Key: ' . $parameter->getKey() . ' - ' . 'Value: '
-                                                     . $violationList->get(0)->getInvalidValue() . ' - Error: '
-                                                     . $violationList->get(0)->getMessage());
+      throw new InvalidTransformerParameterException(
+        'Key: ' . $parameter->getKey() . ' - ' . 'Value: '
+        . $violationList->get(0)->getInvalidValue() . ' - Error: '
+        . $violationList->get(0)->getMessage()
+      );
     }
   }
 
@@ -121,11 +123,13 @@ class BaseValidator
    */
   protected function handleException(\Exception $e, Parameter $parameter)
   {
-    $violation = new ConstraintViolation($e->getMessage(), $e->getMessage(), array(
-      $e->getCode(),
-      $e->getFile(),
-      $e->getLine()
-    ), $parameter->getValue(), null, $parameter->getValue());
+    $violation = new ConstraintViolation(
+      $e->getMessage(), $e->getMessage(), array(
+        $e->getCode(),
+        $e->getFile(),
+        $e->getLine()
+      ), $parameter->getValue(), null, $parameter->getValue()
+    );
 
     return $violationList = new ConstraintViolationList(array($violation));
   }
@@ -135,21 +139,26 @@ class BaseValidator
   public function requireIfAvailableAnd(Configuration $configuration, array $params)
   {
     $requiredIfAvailable = $configuration->getOptions()->getRequiredIfAvailable();
-    foreach ($requiredIfAvailable->getAnd() as $key)
+    if (is_array($requiredIfAvailable->getAnd()) && count($requiredIfAvailable->getAnd()) > 0)
     {
-      if (!array_key_exists(strtolower($key), $params))
+      foreach ($requiredIfAvailable->getAnd() as $key)
       {
-        return false;
-        break;
+        if (!array_key_exists(strtolower($key), $params))
+        {
+          return false;
+          break;
+        }
       }
+
+      return true;
     }
 
-    return true;
+    return false;
   }
 
 
 
-  public function requireIfAvailableOR(Configuration $configuration, array $params)
+  public function requireIfAvailableOr(Configuration $configuration, array $params)
   {
     $requiredIfAvailable = $configuration->getOptions()->getRequiredIfAvailable();
     foreach ($requiredIfAvailable->getOr() as $key)
@@ -169,16 +178,22 @@ class BaseValidator
   public function requireIfNotAvailableAnd(Configuration $configuration, array $params)
   {
     $requiredIfNotAvailable = $configuration->getOptions()->getRequiredIfNotAvailable();
-    foreach ($requiredIfNotAvailable->getAnd() as $key)
+
+    if (is_array($requiredIfNotAvailable->getAnd()) && count($requiredIfNotAvailable->getAnd()) > 0)
     {
-      if (array_key_exists(strtolower($key), $params))
+      foreach ($requiredIfNotAvailable->getAnd() as $key)
       {
-        return false;
-        break;
+        if (array_key_exists(strtolower($key), $params))
+        {
+          return false;
+          break;
+        }
       }
+
+      return true;
     }
 
-    return true;
+    return false;
   }
 
 

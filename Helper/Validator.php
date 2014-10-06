@@ -76,30 +76,26 @@ class Validator extends BaseValidator
    */
   public function requireValue(Configuration $configuration, Parameter $parameter, array $params)
   {
-    $not_null    = false;
     $constraints = array();
 
+    if ($configuration->getOptions()->getRequired() === false)
+    {
+      $methods = array(
+        'requireIfAvailableAnd',
+        'requireIfAvailableOr',
+        'requireIfNotAvailableAnd',
+        'requireIfNotAvailableOr'
+      );
+
+      $i = 0;
+
+      while ($configuration->getOptions()->getRequired() === false && $i < count($methods))
+      {
+        $configuration->getOptions()->setRequired($this->{$methods[$i]}($configuration, $params));
+        ++$i;
+      }
+    }
     if ($configuration->getOptions()->getRequired() === true)
-    {
-      $not_null = true;
-    }
-
-    $methods = array(
-      'requireIfAvailableAnd',
-      'requireIfAvailableOR',
-      'requireIfNotAvailableAnd',
-      'requireIfNotAvailableOr'
-    );
-
-    $i = 1;
-
-    while ($not_null === false && $i < count($methods))
-    {
-      $not_null = $this->{$methods[$i - 1]}($configuration, $params);
-      ++$i;
-    }
-
-    if ($not_null === true)
     {
       array_push($constraints, new Constraints\NotNull());
       if (in_array($configuration->getType(), array(TypeEnum::COLLECTION_TYPE, TypeEnum::OBJECT_TYPE)))
