@@ -1,232 +1,208 @@
-# Enm\TransformerBundle
+# Enm / TransformerBundle
+## What can the bundle be used for?
+The Bundle can be used for validating an array, an object or a json-string and get an array, an object or a json-string back with the validated values.
 
-## What is it for?
-This Bundle is used to transform an array, an object or a json string, which is following a defined structure, to a needed object.
+This will be useful for example with a REST-API. You could give a JSON string in and out and the transformer can secure that all values are valid.
 
-## Requirements
-The TransformerBundle requires PHP in a Version 5.5 or higher
-
-## How to use?
-You can use this Transformer through the following service:
-
+## Basic Usage
+The Transformer is reachable through a symfony service.
+    
     enm.transformer.service
+    
+For the auto-complete the "TransformerInterface" can be used for typification:
 
-the method to call is
-
-    transform(NEEDED_OBJECT, CONFIGURATION, VALUES)
-
-you can validate that the transformer is an instance of "Enm\TransformerBundle\TransformerInterface"
-
-### NEEDED_OBJECT
-has to be an instance of the object or a string containing the class name of the object you want to get.
-#### Example
-Your class:
-
-    class User
-    {
-      // @var string
-      protected $username;
-
-      // @var string
-      protected $email;
-
-      // Getters and Setters...
+    __construct(\Enm\TransformerBundle\Interfaces\TransformerInterface $transformer){
+      $this->transformer = $transformer;
     }
 
-get Instance:
+The Interface will offer different Methods to you:
 
-    $user = new User();
+  - transform($returnClass, $config, $values, $local_config = null, $result_type = 'object') : array | object | string
 
-### CONFIGURATION
-has to be an array which follows the defined structure of the TransformerConfiguration class
-#### Example
+  - reverseTransform($object, $config, $local_config = null, $result_type = 'object') : array | \stdClass | string
+
+  - getEmptyObjectStructureFromConfig($config, $result_type = 'object') : array | object | string
+
+  - convert($value, $to) : array | object | string
+
+### Method: transform()
+This method will validate the given values and build the result from the correct values (including property renaming, value normalizing and value converting if configured).
+
+Parameters:
+
+  - returnClass : object or class name (with namespace) of the object you will get back from the transformer
+  
+  - config : configuration array for validating and building the output
+  
+  - values : object or array or json string with values to validate
+  
+  - local_config : configuration name from the global configuration or configuration array or configuration object or configuration json with transformer settings
+  
+  - result_type : string with the type which should be returned by this method ("array" or "object" or "json")
+  
+Result:
+
+  - object or array or json
+  
+### Method: reverseTransform()
+This method returns the values of the object in the original structure (original naming before the transformation), but in the chosen format (object or array or json)
+
+Parameters:
+
+  - object : object or array or json
+  
+  - config : configuration array
+  
+  - local_config : configuration name from the global configuration or configuration array or configuration object or configuration json with transformer settings
+  
+  - result_type : string with the type which should be returned by this method ("array" or "object" or "json")
+  
+Result:
+
+  - object or array or json
+
+### Method: getEmptyObjectStructureFromConfig()
+This Method will build a structure of the needed object from your configuration array.
+
+Parameters:
+
+  - config : configuration array
+  
+  - result_type : string with the type which should be returned by this method ("array" or "object" or "json")
+
+Result:
+
+  - object or array or json
+
+### Method: convert()
+This value will convert an object, an array or a json string to a standard object, an array or a json string.
+
+Parameters:
+
+  - value : array or object or json
+  
+  - to : string with the type which should be returned by this method ("array" or "object" or "json")
+
+Result:
+
+  - object or array or json
+
+## Validation
+For validation you can use a configuration array, which have to be given to the transform or reverseTransform method.
+
+The config array has some parameters for all types of validation and some special type validation parameters.
+
+Some of the parameters are required, some are optional.
+
+The base configuration looks like:
+
     $config = array(
-                'username' => [
-                  'type' => 'string',
-                  'options' => [
-                    'required' => true
-                  ]
-                ],
-                'email' => [
-                  'type' => 'string',
-                  'options' => [
-                    'required' => true
-                  ]
-                ],
-                'address' => [
-                  'children' => [
-                    'street' => [
-                      // configuration array
-                    ],
-                    // other properties
-                  ],
-                  'options' => [
-                    'required' => true
-                  ]
-                ],
-             );
+      'type' => '', // required
+      'renameTo' => '', // optional
+      'children' => array(), // only in use with types "object", "collection" and (if you want it) "individual"
+      'options' => array() // optional
+    )
 
-### VALUES
-has to be an array, an object or a json string of the given values
-#### Example
-Your array:
+#### type
+This option is the only always required option.
 
-    $values = array(
-      'username' => 'Test User',
-      'email' => 'test@user.de'
-      'address' => array(
-        'street' => 'Schanzenstraße 70',
-        // other values
-      ),
-    );
+With this option you have to give the data type for validation to the transformer.
 
-Or your JSON:
+Possible Values:
 
-    $values = '{"username":"Test User","email":"test@user.de","address":{"street":"Schanzenstraße 70"}}';
-
-### Example how it works together:
-
-    $object = $this->container->get('enm.transformer.service')->transform($user, $config, $values);
-
-## The Configuration
-### Configuration Array
-The following array structure is needed for each parameter:
-
-      '{KEY}' => array( // Description under "Key"
-        'type' => '(bool|integer|string|float|array|collection|date|object|method)',
-        'renameTo' => (string), // The property name in the object, if it differs to the key
-        'children' => array(), // If 'type' is 'object' or 'collection',  Description under "Child Objects" or "Collections"
-        'options' => array(
-          'required' => (true|false), // Always required, if you use 'requiredIf...', the value of 'required' has to be false
-          'requiredIfAvailable' => array(
-            'and' => array(), // Required, if all of the given keys have a value
-            'or' => array() // Required, if one of the given keys have a value
-          ),
-          'requiredIfNotAvailable' => array(
-            'and' => array(), // Required, if all of the given keys have not a value
-            'or' => array() // Required, if one of the given keys have not a value
-          ),
-          'forbiddenIfAvailable' => array(), // Forbidden, if one of the given keys have a value
-          'forbiddenIfNotAvailable' => array(), // Required, if one of the given keys have not a value
-          'regex' => (string), // Only if type is 'string', has to be a valid Regex-Pattern
-          'stringValidation' => (ip|url|email), // Only if type is 'string'
-          'assoc' => (true|false) // Only if type is 'array'. Tells the transformer, whether the array is associative or not
-          'min' => (int|float), // Only if type is 'integer' or 'float'
-          'max' => (int|float), // Only if type is 'integer' or 'float'
-          'expected' => array(), // Description under "Enumerations",
-          'defaultValue' => (array|object|string|integer|float), // The default, if no value is set
-          'date' => array( // Only if type is 'date'
-            'format' => (string|array), // Expected Date Format, Default: Y-m-d, can be an array of formats like array('Y-m-d', 'd.m.Y')
-            'convertToObject' => (true|false), // True, if Date should converted to DateTime-Object, Default: false
-            'convertToFormat' => (null|string) // If not null, it has to be a valid date format, which is returned, default Outputs-Format is the same as the Input-Format
-          ),
-          'length' => array( // Length validation, only if type is 'string'
-            'min' => (int),
-            'max' => (int)
-          ),
-          'returnClass' => '{NAMESPACE\CLASS_NAME}' // If 'type' is 'object' or 'collection', Description under "Child Objects" or "Collections"
-        )
-      )
-
-#### Key
-The key for each Parameter must be exactly named the same as the property of the object you want to get.
-
-#### Child Objects
-If your object should contain sub-objects, you can write a configuration array for your sub-objects too.
-This array should be the value of your 'children'-key.
-
-You also have to set the 'type'-key of your configuration to 'object' or 'collection' (if an array of these objects is expected)
-
-If you are using a complex structure with children, you must define a return class.
-The return class is the class of the object, which is build from the children elements.
-
-    $address_configuration = array(
-      // normal configuration array
-    );
-
-
-    $main_configuration = array(
-      'user_extra_data' => array(
-        'children' => array(
-          'address' => $address_configuration,
-        ),
-        'type' => 'object', // or collection, if an array of these objects is expected
-        'options' => array(
-          'returnClass' => 'Own\Address' // Needed class including namespace
-          // your needed options for the main configuration of 'user_extra_data'
-        )
-      )
-    );
-
-
-    $user = $this->container->get('enm.array.transformer.service')->transform(new User(), $main_configuration, $params);
-
-
-
-
-#### Enumerations
-If you want to allow only special values for a parameter, you can give an array with possible values to the 'expected' option of your configuration array.
-
-    $configuration = array(
-      'username' => array(
-        'type' => 'string',
-        'options' => array(
-          'expected' => array('test', 'testuser', 'user'),
-            // your needed options for the configuration of 'username'
-        )
-      )
-    );
-
-An other possibility is to use an enumeration class which should extend 'Enm\Enumeration\BaseEnumeration'.
-
-For each value you want to allow, you need a public static function which contains the value.
-
-Values can be of the types 'string', 'integer', 'float' and 'bool'
-
-    OwnEnumeration extends Enm\Enumeration\BaseEnumeration
-    {
-      const TEST = 'test';
-      const TESTUSER = 'testuser';
-      const USER = 'user';
-    }
-
-
-Using the enumeration class in the configuration:
-
-    $configuration = array(
-      'username' => array(
-        'type' => 'string',
-        'options' => array(
-          'expected' => OwnEnumeration::toArray(), // call the toArray-Method of the enumeration class
-            // your needed options for the configuration of 'username'
-        )
-      )
-    );
-
-
-## The Parameter Array
-The parameter array you give to the transform method is a simple array of key-value-pairs.
-The key must be always the same as the property of the needed object and the configuration key.
-
-# reverseTransform
-With this Method, you're in a position to transform back your object to a stdClass, JSON-String or array.
-
-Simply call the Transformer-Service and then
-
-    $transformer->reverseTransform($object, $config, $type)
-
-I think, object and config are clearly...
-
-The type have to be a string. Possible values are:
-
-  - array
   - string
-  - json (same result as string)
+  - integer
+  - float
+  - bool
+  - array
   - object
+  - collection // array of equal objects
+  - date
+  - individual // can be any type. validation will not be performed by default, but you can add own validation (see later)
 
-## Questions?
-Write an email to "marien@eosnewmedia.de"!
+#### renameTo
+This option is optional, but if it is used, it needs a string given.
 
+This option can be used for renaming the key to a different property name.
 
+#### children
+This option is only possible if type is object, collection or individual.
+If type is object or collection, this option is required.
 
-©2014 by eos new media GmbH & Co. KG
+This option needs a complete configuration array for child elements (see object and collection validation)
+
+### Default Options
+possible for all types and always optional:
+
+    $config['options'] => array(
+      'required' => true,
+      'requiredIfAvailable' => array(
+        'and' => array(), 
+        'or' => array()
+      ),
+      'requiredIfNotAvailable' => array(
+        'and' => array(),
+        'or' => array()
+      ),
+      'forbiddenIfAvailable' => array(),
+      'forbiddenIfNotAvailable' => array()
+    )
+
+#### required
+This option needs true or false. Default value is false.
+
+If set to true, this option requires the transformer to validate that the current value is not NULL
+
+#### requiredIfAvailable
+This option have to be an array, which requires a sub configuration if set.
+
+Generally this option tells the transformer to set a current value required.
+
+Sub Configuration:
+
+    array(
+      'and' => array(),
+      'or' => array()
+    )
+
+  - and: all keys given here have to be available to set the current value required
+  - or: one of the keys given here has to be available to set the current value required
+ 
+#### requiredIfNotAvailable
+This option have to be an array, which requires a sub configuration if set.
+
+Generally this option tells the transformer to set a current value required.
+
+Sub Configuration:
+
+    array(
+      'and' => array(),
+      'or' => array()
+    )
+
+  - and: all keys given here must not be available to set the current value required
+  - or: one of the keys given here must not be available to set the current value required
+ 
+#### forbiddenIfAvailable
+This option needs an array of config key names.
+
+It requires the transformer to validate that the current key will not have a value or a value equal to NULL if one of the given keys has a value.
+
+#### forbiddenIfNotAvailable
+This option needs an array of config key names.
+
+It requires the transformer to validate that the current key will not have a value or a value equal to NULL if one of the given keys does not have a value.
+
+### String Validation
+Base configuration:
+
+    $config = array(
+      'type' => 'string',
+    )
+ 
+Possible options, all optional:
+
+    $config['options'] = array(
+      'stringValidation' => '' // email|url|ip
+    )
+    
