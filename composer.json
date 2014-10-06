@@ -39,6 +39,5 @@
     "psr-4": {
       "Enm\\TransformerBundle\\": ""
     }
-  },
-  "target-dir":        "Enm/TransformerBundle"
+  }
 }
