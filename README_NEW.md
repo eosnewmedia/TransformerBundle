@@ -203,6 +203,6 @@ Base configuration:
 Possible options, all optional:
 
     $config['options'] = array(
-      
+      'stringValidation' => '' // email|url|ip
     )
     
