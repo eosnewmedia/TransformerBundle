@@ -1,0 +1,44 @@
+{
+  "name":              "enm/transformer-bundle",
+  "description":       "",
+  "keywords":          [
+    "api",
+    "serialisation",
+    "json",
+    "validation"
+  ],
+  "homepage":          "http://www.eosnewmedia.de",
+  "type":              "symfony-bundle",
+  "support":           {
+    "issues": "https://github.com/eosnewmedia/TransformerBundle/issues"
+  },
+  "version":           "0.2.0",
+  "license":           "MIT",
+  "authors":           [
+    {
+      "name":  "Philipp Marien",
+      "email": "marien@eosnewmedia.de",
+      "role":  "Developer"
+    },
+    {
+      "name":  "Alexander Bogomolov",
+      "email": "bogomolov@eosnewmedia.de",
+      "role":  "Developer"
+    },
+    {
+      "name":     "eos new media GmbH & Co. KG",
+      "email":    "info@eosnewmedia.de",
+      "homepage": "http://www.eosnewmedia.de"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require":           {
+    "symfony/framework-bundle": "~2.5"
+  },
+  "autoload":          {
+    "psr-4": {
+      "Enm\\TransformerBundle": ""
+    }
+  },
+  "target-dir":        "Enm/TransformerBundle"
+}
