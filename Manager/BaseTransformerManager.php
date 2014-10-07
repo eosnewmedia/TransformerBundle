@@ -523,17 +523,26 @@ class BaseTransformerManager
 
     $child_array = $parameter->getValue();
 
+    $object_configuration = clone $configuration;
+    $object_configuration->getOptions()->getObjectOptions()->setReturnClass(
+      $configuration->getOptions()->getCollectionOptions()->getReturnClass()
+    );
+    $object_configuration->getOptions()->getObjectOptions()->setDefaultValue(
+      $configuration->getOptions()->getCollectionOptions()->getDefaultValue()
+    );
+    $object_configuration->setParent($configuration);
+
     $result_array = array();
     for ($i = 0; $i < count($child_array); ++$i)
     {
       $param = new Parameter($i, $child_array[$i]);
       if ($reverse === false)
       {
-        $this->prepareObject($configuration, $param);
+        $this->prepareObject($object_configuration, $param);
       }
       else
       {
-        $this->reverseObject($configuration, $param);
+        $this->reverseObject($object_configuration, $param);
       }
 
       array_push($result_array, $param->getValue());
@@ -559,19 +568,8 @@ class BaseTransformerManager
       new TransformerEvent($configuration, $parameter)
     );
 
-    $returnClass = '';
-    switch ($configuration->getType())
-    {
-      case TypeEnum::OBJECT_TYPE:
-        $returnClass = $configuration->getOptions()->getObjectOptions()->getReturnClass();
-        break;
-      case TypeEnum::COLLECTION_TYPE:
-        $returnClass = $configuration->getOptions()->getCollectionOptions()->getReturnClass();
-        break;
-    }
-
     $value = $this->build(
-      $returnClass,
+      $configuration->getOptions()->getObjectOptions()->getReturnClass(),
       $configuration->getChildren(),
       $this->converter->convertTo($parameter->getValue(), 'array')
     );
