@@ -9,150 +9,150 @@ class TransformerEvents
   /**
    * Throws \Enm\TransformerBundle\Event\ExceptionEvent
    */
-  const ON_EXCEPTION = 'transformer.event.on.exception';
+  const ON_EXCEPTION = 'enm.transformer.event.on.exception';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ConfigurationEvent
    */
-  const BEFORE_CHILD_CONFIGURATION = 'transformer.event.before.child_configuration';
+  const BEFORE_CHILD_CONFIGURATION = 'enm.transformer.event.before.child_configuration';
 
 
   /**
    * Throws \Enm\TransformerBundle\Event\ConfigurationEvent
    */
-  const AFTER_CHILD_CONFIGURATION = 'transformer.event.after.child_configuration';
+  const AFTER_CHILD_CONFIGURATION = 'enm.transformer.event.after.child_configuration';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ConfigurationEvent
    */
-  const AFTER_CONFIGURATION = 'transformer.event.after.configuration';
+  const AFTER_CONFIGURATION = 'enm.transformer.event.after.configuration';
 
-  const AFTER_GLOBAL_VALUES = 'transformer.event.after.global.values';
-
-  /**
-   * Throws \Enm\TransformerBundle\Event\TransformerEvent
-   */
-  const BEFORE_RUN = 'transformer.event.before.run';
+  const AFTER_GLOBAL_VALUES = 'enm.transformer.event.after.global.values';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const AFTER_RUN = 'transformer.event.after.run';
+  const BEFORE_RUN = 'enm.transformer.event.before.run';
+
+  /**
+   * Throws \Enm\TransformerBundle\Event\TransformerEvent
+   */
+  const AFTER_RUN = 'enm.transformer.event.after.run';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const BEFORE_VALIDATION = 'transformer.event.before.validation';
+  const BEFORE_VALIDATION = 'enm.transformer.event.before.validation';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const AFTER_VALIDATION = 'transformer.event.after.validation';
+  const AFTER_VALIDATION = 'enm.transformer.event.after.validation';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_STRING = 'transformer.event.validate.string';
+  const VALIDATE_STRING = 'enm.transformer.event.validate.string';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_INTEGER = 'transformer.event.validate.integer';
+  const VALIDATE_INTEGER = 'enm.transformer.event.validate.integer';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_FLOAT = 'transformer.event.validate.float';
+  const VALIDATE_FLOAT = 'enm.transformer.event.validate.float';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_ARRAY = 'transformer.event.validate.array';
+  const VALIDATE_ARRAY = 'enm.transformer.event.validate.array';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_BOOL = 'transformer.event.validate.bool';
+  const VALIDATE_BOOL = 'enm.transformer.event.validate.bool';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_COLLECTION = 'transformer.event.validate.collection';
+  const VALIDATE_COLLECTION = 'enm.transformer.event.validate.collection';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_DATE = 'transformer.event.validate.date';
+  const VALIDATE_DATE = 'enm.transformer.event.validate.date';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_INDIVIDUAL = 'transformer.event.validate.individual';
+  const VALIDATE_INDIVIDUAL = 'enm.transformer.event.validate.individual';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ValidatorEvent
    */
-  const VALIDATE_OBJECT = 'transformer.event.validate.object';
+  const VALIDATE_OBJECT = 'enm.transformer.event.validate.object';
 
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_INDIVIDUAL = 'transformer.event.prepare.individual';
+  const PREPARE_INDIVIDUAL = 'enm.transformer.event.prepare.individual';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_ARRAY = 'transformer.event.prepare.array';
+  const PREPARE_ARRAY = 'enm.transformer.event.prepare.array';
 
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_VALUE = 'transformer.event.prepare.value';
+  const PREPARE_VALUE = 'enm.transformer.event.prepare.value';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_DEFAULT = 'transformer.event.prepare.default';
+  const PREPARE_DEFAULT = 'enm.transformer.event.prepare.default';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_COLLECTION = 'transformer.event.prepare.collection';
+  const PREPARE_COLLECTION = 'enm.transformer.event.prepare.collection';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_OBJECT = 'transformer.event.prepare.object';
+  const PREPARE_OBJECT = 'enm.transformer.event.prepare.object';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const PREPARE_DATE = 'transformer.event.prepare.date';
+  const PREPARE_DATE = 'enm.transformer.event.prepare.date';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const REVERSE_TRANSFORM = 'transformer.event.reverse.transform';
+  const REVERSE_TRANSFORM = 'enm.transformer.event.reverse.transform';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const REVERSE_COLLECTION = 'transformer.event.reverse.collection';
+  const REVERSE_COLLECTION = 'enm.transformer.event.reverse.collection';
 
   /**
    * Throws \Enm\TransformerBundle\Event\TransformerEvent
    */
-  const REVERSE_OBJECT = 'transformer.event.reverse.object';
+  const REVERSE_OBJECT = 'enm.transformer.event.reverse.object';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ClassBuilderEvent
    */
-  const OBJECT_CREATE_INSTANCE = 'transformer.event.object.create_instance';
+  const OBJECT_CREATE_INSTANCE = 'enm.transformer.event.object.create_instance';
 
   /**
    * Throws \Enm\TransformerBundle\Event\ClassBuilderEvent
    */
-  const OBJECT_RETURN_INSTANCE = 'transformer.event.object.return_instance';
+  const OBJECT_RETURN_INSTANCE = 'enm.transformer.event.object.return_instance';
 }
