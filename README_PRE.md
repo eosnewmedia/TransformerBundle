@@ -9,7 +9,7 @@ The TransformerBundle requires PHP in a Version 5.5 or higher
 ## How to use?
 You can use this Transformer through the following service:
 
-    enm.transformer.service
+    enm.transformer
 
 the method to call is
 
@@ -86,7 +86,7 @@ Or your JSON:
 
 ### Example how it works together:
 
-    $object = $this->container->get('enm.transformer.service')->transform($user, $config, $values);
+    $object = $this->container->get('enm.transformer')->transform($user, $config, $values);
 
 ## The Configuration
 ### Configuration Array
