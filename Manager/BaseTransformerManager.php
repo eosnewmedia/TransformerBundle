@@ -524,6 +524,7 @@ class BaseTransformerManager
     $child_array = $parameter->getValue();
 
     $object_configuration = clone $configuration;
+    $object_configuration->setType(TypeEnum::OBJECT_TYPE);
     $object_configuration->getOptions()->getObjectOptions()->setReturnClass(
       $configuration->getOptions()->getCollectionOptions()->getReturnClass()
     );
