@@ -75,7 +75,7 @@ class BaseTransformerTest extends BaseTest
               'or' => array('user')
             ],
             'date'                => [
-              'format' => 'Y-m-d'
+              'expectedFormat' => 'Y-m-d'
             ]
           ]
         ],

@@ -9,7 +9,7 @@ class DateOptions
   /**
    * @var array
    */
-  protected $format = array('Y-m-d', 'd.m.Y');
+  protected $expectedFormat = array('Y-m-d', 'd.m.Y');
 
   /**
    * @var bool
@@ -19,16 +19,16 @@ class DateOptions
   /**
    * @var string|null
    */
-  protected $conver_to_format = null;
+  protected $convert_to_format = null;
 
 
 
   /**
    * @param string|null $conver_to_format
    */
-  public function setConverToFormat($conver_to_format)
+  public function setConvertToFormat($convert_to_format)
   {
-    $this->conver_to_format = $conver_to_format;
+    $this->convert_to_format = $convert_to_format;
 
     return $this;
   }
@@ -38,9 +38,9 @@ class DateOptions
   /**
    * @return string|null
    */
-  public function getConverToFormat()
+  public function getConvertToFormat()
   {
-    return $this->conver_to_format;
+    return $this->convert_to_format;
   }
 
 
@@ -70,9 +70,9 @@ class DateOptions
   /**
    * @param array $format
    */
-  public function setFormat(array $format)
+  public function setExpectedFormat(array $format)
   {
-    $this->format = $format;
+    $this->expectedFormat = $format;
 
     return $this;
   }
@@ -82,8 +82,8 @@ class DateOptions
   /**
    * @return array
    */
-  public function getFormat()
+  public function getExpectedFormat()
   {
-    return $this->format;
+    return $this->expectedFormat;
   }
 }

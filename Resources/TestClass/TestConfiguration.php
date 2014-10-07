@@ -73,7 +73,7 @@ class TestConfiguration
         'type'    => 'date',
         'options' => [
           'date' => [
-            'format'          => 'Y-m-d',
+            'expectedFormat'          => 'Y-m-d',
             'convertToObject' => true
           ],
         ]

@@ -89,8 +89,8 @@ class Configurator
         $this->setEventConfiguration($settings, $key);
 
         $this->dispatcher->dispatch(
-                         TransformerEvents::AFTER_CONFIGURATION,
-                           new ConfigurationEvent($this->configuration[$key])
+          TransformerEvents::AFTER_CONFIGURATION,
+          new ConfigurationEvent($this->configuration[$key])
         );
       }
 
@@ -154,8 +154,8 @@ class Configurator
     {
       $this->configuration[$key]->setChildren($config['children']);
       $this->dispatcher->dispatch(
-                       TransformerEvents::BEFORE_CHILD_CONFIGURATION,
-                         new ConfigurationEvent($this->configuration[$key])
+        TransformerEvents::BEFORE_CHILD_CONFIGURATION,
+        new ConfigurationEvent($this->configuration[$key])
       );
 
       $configuration = new self(
@@ -168,13 +168,15 @@ class Configurator
 
       if (!count($this->configuration[$key]->getChildren()) > 0)
       {
-        throw new InvalidTransformerConfigurationException('A child configuration is required for type '
-                                                           . $this->configuration[$key]->getType());
+        throw new InvalidTransformerConfigurationException(
+          'A child configuration is required for type '
+          . $this->configuration[$key]->getType()
+        );
       }
 
       $this->dispatcher->dispatch(
-                       TransformerEvents::AFTER_CHILD_CONFIGURATION,
-                         new ConfigurationEvent($this->configuration[$key])
+        TransformerEvents::AFTER_CHILD_CONFIGURATION,
+        new ConfigurationEvent($this->configuration[$key])
       );
     }
   }
@@ -190,22 +192,22 @@ class Configurator
     $options = $this->configuration[$key]->getOptions();
     $options->setRequired($config['options']['required']);
     $options->setForbiddenIfAvailable(
-            array_change_key_case($config['options']['forbiddenIfAvailable'], CASE_LOWER)
+      array_change_key_case($config['options']['forbiddenIfAvailable'], CASE_LOWER)
     );
     $options->setForbiddenIfNotAvailable(
-            array_change_key_case($config['options']['forbiddenIfNotAvailable'], CASE_LOWER)
+      array_change_key_case($config['options']['forbiddenIfNotAvailable'], CASE_LOWER)
     );
     $options->setRequiredIfAvailable(
-            new RequiredIfStructure(
-              array_change_key_case($config['options']['requiredIfAvailable']['or'], CASE_LOWER),
-              array_change_key_case($config['options']['requiredIfAvailable']['and'], CASE_LOWER)
-            )
+      new RequiredIfStructure(
+        array_change_key_case($config['options']['requiredIfAvailable']['or'], CASE_LOWER),
+        array_change_key_case($config['options']['requiredIfAvailable']['and'], CASE_LOWER)
+      )
     );
     $options->setRequiredIfNotAvailable(
-            new RequiredIfStructure(
-              array_change_key_case($config['options']['requiredIfNotAvailable']['or'], CASE_LOWER),
-              array_change_key_case($config['options']['requiredIfNotAvailable']['and'], CASE_LOWER)
-            )
+      new RequiredIfStructure(
+        array_change_key_case($config['options']['requiredIfNotAvailable']['or'], CASE_LOWER),
+        array_change_key_case($config['options']['requiredIfNotAvailable']['and'], CASE_LOWER)
+      )
     );
   }
 
@@ -262,17 +264,17 @@ class Configurator
   protected function setDateOptions(array $config, $key)
   {
     $options = new DateOptions();
-    $format  = $config['options']['date']['format'];
+    $format  = $config['options']['date']['expectedFormat'];
     if (is_array($format))
     {
-      $options->setFormat($format);
+      $options->setExpectedFormat($format);
     }
     else
     {
-      $options->setFormat(array($format));
+      $options->setExpectedFormat(array($format));
     }
     $options->setConvertToObject($config['options']['date']['convertToObject']);
-    $options->setConverToFormat($config['options']['date']['convertToFormat']);
+    $options->setConvertToFormat($config['options']['date']['convertToFormat']);
     $this->configuration[$key]->getOptions()->setDateOptions($options);
   }
 

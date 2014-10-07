@@ -654,7 +654,7 @@ class BaseTransformerManager
     );
 
     $date = new \DateTime();
-    foreach ($configuration->getOptions()->getDateOptions()->getFormat() as $format)
+    foreach ($configuration->getOptions()->getDateOptions()->getExpectedFormat() as $format)
     {
       $date = \DateTime::createFromFormat($format, $parameter->getValue());
       if ($date instanceof \DateTime)
@@ -666,9 +666,9 @@ class BaseTransformerManager
     {
       $parameter->setValue($date);
     }
-    elseif ($configuration->getOptions()->getDateOptions()->getConverToFormat() !== null)
+    elseif ($configuration->getOptions()->getDateOptions()->getConvertToFormat() !== null)
     {
-      $parameter->setValue($date->format($configuration->getOptions()->getDateOptions()->getConverToFormat()));
+      $parameter->setValue($date->format($configuration->getOptions()->getDateOptions()->getConvertToFormat()));
     }
 
     return $this;

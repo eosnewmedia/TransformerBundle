@@ -15,7 +15,7 @@ class DateTest extends BaseTest
         'type'    => 'date',
         'options' => [
           'date' => [
-            'format'          => 'Y/m/d',
+            'expectedFormat'  => 'Y/m/d',
             'convertToObject' => true,
           ]
         ]
@@ -25,9 +25,9 @@ class DateTest extends BaseTest
     try
     {
       $date = $this->container->get('enm.transformer')->transform(
-                              new \stdClass(),
-                                $config,
-                                array('date' => '2014/07/10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014/07/10')
       );
       $this->assertInstanceOf('DateTime', $date->date);
     }
@@ -38,9 +38,9 @@ class DateTest extends BaseTest
     try
     {
       $this->container->get('enm.transformer')->transform(
-                      new \stdClass(),
-                        $config,
-                        array('date' => '2014-07-10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014-07-10')
       );
       $this->fail('No Exception thrown with Invalid Parameter!');
     }
@@ -68,9 +68,9 @@ class DateTest extends BaseTest
     try
     {
       $date = $this->container->get('enm.transformer')->transform(
-                              new \stdClass(),
-                                $config,
-                                array('date' => '2014-07-10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014-07-10')
       );
       $this->assertInstanceOf('DateTime', $date->date);
     }
@@ -81,9 +81,9 @@ class DateTest extends BaseTest
     try
     {
       $this->container->get('enm.transformer')->transform(
-                      new \stdClass(),
-                        $config,
-                        array('date' => '2014/07/10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014/07/10')
       );
       $this->fail('No Exception thrown with Invalid Parameter!');
     }
@@ -102,7 +102,7 @@ class DateTest extends BaseTest
         'type'    => 'date',
         'options' => [
           'date' => [
-            'format'          => ['Y-m-d', 'Y/m/d'],
+            'expectedFormat'  => ['Y-m-d', 'Y/m/d'],
             'convertToObject' => true,
           ]
         ]
@@ -112,15 +112,15 @@ class DateTest extends BaseTest
     try
     {
       $date = $this->container->get('enm.transformer')->transform(
-                              new \stdClass(),
-                                $config,
-                                array('date' => '2014-07-10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014-07-10')
       );
       $this->assertInstanceOf('DateTime', $date->date);
       $date = $this->container->get('enm.transformer')->transform(
-                              new \stdClass(),
-                                $config,
-                                array('date' => '2014/07/10')
+        new \stdClass(),
+        $config,
+        array('date' => '2014/07/10')
       );
       $this->assertInstanceOf('DateTime', $date->date);
     }
@@ -131,9 +131,9 @@ class DateTest extends BaseTest
     try
     {
       $this->container->get('enm.transformer')->transform(
-                      new \stdClass(),
-                        $config,
-                        array('date' => '10.07.2014')
+        new \stdClass(),
+        $config,
+        array('date' => '10.07.2014')
       );
       $this->fail('No Exception thrown with Invalid Parameter!');
     }

@@ -277,7 +277,7 @@ class Validator extends BaseValidator
   protected function validateDate(Configuration $configuration, Parameter $parameter)
   {
     $this->addConstraint(
-      new Date(array('format' => $configuration->getOptions()->getDateOptions()->getFormat()))
+      new Date(array('format' => $configuration->getOptions()->getDateOptions()->getExpectedFormat()))
     );
 
     $this->dispatcher->dispatch(
