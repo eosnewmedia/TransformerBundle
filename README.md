@@ -97,10 +97,12 @@ Some of the parameters are required, some are optional.
 The base configuration looks like:
 
     $config = array(
-      'type' => '', // required
-      'renameTo' => '', // optional
-      'children' => array(), // only in use with types "object", "collection" and (if you want it) "individual"
-      'options' => array() // optional
+      'key' => array(
+        'type' => '', // required
+        'renameTo' => '', // optional
+        'children' => array(), // only in use with types "object", "collection" and (if you want it) "individual"
+        'options' => array() // optional
+      )
     )
 
 #### type
@@ -134,7 +136,7 @@ This option needs a complete configuration array for child elements (see object 
 ### Default Options
 possible for all types and always optional:
 
-    $config['options'] => array(
+    $config['key']['options'] => array(
       'required' => true,
       'requiredIfAvailable' => array(
         'and' => array(), 
@@ -197,12 +199,14 @@ It requires the transformer to validate that the current key will not have a val
 Base configuration:
 
     $config = array(
-      'type' => 'string',
+      'key' => array(
+        'type' => 'string',
+      )
     )
  
 Possible options, all optional:
 
-    $config['options'] = array(
+    $config['key']['options'] = array(
       'stringValidation' => '' // email|url|ip
     )
     
