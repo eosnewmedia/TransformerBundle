@@ -65,7 +65,7 @@ class Converter
         $rc = new \ReflectionClass(get_class($value));
         if ($rc->hasMethod('__toString'))
         {
-          return print_r($value);
+          return print_r($value, true);
         }
 
         return json_encode($this->objectToPublicObject($value));
