@@ -26,14 +26,22 @@ class Converter
       case ConversionEnum::STRING_CONVERSION:
         return $this->jsonToArray($value);
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be converted to array by this method.',
-      gettype($value)
-    ));
+    throw new InvalidTransformerParameterException(
+      sprintf(
+        'Value of type %s can not be converted to array by this method.',
+        gettype($value)
+      )
+    );
   }
 
 
 
+  /**
+   * @param $value
+   *
+   * @throws InvalidTransformerParameterException
+   * @return object
+   */
   protected function toObject($value)
   {
     switch (gettype($value))
@@ -45,14 +53,22 @@ class Converter
       case ConversionEnum::STRING_CONVERSION:
         return json_decode(json_encode($this->jsonToArray($value)));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be converted to object by this method.',
-      gettype($value)
-    ));
+    throw new InvalidTransformerParameterException(
+      sprintf(
+        'Value of type %s can not be converted to object by this method.',
+        gettype($value)
+      )
+    );
   }
 
 
 
+  /**
+   * @param object $value
+   *
+   * @throws InvalidTransformerParameterException
+   * @return string
+   */
   protected function toString($value)
   {
     switch (gettype($value))
@@ -65,19 +81,27 @@ class Converter
         $rc = new \ReflectionClass(get_class($value));
         if ($rc->hasMethod('__toString'))
         {
-          return print_r($value, true);
+          return $value->__toString();
         }
 
         return json_encode($this->objectToPublicObject($value));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be converted to JSON by this method.',
-      gettype($value)
-    ));
+    throw new InvalidTransformerParameterException(
+      sprintf(
+        'Value of type %s can not be converted to JSON by this method.',
+        gettype($value)
+      )
+    );
   }
 
 
 
+  /**
+   * @param $value
+   *
+   * @throws InvalidTransformerParameterException
+   * @return string
+   */
   protected function toJson($value)
   {
     switch (gettype($value))
@@ -88,10 +112,12 @@ class Converter
       case ConversionEnum::OBJECT_CONVERSION:
         return json_encode($this->objectToPublicObject($value));
     }
-    throw new InvalidTransformerParameterException(sprintf(
-      'Value of type %s can not be converted to JSON by this method.',
-      gettype($value)
-    ));
+    throw new InvalidTransformerParameterException(
+      sprintf(
+        'Value of type %s can not be converted to JSON by this method.',
+        gettype($value)
+      )
+    );
   }
 
 
@@ -229,10 +255,12 @@ class Converter
   {
     if (!in_array(gettype($input), array(ConversionEnum::OBJECT_CONVERSION, ConversionEnum::ARRAY_CONVERSION)))
     {
-      throw new InvalidTransformerParameterException(sprintf(
-        "Value of type %s can't be converted by this method!",
-        gettype($input)
-      ));
+      throw new InvalidTransformerParameterException(
+        sprintf(
+          "Value of type %s can't be converted by this method!",
+          gettype($input)
+        )
+      );
     }
     // Rückgabe Array erstellen
     $final = array();
@@ -291,10 +319,12 @@ class Converter
       case ConversionEnum::OBJECT_CONVERSION:
         return $this->toObject($value);
       default:
-        throw new InvalidTransformerParameterException(sprintf(
-          "The given Value can't be converted to %s by this method!",
-          gettype($result_type)
-        ));
+        throw new InvalidTransformerParameterException(
+          sprintf(
+            "The given Value can't be converted to %s by this method!",
+            gettype($result_type)
+          )
+        );
     }
   }
 } 
