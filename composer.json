@@ -32,8 +32,12 @@
   ],
   "minimum-stability": "stable",
   "require":           {
-    "php":                      ">=5.5",
-    "symfony/framework-bundle": "~2.5"
+    "php":                          ">=5.5",
+    "symfony/config":               "~2.5",
+    "symfony/dependency-injection": "~2.5",
+    "symfony/event-dispatcher":     "~2.5",
+    "symfony/http-kernel":          "~2.5",
+    "symfony/validator":            "~2.5"
   },
   "autoload":          {
     "psr-4": {
