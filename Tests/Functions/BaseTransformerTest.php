@@ -28,7 +28,7 @@ class BaseTransformerTest extends BaseTest
     {
       $dispatcher = new EventDispatcher();
       $validator  = $this->container->get('validator');
-      $paramBag   = $this->container->get('enm.transformer.assetic.parameter_bag');
+      $paramBag   = $this->container->getParameter('transformer.config');
       $stopwatch  = new Stopwatch();
 
       $this->transformer = new BaseTransformerManager($dispatcher, $validator, $paramBag, $stopwatch);

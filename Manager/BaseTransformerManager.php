@@ -22,7 +22,6 @@ use Enm\TransformerBundle\Helper\Normalizer;
 use Enm\TransformerBundle\Helper\Validator;
 use Enm\TransformerBundle\TransformerEvents;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -83,11 +82,11 @@ class BaseTransformerManager
   public function __construct(
     EventDispatcherInterface $eventDispatcher,
     ValidatorInterface $validator,
-    ParameterBag $parameterBag
+    array $global_config
   )
   {
     $this->dispatcher           = $eventDispatcher;
-    $this->global_configuration = $parameterBag->get('transformer.config');
+    $this->global_configuration = $global_config;
     $this->converter            = new Converter();
     $this->normalizer           = new Normalizer($this->converter);
     $this->eventHandler         = new EventHandler($eventDispatcher, $this->getClassBuilder());

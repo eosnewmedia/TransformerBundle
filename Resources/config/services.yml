@@ -6,13 +6,10 @@ parameters:
 services:
     enm.transformer:
         class: %enm.transformer.class%
-        arguments: [ @enm.transformer.event_dispatcher, @enm.transformer.validator, @enm.transformer.assetic.parameter_bag ]
+        arguments: [ @enm.transformer.event_dispatcher, @enm.transformer.validator, %transformer.config% ]
 
     enm.transformer.event_dispatcher:
         class: %enm.transformer.event_dispatcher.class%
     
     enm.transformer.validator:
         alias: validator
-        
-    enm.transformer.assetic.parameter_bag:
-        alias: assetic.parameter_bag
