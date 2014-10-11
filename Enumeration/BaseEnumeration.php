@@ -10,6 +10,14 @@ namespace Enm\TransformerBundle\Enumeration;
 
 use Enm\TransformerBundle\Interfaces\EnumInterface;
 
+/**
+ * Class BaseEnumeration
+ *
+ * @package    Enm\TransformerBundle\Enumeration
+ * @author     Philipp Marien <marien@eosnewmedia.de>
+ *
+ * @deprecated use the Enm\TransformerBundle\Traits\EnumTrait instead
+ */
 abstract class BaseEnumeration implements EnumInterface
 {
 
