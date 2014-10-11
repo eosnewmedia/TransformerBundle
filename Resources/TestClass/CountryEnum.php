@@ -3,10 +3,12 @@
 
 namespace Enm\TransformerBundle\Resources\TestClass;
 
-use Enm\TransformerBundle\Enumeration\BaseEnumeration;
+use Enm\TransformerBundle\Traits\EnumTrait;
 
-class CountryEnum extends BaseEnumeration
+class CountryEnum
 {
 
+  use EnumTrait;
+  
   const GERMANY = 'Germany';
 }

@@ -3,11 +3,15 @@
 
 namespace Enm\TransformerBundle\Resources\TestClass;
 
+use Enm\TransformerBundle\Interfaces\ConfigInterface;
 use Enm\TransformerBundle\TransformerEvents;
 
-class TestConfiguration
+class TestConfiguration implements ConfigInterface
 {
 
+  /**
+   * @return array
+   */
   public static function getConfig()
   {
     return array(
@@ -73,7 +77,7 @@ class TestConfiguration
         'type'    => 'date',
         'options' => [
           'date' => [
-            'expectedFormat'          => 'Y-m-d',
+            'expectedFormat'  => 'Y-m-d',
             'convertToObject' => true
           ],
         ]

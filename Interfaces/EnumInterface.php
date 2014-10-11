@@ -8,11 +8,18 @@
 
 namespace Enm\TransformerBundle\Interfaces;
 
+/**
+ * Interface EnumInterface
+ *
+ * Can be used together with Enm\TransformerBundle\Traits\EnumTrait
+ *
+ * @package Enm\TransformerBundle\Interfaces
+ */
 interface EnumInterface
 {
 
   /**
-   * This function returns an array with static properties of the extending class.
+   * This method returns an array with the static properties of the called class.
    *
    * @return array
    */
