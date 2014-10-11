@@ -136,6 +136,12 @@ class BaseValidator
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param array         $params
+   *
+   * @return bool
+   */
   public function requireIfAvailableAnd(Configuration $configuration, array $params)
   {
     $requiredIfAvailable = $configuration->getOptions()->getRequiredIfAvailable();
@@ -158,6 +164,12 @@ class BaseValidator
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param array         $params
+   *
+   * @return bool
+   */
   public function requireIfAvailableOr(Configuration $configuration, array $params)
   {
     $requiredIfAvailable = $configuration->getOptions()->getRequiredIfAvailable();
@@ -175,6 +187,12 @@ class BaseValidator
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param array         $params
+   *
+   * @return bool
+   */
   public function requireIfNotAvailableAnd(Configuration $configuration, array $params)
   {
     $requiredIfNotAvailable = $configuration->getOptions()->getRequiredIfNotAvailable();
@@ -198,6 +216,12 @@ class BaseValidator
 
 
 
+  /**
+   * @param Configuration $configuration
+   * @param array         $params
+   *
+   * @return bool
+   */
   public function requireIfNotAvailableOr(Configuration $configuration, array $params)
   {
     $requiredIfNotAvailable = $configuration->getOptions()->getRequiredIfNotAvailable();

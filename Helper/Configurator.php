@@ -39,6 +39,13 @@ class Configurator
 
 
 
+  /**
+   * @param array                    $config
+   * @param EventDispatcherInterface $eventDispatcher
+   * @param Configuration            $parent
+   *
+   * @throws TransformerConfigurationException
+   */
   public function __construct(array $config, EventDispatcherInterface $eventDispatcher, Configuration $parent = null)
   {
     $this->configuration = array();
@@ -119,6 +126,10 @@ class Configurator
 
 
 
+  /**
+   * @param array  $config
+   * @param string $key
+   */
   protected function setEventConfiguration(array $config, $key)
   {
     $this->configuration[$key]->setEvents($config['options']['events']);

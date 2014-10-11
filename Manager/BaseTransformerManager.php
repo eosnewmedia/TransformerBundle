@@ -79,6 +79,11 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param EventDispatcherInterface $eventDispatcher
+   * @param ValidatorInterface       $validator
+   * @param array                    $global_config
+   */
   public function __construct(
     EventDispatcherInterface $eventDispatcher,
     ValidatorInterface $validator,
@@ -209,6 +214,13 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param mixed $config
+   * @param mixed $object
+   *
+   * @return object
+   * @throws TransformerException
+   */
   public function reverseProcess($config, $object)
   {
     try
@@ -323,6 +335,9 @@ class BaseTransformerManager
 
 
 
+  /**
+   * @param Configuration $configuration
+   */
   protected function modifyConfiguration(Configuration $configuration)
   {
     if ($configuration->getRenameTo() !== null)

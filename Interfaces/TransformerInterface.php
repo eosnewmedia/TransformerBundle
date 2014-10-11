@@ -7,7 +7,8 @@ interface TransformerInterface
 {
 
   /**
-   * Diese Methode transformiert ein Array, ein Objekt oder einen JSON-String in ein gewünschtes Objekt und validiert die Werte
+   * This method transforms an array, an object or a json into the needed format.
+   * It will validate the structure and the values with reference to a given configuration array.
    *
    * @param object|string            $returnClass
    * @param array|object|string      $config
@@ -16,13 +17,14 @@ interface TransformerInterface
    * @param string                   $result_type
    *
    * @return array|object|string
+   * @throws \Enm\TransformerBundle\Exceptions\TransformerException
    */
   public function transform($returnClass, $config, $values, $local_config = null, $result_type = 'object');
 
 
 
   /**
-   * Diese Methode transformiert ein Objekt zurück in einen JSON-String, ein Array oder eine Standard-Klasse
+   * This method reverses the transforming.
    *
    * @param object|object|string     $object
    * @param array|object|string      $config
@@ -49,6 +51,8 @@ interface TransformerInterface
 
 
   /**
+   * Converts a value to an other format.
+   *
    * @param mixed  $value
    * @param string $to
    *

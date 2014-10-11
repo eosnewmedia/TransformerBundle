@@ -18,6 +18,9 @@ class Normalizer
 
 
 
+  /**
+   * @param Converter $converter
+   */
   public function __construct(Converter $converter)
   {
     $this->converter = $converter;
