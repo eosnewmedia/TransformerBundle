@@ -1,6 +1,6 @@
 {
   "name":              "enm/transformer-bundle",
-  "description":       "",
+  "description":       "This bundle can be used for transforming an array, an object or a json-string into a needed array, object or json-string and validating the values and the schema against a configuration array.",
   "keywords":          [
     "api",
     "serialisation",
@@ -32,6 +32,7 @@
   ],
   "minimum-stability": "stable",
   "require":           {
+    "php":                      ">=5.5",
     "symfony/framework-bundle": "~2.5"
   },
   "autoload":          {
