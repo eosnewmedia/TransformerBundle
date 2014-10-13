@@ -13,7 +13,7 @@ class ArrayFromConfigTest extends BaseTest
   {
     $config = TestConfiguration::getConfig();
 
-    $transformer = $this->container->get('enm.transformer');
+    $transformer = $this->getTransformer();
 
     try
     {

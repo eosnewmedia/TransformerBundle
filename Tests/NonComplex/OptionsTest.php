@@ -88,7 +88,7 @@ class OptionsTest extends BaseTest
         'testB' => 'abc',
         'testD' => 'abc',
       );
-      $this->container->get('enm.transformer')->transform(new \stdClass(), $config, $array);
+      $this->getTransformer()->transform(new \stdClass(), $config, $array);
       $this->assertTrue(true);
     }
     catch (\Exception $e)
@@ -101,7 +101,7 @@ class OptionsTest extends BaseTest
         'testA' => 'abc',
         'testC' => 'abc',
       );
-      $this->container->get('enm.transformer')->transform(new \stdClass(), $config, $array);
+      $this->getTransformer()->transform(new \stdClass(), $config, $array);
       $this->assertTrue(true);
     }
     catch (\Exception $e)
@@ -115,7 +115,7 @@ class OptionsTest extends BaseTest
         'testA' => 'abc',
         'testD' => 'abc',
       );
-      $this->container->get('enm.transformer')->transform(new \stdClass(), $config, $array);
+      $this->getTransformer()->transform(new \stdClass(), $config, $array);
       $this->fail('No Exception thrown with invalid parameters!');
     }
     catch (\Exception $e)
@@ -129,7 +129,7 @@ class OptionsTest extends BaseTest
         'testB' => 'abc',
         'testC' => 'abc',
       );
-      $this->container->get('enm.transformer')->transform(new \stdClass(), $config, $array);
+      $this->getTransformer()->transform(new \stdClass(), $config, $array);
       $this->fail('No Exception thrown with invalid parameters!');
     }
     catch (\Exception $e)
@@ -143,7 +143,7 @@ class OptionsTest extends BaseTest
         'testA' => 'abc',
         'testB' => 'abc',
       );
-      $this->container->get('enm.transformer')->transform(new \stdClass(), $config, $array);
+      $this->getTransformer()->transform(new \stdClass(), $config, $array);
       $this->fail('No Exception thrown with invalid parameters!');
     }
     catch (\Exception $e)
@@ -237,7 +237,7 @@ class OptionsTest extends BaseTest
     );
     try
     {
-      $class = $this->container->get('enm.transformer')->transform(new \stdClass(), $config, array());
+      $class = $this->getTransformer()->transform(new \stdClass(), $config, array());
       $this->assertEquals('Hallo Welt!', $class->test);
     }
     catch (\Exception $e)
@@ -262,10 +262,10 @@ class OptionsTest extends BaseTest
 
     try
     {
-      $class = $this->container->get('enm.transformer')->transform(
-                               new \stdClass(),
-                                 $config,
-                                 array('test' => 'Hallo Welt!')
+      $class = $this->getTransformer()->transform(
+        new \stdClass(),
+        $config,
+        array('test' => 'Hallo Welt!')
       );
       $this->assertEquals('Hallo Welt!', $class->abc);
     }

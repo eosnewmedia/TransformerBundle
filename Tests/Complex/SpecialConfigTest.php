@@ -4,7 +4,6 @@
 namespace Enm\TransformerBundle\Tests\Complex;
 
 use Enm\TransformerBundle\Tests\BaseTest;
-use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
 use Enm\TransformerBundle\Resources\TestClass\UserTestClass;
 
 class SpecialConfigTest extends BaseTest
@@ -25,7 +24,7 @@ class SpecialConfigTest extends BaseTest
       ]
     );
 
-    $transformer = $this->container->get('enm.transformer');
+    $transformer = $this->getTransformer();
 
     try
     {

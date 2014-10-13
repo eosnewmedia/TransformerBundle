@@ -38,7 +38,7 @@ class ReverseTransformTest extends BaseTest
       ]
     );
 
-    $transformer = $this->container->get('enm.transformer');
+    $transformer = $this->getTransformer();
 
     try
     {

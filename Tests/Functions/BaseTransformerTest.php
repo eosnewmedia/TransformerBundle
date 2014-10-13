@@ -8,35 +8,10 @@ use Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
 use Enm\TransformerBundle\ConfigurationStructure\Parameter;
 use Enm\TransformerBundle\Exceptions\TransformerException;
-use Enm\TransformerBundle\Listener\ExceptionListener;
-use Enm\TransformerBundle\Manager\BaseTransformerManager;
 use Enm\TransformerBundle\Tests\BaseTest;
-use Enm\TransformerBundle\TransformerEvents;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 class BaseTransformerTest extends BaseTest
 {
-
-  protected $transformer;
-
-
-
-  protected function getInstanz()
-  {
-    if (!$this->transformer instanceof BaseTransformerManager)
-    {
-      $dispatcher = new EventDispatcher();
-      $validator  = $this->container->get('validator');
-      $paramBag   = $this->container->getParameter('transformer.config');
-      $stopwatch  = new Stopwatch();
-
-      $this->transformer = new BaseTransformerManager($dispatcher, $validator, $paramBag, $stopwatch);
-    }
-
-    return $this->transformer;
-  }
-
 
 
   protected function getMethod($name)
@@ -97,7 +72,7 @@ class BaseTransformerTest extends BaseTest
         'birthday' => '1990-01-01',
       );
       $method = $this->getMethod('process');
-      $result = $method->invokeArgs($this->getInstanz(), array('\stdClass', $config, $params));
+      $result = $method->invokeArgs($this->getTransformer(), array('\stdClass', $config, $params));
       $this->assertEquals('testUser', $result->username);
       $this->assertEquals('1990-01-01', $result->birthday);
     }
@@ -114,7 +89,7 @@ class BaseTransformerTest extends BaseTest
     try
     {
       $method = $this->getMethod('init');
-      $method->invoke($this->getInstanz());
+      $method->invoke($this->getTransformer());
       $this->assertTrue(true);
     }
     catch (TransformerException $e)
@@ -144,11 +119,11 @@ class BaseTransformerTest extends BaseTest
     try
     {
       $method = $this->getMethod('prepareCollection');
-      $method->invokeArgs($this->getInstanz(), array($configuration, new Parameter('address', array())));
+      $method->invokeArgs($this->getTransformer(), array($configuration, new Parameter('address', array())));
 
       $method->invokeArgs(
-             $this->getInstanz(),
-               array($configuration, new Parameter('address', array(['street' => 'bla'])))
+        $this->getTransformer(),
+        array($configuration, new Parameter('address', array(['street' => 'bla'])))
       );
       $this->assertTrue(true);
     }
@@ -165,7 +140,7 @@ class BaseTransformerTest extends BaseTest
     try
     {
       $method = $this->getMethod('destroy');
-      $method->invoke($this->getInstanz());
+      $method->invoke($this->getTransformer());
       $this->assertTrue(true);
     }
     catch (TransformerException $e)

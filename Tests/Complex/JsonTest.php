@@ -10,7 +10,7 @@ class JsonTest extends BaseTest
 
   public function testJson()
   {
-    $transformer = $this->container->get('enm.transformer');
+    $transformer = $this->getTransformer();
 
     $json = '{"initialInput":{"geoRestriction":{"circle":{"center":{"longitude":9.179940819740295,"latitude":48.78247982110398},"radius":539}}},"Restrictions":{"Type":["stop","poi"]}}';
 
