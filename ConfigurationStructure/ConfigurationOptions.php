@@ -10,7 +10,6 @@ use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions;
-use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\MethodOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions;
@@ -106,6 +105,8 @@ class ConfigurationOptions
 
   /**
    * @param array $forbiddenIfAvailable
+   *
+   * @return $this
    */
   public function setForbiddenIfAvailable(array $forbiddenIfAvailable)
   {
@@ -128,6 +129,8 @@ class ConfigurationOptions
 
   /**
    * @param array $forbiddenIfNotAvailable
+   *
+   * @return $this
    */
   public function setForbiddenIfNotAvailable(array $forbiddenIfNotAvailable)
   {
@@ -149,11 +152,13 @@ class ConfigurationOptions
 
 
   /**
-   * @param boolean $required
+   * @param bool $required
+   *
+   * @return $this
    */
   public function setRequired($required)
   {
-    $this->required = $required;
+    $this->required = boolval($required);
 
     return $this;
   }
@@ -161,7 +166,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return boolean
+   * @return bool
    */
   public function getRequired()
   {
@@ -171,7 +176,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfAvailable
+   * @param RequiredIfStructure $requiredIfAvailable
+   *
+   * @return $this
    */
   public function setRequiredIfAvailable(RequiredIfStructure $requiredIfAvailable)
   {
@@ -183,7 +190,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @return RequiredIfStructure
    */
   public function getRequiredIfAvailable()
   {
@@ -193,7 +200,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure $requiredIfNotAvailable
+   * @param RequiredIfStructure $requiredIfNotAvailable
+   *
+   * @return $this
    */
   public function setRequiredIfNotAvailable(RequiredIfStructure $requiredIfNotAvailable)
   {
@@ -205,7 +214,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\RequiredIfStructure
+   * @return RequiredIfStructure
    */
   public function getRequiredIfNotAvailable()
   {
@@ -215,7 +224,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions $arrayOptions
+   * @param ArrayOptions $arrayOptions
+   *
+   * @return $this
    */
   public function setArrayOptions(ArrayOptions $arrayOptions)
   {
@@ -227,7 +238,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ArrayOptions
+   * @return ArrayOptions
    */
   public function getArrayOptions()
   {
@@ -237,7 +248,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions $boolOptions
+   * @param BoolOptions $boolOptions
+   *
+   * @return $this
    */
   public function setBoolOptions(BoolOptions $boolOptions)
   {
@@ -249,7 +262,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\BoolOptions
+   * @return BoolOptions
    */
   public function getBoolOptions()
   {
@@ -259,7 +272,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions $collectionOptions
+   * @param CollectionOptions $collectionOptions
+   *
+   * @return $this
    */
   public function setCollectionOptions(CollectionOptions $collectionOptions)
   {
@@ -271,7 +286,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions
+   * @return CollectionOptions
    */
   public function getCollectionOptions()
   {
@@ -281,7 +296,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions $dateOptions
+   * @param DateOptions $dateOptions
+   *
+   * @return $this
    */
   public function setDateOptions(DateOptions $dateOptions)
   {
@@ -293,7 +310,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\DateOptions
+   * @return DateOptions
    */
   public function getDateOptions()
   {
@@ -303,7 +320,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions $floatOptions
+   * @param FloatOptions $floatOptions
+   *
+   * @return $this
    */
   public function setFloatOptions(FloatOptions $floatOptions)
   {
@@ -315,7 +334,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\FloatOptions
+   * @return FloatOptions
    */
   public function getFloatOptions()
   {
@@ -325,7 +344,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions $integerOptions
+   * @param IntegerOptions $integerOptions
+   *
+   * @return $this
    */
   public function setIntegerOptions(IntegerOptions $integerOptions)
   {
@@ -337,7 +358,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IntegerOptions
+   * @return IntegerOptions
    */
   public function getIntegerOptions()
   {
@@ -347,7 +368,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions $individualOptions
+   * @param IndividualOptions $individualOptions
+   *
+   * @return $this
    */
   public function setIndividualOptions(IndividualOptions $individualOptions)
   {
@@ -359,7 +382,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\IndividualOptions
+   * @return IndividualOptions
    */
   public function getIndividualOptions()
   {
@@ -369,7 +392,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions $objectOptions
+   * @param ObjectOptions $objectOptions
+   *
+   * @return $this
    */
   public function setObjectOptions(ObjectOptions $objectOptions)
   {
@@ -381,7 +406,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\ObjectOptions
+   * @return ObjectOptions
    */
   public function getObjectOptions()
   {
@@ -391,7 +416,9 @@ class ConfigurationOptions
 
 
   /**
-   * @param \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions $stringOptions
+   * @param StringOptions $stringOptions
+   *
+   * @return $this
    */
   public function setStringOptions(StringOptions $stringOptions)
   {
@@ -403,7 +430,7 @@ class ConfigurationOptions
 
 
   /**
-   * @return \Enm\TransformerBundle\ConfigurationStructure\OptionStructures\StringOptions
+   * @return StringOptions
    */
   public function getStringOptions()
   {

@@ -4,7 +4,6 @@
 namespace Enm\TransformerBundle\Validator\Constraint;
 
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 
 /**
  * Class Date

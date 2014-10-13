@@ -25,10 +25,12 @@ class Date extends Constraint
   {
     if (is_array($options) && !isset($options['format']))
     {
-      throw new ConstraintDefinitionException(sprintf(
-        'The %s constraint requires the "format" option to be set.',
-        get_class($this)
-      ));
+      throw new ConstraintDefinitionException(
+        sprintf(
+          'The %s constraint requires the "format" option to be set.',
+          get_class($this)
+        )
+      );
     }
     if (!is_array($options['format']))
     {

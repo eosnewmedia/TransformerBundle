@@ -548,7 +548,8 @@ class BaseTransformerManager
     $object_configuration->setParent($configuration);
 
     $result_array = array();
-    for ($i = 0; $i < count($child_array); ++$i)
+    $childs       = count($child_array);
+    for ($i = 0; $i < $childs; ++$i)
     {
       $param = new Parameter($i, $child_array[$i]);
       if ($reverse === false)
@@ -611,7 +612,7 @@ class BaseTransformerManager
     $return = self::BUILD_ARRAY;
 
     if (count($configuration->getChildren()) > 0
-        && $configuration->getOptions()->getArrayOptions()->getIsAssociative() === true
+        && $configuration->getOptions()->getArrayOptions()->isAssociative() === true
     )
     {
       $value = $this->build(

@@ -233,7 +233,7 @@ class Configurator
     $options = new ArrayOptions();
     $options->setDefaultValue($config['options']['defaultValue']);
     $options->setExpected($config['options']['expected']);
-    $options->setIsAssociative($config['options']['assoc']);
+    $options->setAssociative($config['options']['assoc']);
     $options->setRegex($config['options']['regex']);
     $this->configuration[$key]->getOptions()->setArrayOptions($options);
   }
@@ -389,4 +389,4 @@ class Configurator
     $options->setMin($config['options']['length']['min']);
     $this->configuration[$key]->getOptions()->setStringOptions($options);
   }
-} 
+}

@@ -27,4 +27,4 @@ trait EnumTrait
 
     return $return;
   }
-} 
+}

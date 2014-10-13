@@ -55,4 +55,4 @@ class CollectionTest extends BaseTransformerTestClass
     $this->assertArrayHasKey(1, $result->list);
     $this->assertArrayHasKey(2, $result->list);
   }
-} 
+}

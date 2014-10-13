@@ -49,4 +49,4 @@ class FullClassTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

@@ -31,4 +31,4 @@ interface NumberInterface extends NonComplexInterface
    * @return float|null|integer
    */
   public function getMin();
-} 
+}

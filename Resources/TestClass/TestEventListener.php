@@ -25,4 +25,4 @@ class TestEventListener
       throw new \Exception();
     }
   }
-} 
+}

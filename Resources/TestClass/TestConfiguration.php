@@ -112,4 +112,4 @@ class TestConfiguration implements ConfigInterface
       ]
     );
   }
-} 
+}

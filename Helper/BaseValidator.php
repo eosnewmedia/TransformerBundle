@@ -83,9 +83,10 @@ class BaseValidator
 
 
   /**
+   * @param array     $constraints
    * @param Parameter $parameter
    *
-   * @throws \Enm\TransformerBundle\Exceptions\InvalidTransformerParameterException
+   * @throws InvalidTransformerParameterException
    */
   public function validateConstrains(array $constraints, Parameter $parameter)
   {
@@ -131,7 +132,7 @@ class BaseValidator
       ), $parameter->getValue(), null, $parameter->getValue()
     );
 
-    return $violationList = new ConstraintViolationList(array($violation));
+    return new ConstraintViolationList(array($violation));
   }
 
 

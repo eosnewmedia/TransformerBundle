@@ -89,12 +89,12 @@ class EventHandler
       foreach ($listeners as $listener)
       {
         $this->dispatcher->addListener(
-                         $listener['event'],
-                           array(
-                             $listener['class'],
-                             $listener['method']
-                           ),
-                           $listener['priority']
+          $listener['event'],
+          array(
+            $listener['class'],
+            $listener['method']
+          ),
+          $listener['priority']
         );
       }
     }
@@ -146,11 +146,11 @@ class EventHandler
       foreach ($listeners as $listener)
       {
         $this->dispatcher->removeListener(
-                         $listener['event'],
-                           array(
-                             $listener['class'],
-                             $listener['method']
-                           )
+          $listener['event'],
+          array(
+            $listener['class'],
+            $listener['method']
+          )
         );
       }
     }

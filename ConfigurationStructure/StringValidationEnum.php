@@ -3,10 +3,12 @@
 
 namespace Enm\TransformerBundle\ConfigurationStructure;
 
-use Enm\TransformerBundle\Enumeration\BaseEnumeration;
+use Enm\TransformerBundle\Traits\EnumTrait;
 
-class StringValidationEnum extends BaseEnumeration
+class StringValidationEnum
 {
+
+  use EnumTrait;
 
   const EMAIL = 'email';
 

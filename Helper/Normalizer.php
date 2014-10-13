@@ -111,7 +111,7 @@ class Normalizer
   protected function normalizeArray(Parameter $parameter, Configuration $configuration)
   {
     $parameter->setValue($this->converter->convertTo($parameter->getValue(), 'array'));
-    if ($configuration->getOptions()->getArrayOptions()->getIsAssociative() === false)
+    if ($configuration->getOptions()->getArrayOptions()->isAssociative() === false)
     {
       $parameter->setValue(array_values($parameter->getValue()));
     }
@@ -180,4 +180,4 @@ class Normalizer
       $parameter->setValue(array());
     }
   }
-} 
+}

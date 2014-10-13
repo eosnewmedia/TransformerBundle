@@ -148,4 +148,4 @@ class BaseTransformerTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

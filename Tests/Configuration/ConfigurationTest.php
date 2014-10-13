@@ -25,4 +25,4 @@ class ConfigurationTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

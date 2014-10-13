@@ -25,11 +25,15 @@ class ArrayBuilder
     {
       if (!$configuration instanceof Configuration)
       {
-        throw new InvalidTransformerConfigurationException('Parameter "config" have to be an array of Configuration-Objects!');
+        throw new InvalidTransformerConfigurationException(
+          'Parameter "config" have to be an array of Configuration-Objects!'
+        );
       }
       if (!$params[$configuration->getKey()] instanceof Parameter)
       {
-        throw new InvalidTransformerConfigurationException('Parameter "params" have to be an array of Parameter-Objects!');
+        throw new InvalidTransformerConfigurationException(
+          'Parameter "params" have to be an array of Parameter-Objects!'
+        );
       }
       $return = $this->setValue($return, $configuration, $params[$configuration->getKey()]);
     }
@@ -53,4 +57,4 @@ class ArrayBuilder
 
     return array_merge($return, $array);
   }
-} 
+}

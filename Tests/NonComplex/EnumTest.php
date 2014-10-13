@@ -63,4 +63,4 @@ class EnumTest extends BaseTransformerTestClass
     $this->exceptionWithNegativeFloatTest($config, 'test');
     $this->exceptionWithPositiveFloatTest($config, 'test');
   }
-} 
+}

@@ -59,4 +59,4 @@ interface TransformerInterface
    * @return array|object|string
    */
   public function convert($value, $to);
-} 
+}

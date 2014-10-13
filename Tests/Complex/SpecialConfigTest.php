@@ -36,4 +36,4 @@ class SpecialConfigTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

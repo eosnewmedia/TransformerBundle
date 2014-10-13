@@ -24,4 +24,4 @@ interface EnumInterface
    * @return array
    */
   public static function toArray();
-} 
+}

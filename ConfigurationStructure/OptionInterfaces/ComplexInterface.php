@@ -31,4 +31,4 @@ interface ComplexInterface
    * @return string|object
    */
   public function getReturnClass();
-} 
+}

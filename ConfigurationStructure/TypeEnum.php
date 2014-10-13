@@ -3,10 +3,12 @@
 
 namespace Enm\TransformerBundle\ConfigurationStructure;
 
-use Enm\TransformerBundle\Enumeration\BaseEnumeration;
+use Enm\TransformerBundle\Traits\EnumTrait;
 
-class TypeEnum extends BaseEnumeration
+class TypeEnum
 {
+
+  use EnumTrait;
 
   const INTEGER_TYPE = 'integer';
 
@@ -25,4 +27,4 @@ class TypeEnum extends BaseEnumeration
   const OBJECT_TYPE = 'object';
 
   const INDIVIDUAL_TYPE = 'individual';
-} 
+}

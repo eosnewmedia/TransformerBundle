@@ -37,4 +37,4 @@ abstract class BaseEnumeration implements EnumInterface
 
     return $return;
   }
-} 
+}

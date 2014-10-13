@@ -31,4 +31,4 @@ interface NonComplexInterface
    * @return array
    */
   public function getExpected();
-} 
+}

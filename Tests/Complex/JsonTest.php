@@ -180,4 +180,4 @@ class JsonTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

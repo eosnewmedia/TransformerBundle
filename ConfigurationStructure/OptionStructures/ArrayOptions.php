@@ -9,7 +9,7 @@ class ArrayOptions
   /**
    * @var bool
    */
-  protected $is_associative = true;
+  protected $associative = true;
 
   /**
    * @var array
@@ -26,7 +26,9 @@ class ArrayOptions
 
 
   /**
-   * @param mixed $default_value
+   * @param $default_value
+   *
+   * @return $this
    */
   public function setDefaultValue($default_value)
   {
@@ -49,6 +51,8 @@ class ArrayOptions
 
   /**
    * @param array $expected
+   *
+   * @return $this
    */
   public function setExpected($expected)
   {
@@ -70,29 +74,9 @@ class ArrayOptions
 
 
   /**
-   * @param boolean $is_associative
-   */
-  public function setIsAssociative($is_associative)
-  {
-    $this->is_associative = $is_associative;
-
-    return $this;
-  }
-
-
-
-  /**
-   * @return boolean
-   */
-  public function getIsAssociative()
-  {
-    return $this->is_associative;
-  }
-
-
-
-  /**
-   * @param null $regex
+   * @param $regex
+   *
+   * @return $this
    */
   public function setRegex($regex)
   {
@@ -104,10 +88,34 @@ class ArrayOptions
 
 
   /**
-   * @return null
+   * @return null|string
    */
   public function getRegex()
   {
     return $this->regex;
+  }
+
+
+
+  /**
+   * @return bool
+   */
+  public function isAssociative()
+  {
+    return $this->associative;
+  }
+
+
+
+  /**
+   * @param $associative
+   *
+   * @return $this
+   */
+  public function setAssociative($associative)
+  {
+    $this->associative = $associative;
+
+    return $this;
   }
 }

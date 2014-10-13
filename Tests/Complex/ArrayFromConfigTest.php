@@ -27,4 +27,4 @@ class ArrayFromConfigTest extends BaseTransformerTestClass
       $this->fail($e->getMessage());
     }
   }
-} 
+}

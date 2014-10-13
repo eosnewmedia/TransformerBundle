@@ -330,4 +330,4 @@ class OptionsTest extends BaseTransformerTestClass
     $this->expectFailure($config, 'test', '2001:0db8:85a3:08d3:1319:8a2e:0370:7344:4444');
     $this->expectFailure($config, 'test', 'avcbegasjguegadsdfbwndisfdshafdsffdsfsdfsfnehajsdsfffdff');
   }
-} 
+}

@@ -3,8 +3,12 @@
 
 namespace Enm\TransformerBundle\ConfigurationStructure;
 
+use Enm\TransformerBundle\Traits\EnumTrait;
+
 class ConversionEnum
 {
+
+  use EnumTrait;
 
   const ARRAY_CONVERSION = 'array';
 
