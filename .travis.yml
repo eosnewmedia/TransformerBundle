@@ -11,7 +11,7 @@ env:
 
 before_script:
   - composer self-update
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION}
+  - composer install
 
 script: phpunit -c phpunit.xml.dist --coverage-text
 
