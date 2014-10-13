@@ -3,10 +3,10 @@
 
 namespace Enm\TransformerBundle\Tests\Complex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 use Enm\TransformerBundle\Resources\TestClass\UserTestClass;
 
-class SpecialConfigTest extends BaseTest
+class SpecialConfigTest extends BaseTransformerTestClass
 {
 
   public function testLocalTransformerConfigurationArray()

@@ -3,9 +3,9 @@
 
 namespace Enm\TransformerBundle\Tests\NonComplex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class DefaultTypeTest extends BaseTest
+class DefaultTypeTest extends BaseTransformerTestClass
 {
 
   public function testBoolean()

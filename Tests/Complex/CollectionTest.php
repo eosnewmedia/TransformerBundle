@@ -8,9 +8,9 @@
 
 namespace Enm\TransformerBundle\Tests\Complex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class CollectionTest extends BaseTest
+class CollectionTest extends BaseTransformerTestClass
 {
 
   public function testCollection()

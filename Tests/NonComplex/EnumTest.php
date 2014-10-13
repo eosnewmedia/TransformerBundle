@@ -3,9 +3,9 @@
 
 namespace Enm\TransformerBundle\Tests\NonComplex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class EnumTest extends BaseTest
+class EnumTest extends BaseTransformerTestClass
 {
 
   public function testEnumWithString()

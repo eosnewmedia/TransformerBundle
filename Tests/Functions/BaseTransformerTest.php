@@ -8,9 +8,9 @@ use Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
 use Enm\TransformerBundle\ConfigurationStructure\Parameter;
 use Enm\TransformerBundle\Exceptions\TransformerException;
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class BaseTransformerTest extends BaseTest
+class BaseTransformerTest extends BaseTransformerTestClass
 {
 
 

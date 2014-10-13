@@ -4,9 +4,9 @@
 namespace Enm\TransformerBundle\Tests\Complex;
 
 use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class ArrayFromConfigTest extends BaseTest
+class ArrayFromConfigTest extends BaseTransformerTestClass
 {
 
   public function testTestCase()

@@ -5,9 +5,9 @@ namespace Enm\TransformerBundle\Tests\Complex;
 
 use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
 use Enm\TransformerBundle\Resources\TestClass\UserTestClass;
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class ReverseTransformTest extends BaseTest
+class ReverseTransformTest extends BaseTransformerTestClass
 {
 
   public function testReverse()

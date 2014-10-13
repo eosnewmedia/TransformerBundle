@@ -3,9 +3,9 @@
 
 namespace Enm\TransformerBundle\Tests\Complex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class JsonTest extends BaseTest
+class JsonTest extends BaseTransformerTestClass
 {
 
   public function testJson()

@@ -3,11 +3,11 @@
 
 namespace Enm\TransformerBundle\Tests\Complex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
 use Enm\TransformerBundle\Resources\TestClass\UserTestClass;
 
-class FullClassTest extends BaseTest
+class FullClassTest extends BaseTransformerTestClass
 {
 
   public function testTestCase()

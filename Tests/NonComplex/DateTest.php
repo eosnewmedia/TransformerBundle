@@ -3,9 +3,9 @@
 
 namespace Enm\TransformerBundle\Tests\NonComplex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class DateTest extends BaseTest
+class DateTest extends BaseTransformerTestClass
 {
 
   public function testDate()

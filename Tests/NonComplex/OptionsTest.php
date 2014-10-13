@@ -3,9 +3,9 @@
 
 namespace Enm\TransformerBundle\Tests\NonComplex;
 
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
-class OptionsTest extends BaseTest
+class OptionsTest extends BaseTransformerTestClass
 {
 
   public function testRequired()

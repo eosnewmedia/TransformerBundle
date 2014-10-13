@@ -3,13 +3,12 @@
 
 namespace Enm\TransformerBundle\Tests\Configuration;
 
-use Enm\TransformerBundle\ConfigurationStructure\TypeEnum;
 use Enm\TransformerBundle\Helper\Configurator;
 use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
-use Enm\TransformerBundle\Tests\BaseTest;
+use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class ConfigurationTest extends BaseTest
+class ConfigurationTest extends BaseTransformerTestClass
 {
 
   public function testConfiguration()

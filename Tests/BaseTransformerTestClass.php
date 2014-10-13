@@ -7,7 +7,7 @@ use Enm\TransformerBundle\Manager\TransformerManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Validator\Validation;
 
-class BaseTest extends \PHPUnit_Framework_TestCase
+class BaseTransformerTestClass extends \PHPUnit_Framework_TestCase
 {
 
   protected $instance = null;
