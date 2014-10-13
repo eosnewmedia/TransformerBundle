@@ -1,4 +1,6 @@
 # Enm / TransformerBundle
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/c1376c5f-eb5a-4c4d-95de-0071384bc33a/big.png)](https://insight.sensiolabs.com/projects/c1376c5f-eb5a-4c4d-95de-0071384bc33a)
+
 ## What can the bundle be used for?
 The Bundle can be used for validating an array, an object or a json-string and get an array, an object or a json-string back with the validated values.
 
