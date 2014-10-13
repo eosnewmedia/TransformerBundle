@@ -8,6 +8,9 @@ use Enm\TransformerBundle\ConfigurationStructure\ConfigurationOptions;
 use Enm\TransformerBundle\ConfigurationStructure\OptionStructures\CollectionOptions;
 use Enm\TransformerBundle\ConfigurationStructure\Parameter;
 use Enm\TransformerBundle\Exceptions\TransformerException;
+use Enm\TransformerBundle\Helper\ArrayBuilder;
+use Enm\TransformerBundle\Helper\ClassBuilder;
+use Enm\TransformerBundle\Resources\TestClass\TestConfiguration;
 use Enm\TransformerBundle\Tests\BaseTransformerTestClass;
 
 class BaseTransformerTest extends BaseTransformerTestClass
@@ -144,6 +147,54 @@ class BaseTransformerTest extends BaseTransformerTestClass
       $this->assertTrue(true);
     }
     catch (TransformerException $e)
+    {
+      $this->fail($e->getMessage());
+    }
+  }
+
+
+
+  public function testGetArrayBuilder()
+  {
+    try
+    {
+      $method = $this->getMethod('getArrayBuilder');
+
+      $this->assertTrue($method->invoke($this->getTransformer()) instanceof ArrayBuilder);
+    }
+    catch (\Exception $e)
+    {
+      $this->fail($e->getMessage());
+    }
+  }
+
+
+
+  public function testGetClassBuilder()
+  {
+    try
+    {
+      $method = $this->getMethod('getClassBuilder');
+
+      $this->assertTrue($method->invoke($this->getTransformer()) instanceof ClassBuilder);
+    }
+    catch (\Exception $e)
+    {
+      $this->fail($e->getMessage());
+    }
+  }
+
+
+
+  public function testCreateEmptyObjectStructure()
+  {
+    try
+    {
+      $method = $this->getMethod('createEmptyObjectStructure');
+
+      $this->assertTrue(is_object($method->invokeArgs($this->getTransformer(), array(TestConfiguration::getConfig()))));
+    }
+    catch (\Exception $e)
     {
       $this->fail($e->getMessage());
     }
