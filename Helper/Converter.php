@@ -37,7 +37,7 @@ class Converter
 
 
   /**
-   * @param $value
+   * @param mixed $value
    *
    * @throws InvalidTransformerParameterException
    * @return object
@@ -64,7 +64,7 @@ class Converter
 
 
   /**
-   * @param object $value
+   * @param mixed $value
    *
    * @throws InvalidTransformerParameterException
    * @return string
@@ -97,7 +97,7 @@ class Converter
 
 
   /**
-   * @param $value
+   * @param mixed $value
    *
    * @throws InvalidTransformerParameterException
    * @return string
