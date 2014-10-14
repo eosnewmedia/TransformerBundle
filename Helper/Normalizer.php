@@ -132,7 +132,7 @@ class Normalizer
       try
       {
         // 'date' ist der Standard-Key, wenn ein DateTime-Objekt in Array umgewandelt wird
-        $date   = new \DateTime($parameter->getValue()['date'];
+        $date   = new \DateTime($parameter->getValue()['date']);
         $format = $configuration->getOptions()->getDateOptions()->getExpectedFormat()[0];
         $parameter->setValue($date->format($format));
       }
