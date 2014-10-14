@@ -5,7 +5,13 @@
     "api",
     "serialisation",
     "json",
-    "validation"
+    "validation",
+    "transformer",
+    "converter",
+    "bundle",
+    "symfony",
+    "array",
+    "object"
   ],
   "homepage":          "http://www.eosnewmedia.de",
   "type":              "symfony-bundle",
