@@ -157,7 +157,7 @@ class Converter
     $object_properties = $this->objectToArray($object);
     if ($this->shouldBeDateTime($object_properties) === true)
     {
-      return new \DateTime($object_properties['date'];
+      return new \DateTime($object_properties['date']);
     }
 
     foreach ($object_properties as $key => $value)
