@@ -78,7 +78,7 @@ class Converter
       case ConversionEnum::STRING_CONVERSION:
         return $value;
       case ConversionEnum::OBJECT_CONVERSION:
-        $rc = new \ReflectionClass(get_class($value));
+        $rc = new \ReflectionObject($value);
         if ($rc->hasMethod('__toString'))
         {
           return $value->__toString();
@@ -88,7 +88,7 @@ class Converter
     }
     throw new InvalidTransformerParameterException(
       sprintf(
-        'Value of type %s can not be converted to JSON by this method.',
+        'Value of type %s can not be converted to String by this method.',
         gettype($value)
       )
     );
