@@ -11,7 +11,7 @@ namespace Enm\TransformerBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class TransformerConfiguration implements ConfigurationInterface
+class TransformerConfiguration extends BaseConfiguration implements ConfigurationInterface
 {
 
   /**
@@ -28,27 +28,7 @@ class TransformerConfiguration implements ConfigurationInterface
         ->useAttributeAsKey('name')
         ->prototype('array')
           ->children()
-            ->arrayNode('events')
-              ->addDefaultsIfNotSet()
-              ->children()
-                ->arrayNode('subscribers')
-                    ->prototype('scalar')->end()
-                    ->defaultValue(array())
-                ->end()
-                ->arrayNode('listeners')
-                  ->useAttributeAsKey('name')
-                  ->prototype('array')
-                    ->children()
-                      ->scalarNode('event')->end()
-                      ->scalarNode('class')->end()
-                      ->scalarNode('method')->end()
-                      ->integerNode('priority')->defaultValue(0)->end()
-                    ->end()
-                  ->end()
-                  ->defaultValue(array())
-                ->end()
-              ->end()
-            ->end()
+            ->append($this->addEventConfiguration())
           ->end()
         ->end()
       ->end();
