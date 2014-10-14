@@ -36,4 +36,3 @@ class BaseConfiguration
     return $node;
   }
 }
- 
