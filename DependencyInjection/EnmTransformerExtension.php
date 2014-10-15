@@ -2,6 +2,7 @@
 
 namespace Enm\TransformerBundle\DependencyInjection;
 
+use Enm\Transformer\Configuration\TransformerConfiguration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;

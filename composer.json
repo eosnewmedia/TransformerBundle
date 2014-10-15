@@ -39,12 +39,10 @@
   "minimum-stability": "stable",
   "require":           {
     "php":                          ">=5.5",
-    "symfony/config":               ">=2.5",
-    "symfony/dependency-injection": ">=2.5",
-    "symfony/event-dispatcher":     ">=2.5",
-    "symfony/http-kernel":          ">=2.5",
-    "symfony/validator":            ">=2.5",
-    "phpunit/phpunit":              ">=4.0"
+    "enm/transformer":              "0.1.0",
+    "symfony/config":               ">=2.2",
+    "symfony/dependency-injection": ">=2.2",
+    "symfony/http-kernel":          ">=2.2"
   },
   "autoload":          {
     "psr-4": {

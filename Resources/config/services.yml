@@ -1,15 +1,11 @@
-
 parameters:
-    enm.transformer.class: Enm\TransformerBundle\Manager\TransformerManager
+    enm.transformer.class: Enm\Transformer\Transformer
     enm.transformer.event_dispatcher.class: Symfony\Component\EventDispatcher\EventDispatcher
 
 services:
     enm.transformer:
         class: %enm.transformer.class%
-        arguments: [ @enm.transformer.event_dispatcher, @enm.transformer.validator, %transformer.config% ]
+        arguments: [ @enm.transformer.event_dispatcher, %transformer.config% ]
 
     enm.transformer.event_dispatcher:
         class: %enm.transformer.event_dispatcher.class%
-    
-    enm.transformer.validator:
-        alias: validator
