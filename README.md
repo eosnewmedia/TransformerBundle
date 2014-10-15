@@ -2,7 +2,9 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c1376c5f-eb5a-4c4d-95de-0071384bc33a/big.png)](https://insight.sensiolabs.com/projects/c1376c5f-eb5a-4c4d-95de-0071384bc33a)
 
 ## What can the bundle be used for?
-The Bundle can be used for validating an array, an object or a json-string and get an array, an object or a json-string back with the validated values.
+This Bundle is used to integrate the [Enm/Transformer](https://github.com/eosnewmedia/Transformer) library into a Symfony2 environment.
+
+The Library can be used for validating an array, an object or a json-string and get an array, an object or a json-string back with the validated values.
 
 This will be useful for example with a REST-API. You could give a JSON string in and out and the transformer can secure that all values are valid.
 
