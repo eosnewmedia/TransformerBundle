@@ -16,32 +16,41 @@ use Symfony\Component\DependencyInjection\Loader;
 class EnmTransformerExtension extends Extension
 {
 
-  /**
-   * {@inheritDoc}
-   */
-  public function load(array $configs, ContainerBuilder $container)
-  {
-    $configuration = new TransformerConfiguration();
-    $config        = $this->processConfiguration($configuration, $configs);
-
-    $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-    $loader->load('services.yml');
-
-    $this->setGlobalConfig($config, $container);
-  }
-
-
-
-  protected function setGlobalConfig($config, ContainerBuilder $container)
-  {
-    $config_array = array();
-    if (is_array($config))
+    /**
+     * @param array $configs
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \Exception
+     */
+    public function load(array $configs, ContainerBuilder $container)
     {
-      foreach ($config as $key => $settings)
-      {
-        $config_array[$key] = $settings;
-      }
+        $configuration = new TransformerConfiguration();
+        $config        = $this->processConfiguration($configuration, $configs);
+
+        $loader = new Loader\YamlFileLoader(
+          $container,
+          new FileLocator(__DIR__.'/../Resources/config')
+        );
+        $loader->load('services.yml');
+
+        $this->setGlobalConfig($config, $container);
     }
-    $container->setParameter('transformer.config', $config_array);
-  }
+
+
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    protected function setGlobalConfig(
+      array $config,
+      ContainerBuilder $container
+    ) {
+        $config_array = array();
+        if (is_array($config)) {
+            foreach ($config as $key => $settings) {
+                $config_array[$key] = $settings;
+            }
+        }
+        $container->setParameter('transformer.config', $config_array);
+    }
 }
